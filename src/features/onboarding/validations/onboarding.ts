@@ -45,6 +45,14 @@ export const skillsSchema = z.object({
 
 export type SkillsFormValues = z.infer<typeof skillsSchema>;
 
+// Interests Schema
+export const interestsSchema = z.object({
+  interests: z.array(z.string())
+    .max(10, "Maximum 10 interests allowed")
+});
+
+export type InterestsFormValues = z.infer<typeof interestsSchema>;
+
 // Contact Schema
 export const contactSchema = z.object({
   github: z.string().url("Please enter a valid GitHub URL").optional(),

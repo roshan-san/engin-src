@@ -1,24 +1,19 @@
-"use client";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { FaGithub, FaLinkedinIn } from "react-icons/fa";
-import { Profile } from "@/lib/db/schema";
-import { ContactFormValues } from "../validations/onboarding";
+import type { ContactFormValues } from "../validations/onboarding";
+import { useOnboarding } from "../context/OnboardContext";
 
-interface StepProps {
-  handleNext: (data: Partial<Profile>) => void;
-  handlePrevious: () => void;
-}
-
-export default function Contact({ handleNext, handlePrevious }: StepProps) {
+export default function Contact() {
+  const { nextStep, previousStep } = useOnboarding();
   const [socials, setSocials] = useState<ContactFormValues>({
-    github_url: '',
-    linkedin_url: ''
+    github: '',
+    linkedin: ''
   });
 
   const handleSubmit = () => {
-    handleNext(socials);
+    nextStep(socials);
   };
 
   return (
@@ -33,8 +28,8 @@ export default function Contact({ handleNext, handlePrevious }: StepProps) {
             <FaGithub className="w-6 h-6 text-foreground/80" />
             <Input 
               placeholder="GitHub URL" 
-              value={socials.github_url}
-              onChange={(e) => setSocials(prev => ({ ...prev, github_url: e.target.value }))}
+              value={socials.github}
+              onChange={(e) => setSocials(prev => ({ ...prev, github: e.target.value }))}
               className="h-14 text-lg rounded-xl"
               autoFocus
             />
@@ -44,8 +39,8 @@ export default function Contact({ handleNext, handlePrevious }: StepProps) {
             <FaLinkedinIn className="w-6 h-6 text-foreground/80" />
             <Input 
               placeholder="LinkedIn URL" 
-              value={socials.linkedin_url}
-              onChange={(e) => setSocials(prev => ({ ...prev, linkedin_url: e.target.value }))}
+              value={socials.linkedin}
+              onChange={(e) => setSocials(prev => ({ ...prev, linkedin: e.target.value }))}
               className="h-14 text-lg rounded-xl"
             />
           </div>
@@ -56,7 +51,7 @@ export default function Contact({ handleNext, handlePrevious }: StepProps) {
         <Button 
           type="button" 
           variant="outline" 
-          onClick={handlePrevious}
+          onClick={previousStep}
           className="flex-1 h-12 text-lg font-medium hover:bg-muted/50 transition-colors"
         >
           Previous

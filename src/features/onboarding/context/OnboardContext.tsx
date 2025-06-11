@@ -1,11 +1,10 @@
 import { createContext, useContext, useState } from "react";
 import type { OnboardingFormValues } from "../validations/onboarding";
-
 type OnboardingContextType = {
   onboardingData: Partial<OnboardingFormValues>;
   updateData: (newData: Partial<OnboardingFormValues>) => void;
   step: number;
-  nextStep: () => void;
+  nextStep: (data?: Partial<OnboardingFormValues>) => void;
   previousStep: () => void;
 };
 
@@ -22,7 +21,10 @@ export const OnboardingProvider = ({
   const updateData = (newData: Partial<OnboardingFormValues>) =>
     setOnboardingData((prev) => ({ ...prev, ...newData }));
 
-  const nextStep = () => {
+  const nextStep = (data?: Partial<OnboardingFormValues>) => {
+    if (data) {
+      updateData(data);
+    }
     setStep(Math.min(5, step + 1));
   };
 

@@ -2,9 +2,9 @@ import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useState } from "react";
 import { FaBriefcase, FaClock, FaFileContract } from "react-icons/fa";
-import { Profile } from "@/lib/db/schema";
-import { workTypeSchema, type WorkTypeFormValues } from "@/app/(landing)/register/validations/onboarding";
-
+import { workTypeSchema } from "../validations/onboarding";
+import type { WorkTypeFormValues } from "../validations/onboarding";
+import { useOnboarding } from "../context/OnboardContext";
 const workTypes = [
     {
       id: 'Full-Time' as const,
@@ -26,19 +26,15 @@ const workTypes = [
     }
   ];    
 
-interface StepProps {
-  handleNext: (data: Partial<Profile>) => void;
-  handlePrevious: () => void;
-}
-
-export default function WorkType({ handleNext, handlePrevious }: StepProps) {
+export default function WorkType() {
+    const { nextStep, previousStep } = useOnboarding();
     const [selectedWorkType, setSelectedWorkType] = useState<WorkTypeFormValues['work_type'] | ''>('');
 
     const handleSubmit = (value: WorkTypeFormValues['work_type']) => {
       const result = workTypeSchema.safeParse({ work_type: value });
       if (result.success) {
         setSelectedWorkType(value);
-        handleNext({
+        nextStep({
           work_type: value,
         });
       }
@@ -93,7 +89,7 @@ export default function WorkType({ handleNext, handlePrevious }: StepProps) {
           <Button 
             type="button" 
             variant="outline" 
-            onClick={handlePrevious}
+            onClick={previousStep}
             className="flex-1 h-12 text-lg font-medium hover:bg-muted/50 transition-colors"
           >
             Previous

@@ -11,18 +11,15 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import type { User } from "@supabase/supabase-js";
 import { usernameSchema } from "../validations/onboarding";
+import { useOnboarding } from "../context/OnboardContext";
+import { useAuth } from "../../authentication/context/AuthContext";
 
 type UsernameFormData = z.infer<typeof usernameSchema>;
 
-interface StepProps {
-  handleNext: (data: UsernameFormData) => void;
-  handlePrevious: () => void;
-  user: User | null;
-}
-
-export default function UserName({ handleNext, handlePrevious, user }: StepProps) {
+export default function UserName() {
+  const { nextStep, previousStep } = useOnboarding();
+  const { user } = useAuth();
   const form = useForm<UsernameFormData>({
     resolver: zodResolver(usernameSchema),
     defaultValues: {
@@ -35,7 +32,7 @@ export default function UserName({ handleNext, handlePrevious, user }: StepProps
   }
 
   const handleSubmit = async (data: UsernameFormData) => {
-    handleNext(data);
+    nextStep(data);
   };
 
   return (
@@ -75,7 +72,7 @@ export default function UserName({ handleNext, handlePrevious, user }: StepProps
               <Button 
                 type="button" 
                 variant="outline" 
-                onClick={handlePrevious}
+                onClick={previousStep}
                 className="flex-1 h-12 text-lg font-medium hover:bg-muted/50 transition-colors"
               >
                 Sign Out 

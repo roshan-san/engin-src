@@ -2,16 +2,14 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { FaTools, FaPlus, FaTimes } from "react-icons/fa";
-import type { Profile } from "@/lib/db/schema";
 import { useOnboarding } from "../context/OnboardContext";
-interface StepProps {
-  handleNext: (data: Partial<Profile>) => void;
-  handlePrevious: () => void;
-}
+import { skillsSchema, type SkillsFormValues } from "../validations/onboarding";
 
-export default function Skills({ handleNext, handlePrevious }: StepProps) {
-  const [skills, setSkills] = useState<string[]>([]);
+export default function Skills() {
+  const { nextStep, previousStep } = useOnboarding();
+  const [skills, setSkills] = useState<SkillsFormValues['skills']>([]);
   const [newSkill, setNewSkill] = useState('');
+  
   const addSkill = () => {
     if (newSkill.trim()) {
       setSkills([...skills, newSkill.trim()]);
@@ -24,9 +22,12 @@ export default function Skills({ handleNext, handlePrevious }: StepProps) {
   };
 
   const handleSubmit = () => {
-    handleNext({
-      skills: skills.map(skill => skill.trim())
-    });
+    const result = skillsSchema.safeParse({ skills: skills.map(skill => skill.trim()) });
+    if (result.success) {
+      nextStep({
+        skills: result.data.skills
+      });
+    }
   };
 
   return (
@@ -84,7 +85,7 @@ export default function Skills({ handleNext, handlePrevious }: StepProps) {
         <Button 
           type="button" 
           variant="outline" 
-          onClick={handlePrevious}
+          onClick={previousStep}
           className="flex-1 h-12 text-lg font-medium hover:bg-muted/50 transition-colors"
         >
           Previous

@@ -1,15 +1,10 @@
-"use client"
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { FaBriefcase, FaUserCog, FaUserGraduate, FaUserTie} from "react-icons/fa";
-import { Profile } from "@/lib/db/schema";
-import { userTypeSchema, type UserTypeFormValues } from "@/app/(landing)/register/validations/onboarding";
+import { userTypeSchema, type UserTypeFormValues } from "../validations/onboarding";
+import { useOnboarding } from "../context/OnboardContext";
 
-interface StepProps {
-  handleNext: (data: Partial<Profile>) => void;
-  handlePrevious: () => void;
-}
 
 const roles = [
   {
@@ -32,14 +27,15 @@ const roles = [
   }
 ];
 
-export default function UserType({ handleNext, handlePrevious }: StepProps) {
+export default function UserType() {
+  const { nextStep, previousStep } = useOnboarding();
   const [selectedUserType, setSelectedUserType] = useState<UserTypeFormValues['user_type'] | ''>('');
 
   const handleSubmit = (value: UserTypeFormValues['user_type']) => {
     const result = userTypeSchema.safeParse({ user_type: value });
     if (result.success) {
       setSelectedUserType(value);
-      handleNext({
+      nextStep({
         user_type: value,
       });
     }
@@ -94,7 +90,7 @@ export default function UserType({ handleNext, handlePrevious }: StepProps) {
         <Button 
           type="button" 
           variant="outline" 
-          onClick={handlePrevious}
+          onClick={previousStep}
           className="flex-1 h-12 text-lg font-medium hover:bg-muted/50 transition-colors"
         >
           Previous

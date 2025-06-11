@@ -1,5 +1,6 @@
 import { useAuth } from '@/features/authentication/context/AuthContext'
-import Container from '@/features/onboarding/Container'
+import { OnboardingProvider } from '@/features/onboarding/context/OnboardContext'
+import Container from '@/features/onboarding/OnboardingSteps'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/register')({
@@ -14,8 +15,10 @@ function RouteComponent() {
       <h1 className="text-2xl font-bold">Welcome {user.email}</h1>
       <p className="text-muted-foreground">Complete your profile to get started</p>
     </div>
-  ) : 
-  <Container/>
+  ) :
+  <OnboardingProvider>
+    <Container/>
+  </OnboardingProvider>
   }
 </div>
 }

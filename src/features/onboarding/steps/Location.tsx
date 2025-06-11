@@ -1,4 +1,3 @@
-"use client"
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
@@ -10,15 +9,11 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import { Profile } from "@/lib/db/schema";
-import { LocationFormValues, locationSchema } from "../validations/onboarding";
+import { type LocationFormValues, locationSchema } from "../validations/onboarding";
+import { useOnboarding } from "../context/OnboardContext";
 
-interface StepProps {
-  handleNext: (data: Partial<Profile>) => void;
-  handlePrevious: () => void;
-}
-
-export default function Location({ handleNext, handlePrevious }: StepProps) {
+export default function Location() {
+  const { nextStep, previousStep } = useOnboarding();
   const form = useForm<LocationFormValues>({
     resolver: zodResolver(locationSchema),
     defaultValues: {
@@ -29,7 +24,7 @@ export default function Location({ handleNext, handlePrevious }: StepProps) {
   const handleSubmit = async (data: LocationFormValues) => {
     const isValid = await form.trigger();
     if (isValid) {
-      handleNext({
+      nextStep({
         location: data.location,
       });
     }
@@ -69,7 +64,7 @@ export default function Location({ handleNext, handlePrevious }: StepProps) {
         <Button 
           type="button" 
           variant="outline" 
-          onClick={handlePrevious}
+          onClick={previousStep}
           className="flex-1 h-12 text-lg font-medium hover:bg-muted/50 transition-colors"
         >
           Previous
