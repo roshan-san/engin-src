@@ -12,7 +12,6 @@ import {
 import { FaUsers } from "react-icons/fa";
 import { startupTeamSchema, type StartupTeamFormValues } from "@/features/platform/dashboard/validations/startup";
 import { useStartupCreation } from "../context/StartupCreateContext";
-import type { Startup } from "@/utils/supa-types";
 
 
 export default function StartupTeam() {

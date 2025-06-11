@@ -12,7 +12,6 @@ import {
 import { FaLightbulb } from "react-icons/fa";
 import { startupSolutionSchema, type StartupSolutionFormValues } from "@/features/platform/dashboard/validations/startup";
 import { useStartupCreation } from "../context/StartupCreateContext";
-import type { Startup } from "@/utils/supa-types";
 
 
 export default function StartupSolution() {
