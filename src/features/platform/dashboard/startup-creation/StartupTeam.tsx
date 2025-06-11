@@ -1,5 +1,3 @@
-"use client";
-
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
@@ -11,27 +9,25 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import { Startup } from "@/lib/db/schema";
 import { FaUsers } from "react-icons/fa";
-import { startupTeamSchema, type StartupTeamFormValues } from "@/app/(platform)/dashboard/validations/startup";
+import { startupTeamSchema, type StartupTeamFormValues } from "@/features/platform/dashboard/validations/startup";
+import { useStartupCreation } from "../context/StartupCreateContext";
+import type { Startup } from "@/utils/supa-types";
 
-interface StepProps {
-  handleNext: (data: Partial<Startup>) => void;
-  handlePrevious: () => void;
-}
 
-export default function StartupTeam({ handleNext, handlePrevious }: StepProps) {
+export default function StartupTeam() {
+  const { startupCreationData, nextStep, previousStep } = useStartupCreation();
   const form = useForm<StartupTeamFormValues>({
     resolver: zodResolver(startupTeamSchema),
     defaultValues: {
-      teamSize: 1,
+      teamSize: startupCreationData.teamSize || 1,
     },
   });
 
   const handleSubmit = async (data: StartupTeamFormValues) => {
     const isValid = await form.trigger();
     if (isValid) {
-      handleNext({
+      nextStep({
         teamSize: data.teamSize,
       });
     }
@@ -73,7 +69,7 @@ export default function StartupTeam({ handleNext, handlePrevious }: StepProps) {
         <Button 
           type="button" 
           variant="outline" 
-          onClick={handlePrevious}
+          onClick={previousStep}
           className="flex-1 h-12 text-lg font-medium hover:bg-muted/50 transition-colors"
         >
           Previous

@@ -11,24 +11,22 @@ import {
 import { FaInfoCircle } from "react-icons/fa";
 import { Input } from "@/components/ui/input";
 import { startupDescriptionSchema, type StartupDescriptionFormValues } from "@/features/platform/dashboard/validations/startup";
+import { useStartupCreation } from "../context/StartupCreateContext";
 
-interface StepProps {
-  handleNext: (data: Partial<StartupDescriptionFormValues>) => void;
-  handlePrevious: () => void;
-}
 
-export default function StartupDescription({ handleNext, handlePrevious }: StepProps) {
+export default function StartupDescription() {
+  const { startupCreationData, nextStep, previousStep } = useStartupCreation();
   const form = useForm<StartupDescriptionFormValues>({
     resolver: zodResolver(startupDescriptionSchema),
     defaultValues: {
-      description: "",
+      description: startupCreationData.description || "",
     },
   });
 
   const handleSubmit = async (data: StartupDescriptionFormValues) => {
     const isValid = await form.trigger();
     if (isValid) {
-      handleNext({
+      nextStep({
         description: data.description,
       });
     }
@@ -69,7 +67,7 @@ export default function StartupDescription({ handleNext, handlePrevious }: StepP
         <Button 
           type="button" 
           variant="outline" 
-          onClick={handlePrevious}
+          onClick={previousStep}
           className="flex-1 h-12 text-lg font-medium hover:bg-muted/50 transition-colors"
         >
           Previous

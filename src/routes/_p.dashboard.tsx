@@ -1,13 +1,16 @@
+import { useAuth } from '@/features/authentication/context/AuthContext'
 import CreateBtn from '@/features/platform/dashboard/CreateBtn'
 import Header from '@/features/platform/Header'
 import StartupCard from '@/features/platform/StartupCard'
 import supabase from '@/utils/supabase'
 import { createFileRoute, useLoaderData } from '@tanstack/react-router'
+import { Suspense } from 'react'
 
 export const Route = createFileRoute('/_p/dashboard')({
   component: RouteComponent,
   loader: async () => {
-    const { data } = await supabase.from('startups').select('*')
+    const {user} = useAuth()
+    const { data } = await supabase.from("startups").select('*').eq('founder_id', user.id)
     return data
   }
 })
@@ -28,17 +31,20 @@ function RouteComponent() {
       <div className="h-full flex flex-col p-4 gap-12">
       <Header>Dashboard</Header>
         <div className="space-y-6">
+          <Suspense>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                 {loaderData?.length === 0 ? (
-                    <div className="col-span-3 text-center py-10">
+                  <div className="col-span-3 text-center py-10">
                         <p className="text-muted-foreground">No startups found. Create your first startup!</p>
                     </div>
                 ) : (
-                    loaderData?.map((startup) => (
-                        <StartupCard key={startup.id} startup={startup} />
-                    ))
+                  
+                  loaderData?.map((startup) => (
+                    <StartupCard key={startup.id} startup={startup} />
+                  ))
                 )}
             </div>
+           </Suspense>
             <CreateBtn />
         </div>
       </div>

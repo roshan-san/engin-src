@@ -1,4 +1,3 @@
-"use client";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
@@ -10,27 +9,25 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import { Startup } from "@/lib/db/schema";
 import { FaMoneyBillWave } from "react-icons/fa";
-import { startupFundingSchema, type StartupFundingFormValues } from "@/app/(platform)/dashboard/validations/startup";
+import { startupFundingSchema, type StartupFundingFormValues } from "@/features/platform/dashboard/validations/startup";
+import { useStartupCreation } from "../context/StartupCreateContext";
 
-interface StepProps {
-  handleNext: (data: Partial<Startup>) => void;
-  handlePrevious: () => void;
-}
 
-export default function StartupFunding({ handleNext, handlePrevious }: StepProps) {
+
+export default function StartupFunding() {
+  const { startupCreationData, nextStep, previousStep } = useStartupCreation();
   const form = useForm<StartupFundingFormValues>({
     resolver: zodResolver(startupFundingSchema),
     defaultValues: {
-      funding: 0,
+      funding: startupCreationData.funding || 0,
     },
   });
 
   const handleSubmit = async (data: StartupFundingFormValues) => {
     const isValid = await form.trigger();
     if (isValid) {
-      handleNext({
+      nextStep({
         funding: data.funding,
       });
     }
@@ -72,7 +69,7 @@ export default function StartupFunding({ handleNext, handlePrevious }: StepProps
         <Button 
           type="button" 
           variant="outline" 
-          onClick={handlePrevious}
+          onClick={previousStep}
           className="flex-1 h-12 text-lg font-medium hover:bg-muted/50 transition-colors"
         >
           Previous

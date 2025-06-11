@@ -29,7 +29,7 @@ export const startupFundingSchema = z.object({
 });
 
 // Combined schema for all startup fields
-export const startupSchema = z.object({
+export const startupCreationSchema = z.object({
   name: startupNameSchema.shape.name,
   description: startupDescriptionSchema.shape.description,
   location: startupLocationSchema.shape.location,
@@ -39,6 +39,7 @@ export const startupSchema = z.object({
   funding: startupFundingSchema.shape.funding,
 });
 
+
 // Type exports
 export type StartupNameFormValues = z.infer<typeof startupNameSchema>;
 export type StartupDescriptionFormValues = z.infer<typeof startupDescriptionSchema>;
@@ -47,4 +48,4 @@ export type StartupProblemFormValues = z.infer<typeof startupProblemSchema>;
 export type StartupSolutionFormValues = z.infer<typeof startupSolutionSchema>;
 export type StartupTeamFormValues = z.infer<typeof startupTeamSchema>;
 export type StartupFundingFormValues = z.infer<typeof startupFundingSchema>;
-export type StartupFormValues = z.infer<typeof startupSchema>; 
+export type StartupCreationFormValues = z.infer<typeof startupCreationSchema>; 

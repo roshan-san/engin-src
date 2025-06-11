@@ -1,5 +1,3 @@
-"use client";
-
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
@@ -11,27 +9,25 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import { Startup } from "@/lib/db/schema";
 import { FaBuilding } from "react-icons/fa";
-import { startupNameSchema, type StartupNameFormValues } from "@/app/(platform)/dashboard/validations/startup";
+import { startupNameSchema, type StartupNameFormValues } from "@/features/platform/dashboard/validations/startup";
+import { useStartupCreation } from "../context/StartupCreateContext";
+import type { Startup } from "@/utils/supa-types";
 
-interface StepProps {
-  handleNext: (data: Partial<Startup>) => void;
-  handlePrevious: () => void;
-}
 
-export default function StartupName({ handleNext, handlePrevious }: StepProps) {
+export default function StartupName() {
+  const { startupCreationData, nextStep, previousStep } = useStartupCreation();
   const form = useForm<StartupNameFormValues>({
     resolver: zodResolver(startupNameSchema),
     defaultValues: {
-      name: "",
+      name: startupCreationData.name || "",
     },
   });
 
   const handleSubmit = async (data: StartupNameFormValues) => {
     const isValid = await form.trigger();
     if (isValid) {
-      handleNext({
+      nextStep({
         name: data.name,
       });
     }
@@ -72,7 +68,7 @@ export default function StartupName({ handleNext, handlePrevious }: StepProps) {
         <Button 
           type="button" 
           variant="outline" 
-          onClick={handlePrevious}
+          onClick={previousStep}
           className="flex-1 h-12 text-lg font-medium hover:bg-muted/50 transition-colors"
         >
           Previous
