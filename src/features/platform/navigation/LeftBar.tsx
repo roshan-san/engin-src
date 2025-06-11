@@ -1,16 +1,13 @@
-'use client';
 import { Laptop, Search, Users, MessageCircle } from "lucide-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { cn } from "@/lib/utils";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { UserAvatar } from "./UserAvatar";
+import { UserAvatar } from "../UserAvatar";
 import SignOutButton from "./SignOut";
+import { Link } from "@tanstack/react-router";
 
 const mainNavigationItems = [
   { href: "/dashboard", icon: Laptop, label: "Dashboard" },
@@ -20,23 +17,21 @@ const mainNavigationItems = [
 ];
 
 export function LeftBar() {
-  const pathname = usePathname();
-
   return (
-    <div className="flex h-screen flex-col items-center ">
+    <div className="flex h-full flex-col items-center">
       <div className="flex flex-col items-center gap-6 flex-grow py-8">
         {mainNavigationItems.map((item) => (
           <TooltipProvider key={item.href}>
             <Tooltip>
               <TooltipTrigger asChild>
                 <Link
-                  href={item.href}
-                  className={cn(
-                    "flex h-12 w-12 items-center justify-center rounded-xl transition-all duration-200",
-                    pathname.startsWith(item.href)
-                      ? "bg-primary text-primary-foreground shadow-sm" 
-                      : "text-muted-foreground hover:bg-primary/10 hover:text-foreground"
-                  )}
+                  to={item.href}
+                  activeProps={{
+                    className: "bg-primary text-primary-foreground shadow-sm p-2 rounded-md"
+                  }}
+                  inactiveProps={{
+                    className: "text-muted-foreground hover:bg-primary/10 hover:text-foreground p-2 rounded-md"
+                  }}
                 >
                   <item.icon className="h-5 w-5" />
                 </Link>
@@ -54,7 +49,13 @@ export function LeftBar() {
           <Tooltip>
             <TooltipTrigger asChild>
               <Link
-                href="/profile"
+                to="/profile"
+                activeProps={{
+                  className: "bg-primary text-primary-foreground shadow-sm p-2 rounded-md"
+                }}
+                inactiveProps={{
+                  className: "text-muted-foreground hover:bg-primary/10 hover:text-foreground p-2 rounded-md"
+                }}
               >
                 <UserAvatar />
               </Link>

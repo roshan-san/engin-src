@@ -1,7 +1,7 @@
 import { Laptop, Search, Users, MessageCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { UserAvatar } from "./UserAvatar";
-import { Link } from "@tanstack/react-router";
+import { UserAvatar } from "../UserAvatar";
+import { Link, useRouter } from "@tanstack/react-router";
 
 const navigationItems = [
   { href: "/dashboard", icon: Laptop, },
@@ -11,16 +11,19 @@ const navigationItems = [
 ];
 
 export function BottomBar() {
-  return 
+  const router = useRouter();
+  const currentPath = router.state.location.pathname;
+
+  return (
     <div className="fixed bottom-0 left-0 right-0 h-16 bg-background border-t">
       <div className="flex justify-around items-center h-full p-2">
         {navigationItems.map(({ href, icon: Icon }) => (
           <Link 
             key={href}
-            href={href} 
+            to={href} 
             className={cn(
               "flex h-12 w-12 items-center justify-center rounded-xl transition-all duration-200",
-              isactive 
+              currentPath === href
                 ? "bg-primary text-primary-foreground shadow-sm" 
                 : "text-muted-foreground hover:bg-primary/10 hover:text-foreground"
             )}
@@ -29,8 +32,13 @@ export function BottomBar() {
           </Link>
         ))}
         <Link 
-          href="/profile"
-         
+          to="/profile"
+          className={cn(
+            "flex h-12 w-12 items-center justify-center rounded-xl transition-all duration-200",
+            currentPath === "/profile"
+              ? "bg-primary text-primary-foreground shadow-sm" 
+              : "text-muted-foreground hover:bg-primary/10 hover:text-foreground"
+          )}
         >
           <UserAvatar />
         </Link>

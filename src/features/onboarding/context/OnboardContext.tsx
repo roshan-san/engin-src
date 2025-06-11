@@ -16,7 +16,7 @@ export const OnboardingProvider = ({
   children: React.ReactNode;
 }) => {
   const [onboardingData, setOnboardingData] = useState<Partial<OnboardingFormValues>>({});
-  const [step, setStep] = useState(2);
+  const [step, setStep] = useState(1);
 
   const updateData = (newData: Partial<OnboardingFormValues>) =>
     setOnboardingData((prev) => ({ ...prev, ...newData }));

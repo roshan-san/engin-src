@@ -14,6 +14,12 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as RegisterImport } from './routes/register'
 import { Route as PImport } from './routes/_p'
 import { Route as IndexImport } from './routes/index'
+import { Route as PStartupsImport } from './routes/_p.startups'
+import { Route as PProfileImport } from './routes/_p.profile'
+import { Route as PMessageImport } from './routes/_p.message'
+import { Route as PDashboardImport } from './routes/_p.dashboard'
+import { Route as PConnectImport } from './routes/_p.connect'
+import { Route as PStartupsStartupidImport } from './routes/_p.startups.$startupid'
 
 // Create/Update Routes
 
@@ -32,6 +38,42 @@ const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRoute,
+} as any)
+
+const PStartupsRoute = PStartupsImport.update({
+  id: '/startups',
+  path: '/startups',
+  getParentRoute: () => PRoute,
+} as any)
+
+const PProfileRoute = PProfileImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => PRoute,
+} as any)
+
+const PMessageRoute = PMessageImport.update({
+  id: '/message',
+  path: '/message',
+  getParentRoute: () => PRoute,
+} as any)
+
+const PDashboardRoute = PDashboardImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => PRoute,
+} as any)
+
+const PConnectRoute = PConnectImport.update({
+  id: '/connect',
+  path: '/connect',
+  getParentRoute: () => PRoute,
+} as any)
+
+const PStartupsStartupidRoute = PStartupsStartupidImport.update({
+  id: '/$startupid',
+  path: '/$startupid',
+  getParentRoute: () => PStartupsRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -59,48 +101,166 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RegisterImport
       parentRoute: typeof rootRoute
     }
+    '/_p/connect': {
+      id: '/_p/connect'
+      path: '/connect'
+      fullPath: '/connect'
+      preLoaderRoute: typeof PConnectImport
+      parentRoute: typeof PImport
+    }
+    '/_p/dashboard': {
+      id: '/_p/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof PDashboardImport
+      parentRoute: typeof PImport
+    }
+    '/_p/message': {
+      id: '/_p/message'
+      path: '/message'
+      fullPath: '/message'
+      preLoaderRoute: typeof PMessageImport
+      parentRoute: typeof PImport
+    }
+    '/_p/profile': {
+      id: '/_p/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof PProfileImport
+      parentRoute: typeof PImport
+    }
+    '/_p/startups': {
+      id: '/_p/startups'
+      path: '/startups'
+      fullPath: '/startups'
+      preLoaderRoute: typeof PStartupsImport
+      parentRoute: typeof PImport
+    }
+    '/_p/startups/$startupid': {
+      id: '/_p/startups/$startupid'
+      path: '/$startupid'
+      fullPath: '/startups/$startupid'
+      preLoaderRoute: typeof PStartupsStartupidImport
+      parentRoute: typeof PStartupsImport
+    }
   }
 }
 
 // Create and export the route tree
 
+interface PStartupsRouteChildren {
+  PStartupsStartupidRoute: typeof PStartupsStartupidRoute
+}
+
+const PStartupsRouteChildren: PStartupsRouteChildren = {
+  PStartupsStartupidRoute: PStartupsStartupidRoute,
+}
+
+const PStartupsRouteWithChildren = PStartupsRoute._addFileChildren(
+  PStartupsRouteChildren,
+)
+
+interface PRouteChildren {
+  PConnectRoute: typeof PConnectRoute
+  PDashboardRoute: typeof PDashboardRoute
+  PMessageRoute: typeof PMessageRoute
+  PProfileRoute: typeof PProfileRoute
+  PStartupsRoute: typeof PStartupsRouteWithChildren
+}
+
+const PRouteChildren: PRouteChildren = {
+  PConnectRoute: PConnectRoute,
+  PDashboardRoute: PDashboardRoute,
+  PMessageRoute: PMessageRoute,
+  PProfileRoute: PProfileRoute,
+  PStartupsRoute: PStartupsRouteWithChildren,
+}
+
+const PRouteWithChildren = PRoute._addFileChildren(PRouteChildren)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '': typeof PRoute
+  '': typeof PRouteWithChildren
   '/register': typeof RegisterRoute
+  '/connect': typeof PConnectRoute
+  '/dashboard': typeof PDashboardRoute
+  '/message': typeof PMessageRoute
+  '/profile': typeof PProfileRoute
+  '/startups': typeof PStartupsRouteWithChildren
+  '/startups/$startupid': typeof PStartupsStartupidRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '': typeof PRoute
+  '': typeof PRouteWithChildren
   '/register': typeof RegisterRoute
+  '/connect': typeof PConnectRoute
+  '/dashboard': typeof PDashboardRoute
+  '/message': typeof PMessageRoute
+  '/profile': typeof PProfileRoute
+  '/startups': typeof PStartupsRouteWithChildren
+  '/startups/$startupid': typeof PStartupsStartupidRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/_p': typeof PRoute
+  '/_p': typeof PRouteWithChildren
   '/register': typeof RegisterRoute
+  '/_p/connect': typeof PConnectRoute
+  '/_p/dashboard': typeof PDashboardRoute
+  '/_p/message': typeof PMessageRoute
+  '/_p/profile': typeof PProfileRoute
+  '/_p/startups': typeof PStartupsRouteWithChildren
+  '/_p/startups/$startupid': typeof PStartupsStartupidRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '' | '/register'
+  fullPaths:
+    | '/'
+    | ''
+    | '/register'
+    | '/connect'
+    | '/dashboard'
+    | '/message'
+    | '/profile'
+    | '/startups'
+    | '/startups/$startupid'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '' | '/register'
-  id: '__root__' | '/' | '/_p' | '/register'
+  to:
+    | '/'
+    | ''
+    | '/register'
+    | '/connect'
+    | '/dashboard'
+    | '/message'
+    | '/profile'
+    | '/startups'
+    | '/startups/$startupid'
+  id:
+    | '__root__'
+    | '/'
+    | '/_p'
+    | '/register'
+    | '/_p/connect'
+    | '/_p/dashboard'
+    | '/_p/message'
+    | '/_p/profile'
+    | '/_p/startups'
+    | '/_p/startups/$startupid'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  PRoute: typeof PRoute
+  PRoute: typeof PRouteWithChildren
   RegisterRoute: typeof RegisterRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  PRoute: PRoute,
+  PRoute: PRouteWithChildren,
   RegisterRoute: RegisterRoute,
 }
 
@@ -123,10 +283,44 @@ export const routeTree = rootRoute
       "filePath": "index.tsx"
     },
     "/_p": {
-      "filePath": "_p.tsx"
+      "filePath": "_p.tsx",
+      "children": [
+        "/_p/connect",
+        "/_p/dashboard",
+        "/_p/message",
+        "/_p/profile",
+        "/_p/startups"
+      ]
     },
     "/register": {
       "filePath": "register.tsx"
+    },
+    "/_p/connect": {
+      "filePath": "_p.connect.tsx",
+      "parent": "/_p"
+    },
+    "/_p/dashboard": {
+      "filePath": "_p.dashboard.tsx",
+      "parent": "/_p"
+    },
+    "/_p/message": {
+      "filePath": "_p.message.tsx",
+      "parent": "/_p"
+    },
+    "/_p/profile": {
+      "filePath": "_p.profile.tsx",
+      "parent": "/_p"
+    },
+    "/_p/startups": {
+      "filePath": "_p.startups.tsx",
+      "parent": "/_p",
+      "children": [
+        "/_p/startups/$startupid"
+      ]
+    },
+    "/_p/startups/$startupid": {
+      "filePath": "_p.startups.$startupid.tsx",
+      "parent": "/_p/startups"
     }
   }
 }
