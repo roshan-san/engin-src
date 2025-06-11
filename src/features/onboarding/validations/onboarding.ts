@@ -1,10 +1,21 @@
 import { z } from "zod";
 
+
+// Username Schema
+export const usernameSchema = z.object({
+    username: z.string()
+      .min(3, "Username must be at least 3 characters")
+      .max(30, "Username must be less than 30 characters")
+      .regex(/^[a-zA-Z0-9_-]+$/, "Username can only contain letters, numbers, underscores, and hyphens")
+  });
+  
+export type UsernameFormValues = z.infer<typeof usernameSchema>;
+
+
 // User Type Schema
 export const userTypeSchema = z.object({
   user_type: z.enum(['Creator/Collaborator', 'Mentor', 'Investor'])
 });
-
 export type UserTypeFormValues = z.infer<typeof userTypeSchema>;
 
 // Work Type Schema
@@ -27,7 +38,9 @@ export type LocationFormValues = z.infer<typeof locationSchema>;
 export const skillsSchema = z.object({
   skills: z.array(z.string())
     .min(1, "At least one skill is required")
-    .max(10, "Maximum 10 skills allowed")
+    .max(10, "Maximum 10 skills allowed"),
+  interests: z.array(z.string())
+    .max(10, "Maximum 10 interests allowed")
 });
 
 export type SkillsFormValues = z.infer<typeof skillsSchema>;
@@ -40,10 +53,16 @@ export const contactSchema = z.object({
 
 export type ContactFormValues = z.infer<typeof contactSchema>;
 
-// Username Schema
-export const usernameSchema = z.object({
-  username: z.string()
-    .min(3, "Username must be at least 3 characters")
-    .max(30, "Username must be less than 30 characters")
-    .regex(/^[a-zA-Z0-9_-]+$/, "Username can only contain letters, numbers, underscores, and hyphens")
+// Complete Profile Schema
+export const OnboardingSchema = z.object({
+  username: usernameSchema.shape.username,
+  user_type: userTypeSchema.shape.user_type,
+  work_type: workTypeSchema.shape.work_type,
+  location: locationSchema.shape.location,
+  skills: skillsSchema.shape.skills,
+  interests: skillsSchema.shape.interests,
+  github: contactSchema.shape.github,
+  linkedin: contactSchema.shape.linkedin
 });
+
+export type OnboardingFormValues = z.infer<typeof OnboardingSchema>;

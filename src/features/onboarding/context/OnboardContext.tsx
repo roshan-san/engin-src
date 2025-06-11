@@ -4,18 +4,40 @@ import type { OnboardingFormValues } from "../validations/onboarding";
 type OnboardingContextType = {
   onboardingData: Partial<OnboardingFormValues>;
   updateData: (newData: Partial<OnboardingFormValues>) => void;
+  step: number;
+  nextStep: () => void;
+  previousStep: () => void;
 };
 
 const OnboardingContext = createContext<OnboardingContextType | null>(null);
 
-export const OnboardingProvider = ({ children }: { children: React.ReactNode }) => {
+export const OnboardingProvider = ({ 
+  children,
+}: { 
+  children: React.ReactNode;
+}) => {
   const [onboardingData, setOnboardingData] = useState<Partial<OnboardingFormValues>>({});
+  const [step, setStep] = useState(1);
 
   const updateData = (newData: Partial<OnboardingFormValues>) =>
     setOnboardingData((prev) => ({ ...prev, ...newData }));
 
+  const nextStep = () => {
+    setStep(Math.min(5, step + 1));
+  };
+
+  const previousStep = () => {
+    setStep(Math.max(1, step - 1));
+  };
+
   return (
-    <OnboardingContext.Provider value={{ onboardingData, updateData }}>
+    <OnboardingContext.Provider value={{ 
+      onboardingData, 
+      updateData, 
+      step, 
+      nextStep, 
+      previousStep,
+    }}>
       {children}
     </OnboardingContext.Provider>
   );

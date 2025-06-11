@@ -1,9 +1,9 @@
-"use client"
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import {
   Form,
   FormControl,
@@ -11,36 +11,31 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
+import type { User } from "@supabase/supabase-js";
+import { usernameSchema } from "../validations/onboarding";
+
+type UsernameFormData = z.infer<typeof usernameSchema>;
 
 interface StepProps {
-  handleNext: (data: Partial<Profile>) => void;
+  handleNext: (data: UsernameFormData) => void;
   handlePrevious: () => void;
+  user: User | null;
 }
 
-export default function UserName({ handleNext, handlePrevious }: StepProps) {
-  const { user, logout, isLoading } = useAuthContext()
-  const form = useForm<UsernameFormValues>({
+export default function UserName({ handleNext, handlePrevious, user }: StepProps) {
+  const form = useForm<UsernameFormData>({
     resolver: zodResolver(usernameSchema),
     defaultValues: {
       username: "",
     },
   });
 
-  if (isLoading) {
-    return <div>Loading...</div>
-  }
-
   if (!user) {
     return <div>Error loading user data</div>
   }
 
-  const handleSubmit = async (data: UsernameFormValues) => {
-    const isValid = await form.trigger();
-    if (isValid) {
-      handleNext({
-        username: data.username,
-      });
-    }
+  const handleSubmit = async (data: UsernameFormData) => {
+    handleNext(data);
   };
 
   return (
@@ -50,7 +45,7 @@ export default function UserName({ handleNext, handlePrevious }: StepProps) {
           <Avatar className="w-10 h-10">
             <AvatarImage src={user.user_metadata.avatar_url} />
             <AvatarFallback>
-              {user.user_metadata.name?.charAt(0)}
+              {user.user_metadata.name.charAt(0)}
             </AvatarFallback>
           </Avatar>
           <span>
@@ -76,29 +71,24 @@ export default function UserName({ handleNext, handlePrevious }: StepProps) {
                 </FormItem>
               )}
             />
+            <div className="w-full p-4 flex justify-between gap-4 mt-4">
+              <Button 
+                type="button" 
+                variant="outline" 
+                onClick={handlePrevious}
+                className="flex-1 h-12 text-lg font-medium hover:bg-muted/50 transition-colors"
+              >
+                Sign Out 
+              </Button>
+              <Button 
+                type="submit"
+                className="flex-1 h-12 text-lg font-medium transition-all hover:scale-[1.02]"
+              >
+                Next
+              </Button>
+            </div>
           </form>
         </Form>
-      </div>
-
-      <div className="w-full p-4 flex justify-between gap-4 mt-4">
-        <Button 
-          type="button" 
-          variant="outline" 
-          onClick={() => {
-            logout()
-            handlePrevious();
-          }}
-          className="flex-1 h-12 text-lg font-medium hover:bg-muted/50 transition-colors"
-        >
-          Sign Out 
-        </Button>
-        <Button 
-          type="submit"
-          onClick={form.handleSubmit(handleSubmit)}
-          className="flex-1 h-12 text-lg font-medium transition-all hover:scale-[1.02]"
-        >
-          Next
-        </Button>
       </div>
     </div>
   );
