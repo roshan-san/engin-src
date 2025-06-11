@@ -1,15 +1,14 @@
 import { createContext, useContext, type ReactNode } from "react";
-import { createClient } from "@supabase/supabase-js";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { type User } from "@supabase/supabase-js";
+import supabase from "@/utils/supabase";
+import { QueryClient, useQuery, useQueryClient } from "@tanstack/react-query";
 
-const supabase = createClient(
-  import.meta.env.VITE_SUPABASE_URL!,
-  import.meta.env.VITE_SUPABASE_ANON_KEY!
-);
+const queryClient = new QueryClient()
+
 
 const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
   if (event === 'SIGNED_IN' || event === 'SIGNED_OUT' || event === 'USER_UPDATED') {
-    window.location.reload();
+    queryClient.invalidateQueries({ queryKey: ["auth-user"] });
   }
 });
 
@@ -18,7 +17,7 @@ window.addEventListener('beforeunload', () => {
 });
 
 type AuthContextType = {
-  user: any;
+  user: User | null;
   isLoading: boolean;
   signInWithGoogle: () => void;
   signInWithGitHub: () => void;
@@ -33,12 +32,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const {
     data: user,
     isLoading,
-  } = useQuery({
+  } = useQuery<User | null>({
     queryKey: ["auth-user"],
     queryFn: async () => {
       const { data, error } = await supabase.auth.getUser();
       if (error) throw error;
-      return data.user;
+      return data.user ?? null;
     },
     staleTime: 5 * 60 * 1000,
   });
@@ -61,7 +60,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   return (
     <AuthContext.Provider
       value={{
-        user,
+        user: user ?? null,
         isLoading,
         signInWithGoogle,
         signInWithGitHub,
