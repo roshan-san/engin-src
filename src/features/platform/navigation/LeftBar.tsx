@@ -54,7 +54,7 @@ export function LeftBar() {
                   to={"/profile/$username"}
                   params={{ username: profile.username }}
                 >
-                  <UserAvatar />
+                  <UserAvatar url={profile.avatar_url}  />
                 </Link>
               ) : (
                 <div className="p-2.5">

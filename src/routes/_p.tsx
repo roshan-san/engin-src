@@ -16,7 +16,7 @@ export const Route = createFileRoute('/_p')({
 
 function RouteComponent() {
   return (
-    <div className="flex h-screen sm:flex-row flex-col w-full border-2 border-red-500">
+    <div className="flex h-screen sm:flex-row flex-col w-full">
       <div className="w-20 hidden md:block">
         <LeftBar />
       </div>

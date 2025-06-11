@@ -30,17 +30,18 @@ export function BottomBar() {
             <Icon className="h-5 w-5" />
           </Link>
         ))}
-        <Link 
-          to="/profile"
-          activeProps={{
-            className: "flex h-12 w-12 items-center justify-center rounded-xl shadow-sm transition-all duration-200"
-          }}
-          inactiveProps={{
-            className: "flex h-12 w-12 items-center justify-center rounded-xl hover:bg-primary/10 hover:text-foreground transition-all duration-200"
-          }}
-        >
-          <UserAvatar/>
-        </Link>
+        {profile ? (
+                <Link
+                  to={"/profile/$username"}
+                  params={{ username: profile.username }}
+                >
+                  <UserAvatar url={profile.avatar_url}  />
+                </Link>
+              ) : (
+                <div className="p-2.5">
+                  <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+                </div>
+              )}
       </div>
     </div>
   );
