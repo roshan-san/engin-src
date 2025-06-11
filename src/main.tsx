@@ -6,7 +6,6 @@ import "./index.css"
 // Import the generated route tree
 import { routeTree } from './routeTree.gen'
 import { ThemeProvider } from './components/ThemeProvider'
-import { AuthProvider } from './features/authentication/context/AuthContext'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 // Create a new router instance
@@ -29,10 +28,8 @@ if (!rootElement.innerHTML) {
       <ThemeProvider>
         <QueryClientProvider client={queryClient}>
 
-      <AuthProvider>
         <RouterProvider router={router} />
-      </AuthProvider>
-        </QueryClientProvider>
+          </QueryClientProvider>
       </ThemeProvider>
     </StrictMode>,
   )

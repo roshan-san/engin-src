@@ -1,4 +1,3 @@
-import { OnboardingProvider } from "./context/OnboardContext";
 import UserName from "./steps/UserName";
 import Location from "./steps/Location";
 import Contact from "./steps/Contact";
