@@ -1,14 +1,13 @@
 import { useAuth } from '@/features/authentication/context/AuthContext'
 import { OnboardingProvider } from '@/features/onboarding/context/OnboardContext'
-import Container from '@/features/onboarding/OnboardingSteps'
 import { createFileRoute, redirect, } from '@tanstack/react-router'
-
-const user = true
+import OnboardingSteps from '@/features/onboarding/OnboardingSteps'
 
 export const Route = createFileRoute('/register')({
   component: RouteComponent,
   loader: async () => {
-    if(user) {
+    const profile = false
+    if(profile) {
       throw redirect({to: '/dashboard'})
     }
   }
@@ -19,15 +18,12 @@ function RouteComponent() {
 
   if(isLoading) return <div>Loading...</div>
   if(!user) {
-    redirect({to: '/'});
-    return <div>
-      lalal
-    </div>;
+    throw redirect({to: '/'});
   }
 
   return <div className='flex flex-col items-center justify-center h-screen'>
     <OnboardingProvider>
-      <Container/>
+      <OnboardingSteps/>
   </OnboardingProvider>
 </div>
 }

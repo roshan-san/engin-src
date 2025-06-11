@@ -28,36 +28,63 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   });
 
   useEffect(() => {
-    supabase.auth.onAuthStateChange(async (event,) => {
-      await queryClient.invalidateQueries({ queryKey: ["auth-user"] });
-      
-      if (event === "SIGNED_IN") {
-        navigate({to: "/register"});
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === "SIGNED_IN" && session) {
+        try {
+          await queryClient.invalidateQueries({ queryKey: ["auth-user"] });
+          navigate({ to: "/register" });
+        } catch (error) {
+          console.error("Error during sign in:", error);
+        }
       } else if (event === "SIGNED_OUT") {
-        navigate({to: "/"});
+        try {
+          await queryClient.invalidateQueries({ queryKey: ["auth-user"] });
+          navigate({ to: "/" });
+        } catch (error) {
+          console.error("Error during sign out:", error);
+        }
       }
     });
-  }, [queryClient]);
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [queryClient, navigate]);
 
   const signInWithGoogle = async () => {    
-    await supabase.auth.signInWithOAuth({ provider: "google" });
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({ 
+        provider: "google",
+        options: {
+          redirectTo: window.location.origin + "/register"
+        }
+      });
+      if (error) throw error;
+    } catch (error) {
+      console.error("Error signing in with Google:", error);
+    }
   };
 
   const signInWithGitHub = async () => {    
-    await supabase.auth.signInWithOAuth({ provider: "github" });
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({ 
+        provider: "github",
+        options: {
+          redirectTo: window.location.origin + "/register"
+        }
+      });
+      if (error) throw error;
+    } catch (error) {
+      console.error("Error signing in with GitHub:", error);
+    }
   };
 
   const signOut = async () => {
-    console.log("Attempting to sign out...");
     try {
       const { error } = await supabase.auth.signOut();
-      if (error) {
-        console.error("Error during sign out:", error);
-      } else {
-        console.log("Sign out successful");
-      }
-    } catch (err) {
-      console.error("Exception during sign out:", err);
+      if (error) throw error;
+    } catch (error) {
+      console.error("Error signing out:", error);
     }
   };
 

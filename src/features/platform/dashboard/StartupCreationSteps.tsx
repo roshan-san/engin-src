@@ -5,7 +5,9 @@ import StartupDescription from "./startup-creation/StartupDescription";
 import StartupProblem from "./startup-creation/StartupProblem";
 import StartupFunding from "./startup-creation/StartupFunding";
 import StartupSolution from "./startup-creation/StartupSolution";
-export default function OnboardingSteps() {
+import { useStartupCreation } from "./context/StartupCreateContext";
+import StartupTeam from "./startup-creation/StartupTeam";
+export default function StartupCreationSteps() {
   const { step } = useStartupCreation();
 
   return (

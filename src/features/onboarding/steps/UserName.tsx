@@ -18,8 +18,8 @@ import { useAuth } from "../../authentication/context/AuthContext";
 type UsernameFormData = z.infer<typeof usernameSchema>;
 
 export default function UserName() {
-  const { nextStep, previousStep } = useOnboarding();
-  const { user } = useAuth();
+  const { nextStep } = useOnboarding();
+  const { user ,signOut} = useAuth();
   const form = useForm<UsernameFormData>({
     resolver: zodResolver(usernameSchema),
     defaultValues: {
@@ -72,7 +72,7 @@ export default function UserName() {
               <Button 
                 type="button" 
                 variant="outline" 
-                onClick={previousStep}
+                onClick={signOut}
                 className="flex-1 h-12 text-lg font-medium hover:bg-muted/50 transition-colors"
               >
                 Sign Out 
