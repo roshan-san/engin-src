@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "update-types": "npx supabase gen types --lang=typescript --project-id \"wwxgdvvqpvlftrqiezcj\" > src/database.types.ts",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"

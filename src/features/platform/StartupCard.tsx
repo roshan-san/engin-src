@@ -1,9 +1,8 @@
 import { Card } from '@/components/ui/card'
 import { Users, DollarSign, Calendar, Building2, MapPin, } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
-  import type { Startup } from '@/lib/db/schema'
-
-export default function StartupCard({ startup }: { startup: Startup }) {
+import type { Startup } from '@/utils/supa-types'
+export default function StartupCard({startup}:{startup:Startup}) {
   return (
     <Link key={startup.id} to={"/startups/"+startup.id}>
       <Card className="w-full p-6 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
@@ -15,7 +14,7 @@ export default function StartupCard({ startup }: { startup: Startup }) {
           </div>
           <div className="flex items-center gap-1 text-sm text-muted-foreground">
             <Users className="w-4 h-4" />
-            <span>{startup.teamSize}</span>
+            <span>{startup.team_size}</span>
           </div>
         </div>
 
