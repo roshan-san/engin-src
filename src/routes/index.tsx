@@ -6,7 +6,7 @@ export const Route = createFileRoute('/')({
 })
 
 function RouteComponent() {
-  return <div>
+  return <div className="min-h-screen flex flex-col">
     <Header/>
     <Hero/>
   </div>
