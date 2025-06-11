@@ -1,13 +1,17 @@
 import { Button } from "@/components/ui/button"
 import { FcGoogle } from "react-icons/fc"
-import { useAuth } from "../context/AuthContext"
+import supabase from "@/utils/supabase"
 
 export function GoogleButton() {  
-    const { signInWithGoogle } = useAuth()
     return (
         <Button 
             className="bg-white hover:bg-gray-50 text-gray-700 border border-gray-300"
-            onClick={signInWithGoogle}
+            onClick={() => supabase.auth.signInWithOAuth({
+                provider: 'google',
+                options: {
+                    redirectTo:`${import.meta.env.VITE_APP_URL}/register`
+                }
+            })}
         >
             <FcGoogle className="h-5 w-5" />
             <span className="text-base">

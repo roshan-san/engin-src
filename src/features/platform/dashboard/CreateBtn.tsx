@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription, DrawerTrigger } from "@/components/ui/drawer";
 import { FaPlus } from "react-icons/fa";
 import StartupCreationSteps from "./StartupCreationSteps";
+import { StartupCreateProvider } from "./context/StartupCreateContext";
 export default function CreateBtn() {
   return (
     <>
@@ -17,7 +18,9 @@ export default function CreateBtn() {
               <DrawerTitle></DrawerTitle>
               <DrawerDescription></DrawerDescription>
             </DrawerHeader>
+            <StartupCreateProvider>
             <StartupCreationSteps />
+            </StartupCreateProvider>
           </DrawerContent>
         </Drawer>
       </div>

@@ -1,29 +1,31 @@
-import { useAuth } from '@/features/authentication/context/AuthContext'
 import { OnboardingProvider } from '@/features/onboarding/context/OnboardContext'
-import { createFileRoute, redirect, } from '@tanstack/react-router'
+import { createFileRoute, redirect } from '@tanstack/react-router'
 import OnboardingSteps from '@/features/onboarding/OnboardingSteps'
+import supabase from '@/utils/supabase';
 
 export const Route = createFileRoute('/register')({
   component: RouteComponent,
-  loader: async () => {
-    const profile = false
-    if(profile) {
-      throw redirect({to: '/dashboard'})
+  beforeLoad: async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    console.log("user found")
+    console.log('user', user);
+    if (user) {
+      const { data: profile } = await supabase.from('profiles').select('*').eq('id', user.id);
+      if (profile) {
+        console.log('profile found');
+        console.log(profile);
+        throw redirect({ to: '/dashboard' });
+      }
     }
-  }
+  },
 })
 
 function RouteComponent() {
-  const {user ,isLoading}= useAuth()
-
-  if(isLoading) return <div>Loading...</div>
-  if(!user) {
-    throw redirect({to: '/'});
-  }
-
-  return <div className='flex flex-col items-center justify-center h-screen'>
-    <OnboardingProvider>
-      <OnboardingSteps/>
-  </OnboardingProvider>
-</div>
+  return (
+    <div className='flex flex-col items-center justify-center h-screen'>
+      <OnboardingProvider>
+        <OnboardingSteps/>
+      </OnboardingProvider>
+    </div>
+  )
 }

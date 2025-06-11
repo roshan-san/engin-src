@@ -9,7 +9,7 @@ type StartupCreationContextType = {
 
 const StartupCreationContext = createContext<StartupCreationContextType | null>(null);
 
-export const OnboardingProvider = ({ 
+export const StartupCreateProvider = ({ 
   children,
 }: { 
   children: React.ReactNode;

@@ -13,13 +13,16 @@ import {
 } from "@/components/ui/form";
 import { usernameSchema } from "../validations/onboarding";
 import { useOnboarding } from "../context/OnboardContext";
-import { useAuth } from "../../authentication/context/AuthContext";
+import { useUser, useSignOut } from "@/features/authentication/store/authStore";
+import { Loader2 } from "lucide-react";
 
 type UsernameFormData = z.infer<typeof usernameSchema>;
 
 export default function UserName() {
   const { nextStep } = useOnboarding();
-  const { user ,signOut} = useAuth();
+  const { data: user, isLoading: isUserLoading } = useUser();
+  const { mutate: signOut, isPending: isSigningOut } = useSignOut();
+  
   const form = useForm<UsernameFormData>({
     resolver: zodResolver(usernameSchema),
     defaultValues: {
@@ -27,13 +30,19 @@ export default function UserName() {
     },
   });
 
-  if (!user) {
-    return <div>Error loading user data</div>
-  }
-
   const handleSubmit = async (data: UsernameFormData) => {
     nextStep(data);
   };
+
+  if (isUserLoading) {
+    return (
+      <div className="w-full h-full flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  if (!user) return null;
 
   return (
     <div className="w-full flex justify-center items-center gap-6 flex-col h-full p-4 max-w-2xl mx-auto">
@@ -42,11 +51,11 @@ export default function UserName() {
           <Avatar className="w-10 h-10">
             <AvatarImage src={user.user_metadata.avatar_url} />
             <AvatarFallback>
-              {user.user_metadata.name.charAt(0)}
+              {user.user_metadata.name?.charAt(0) || user.email?.charAt(0)}
             </AvatarFallback>
           </Avatar>
           <span>
-            hello {user.user_metadata.name}
+            hello {user.user_metadata.name || user.email}
           </span>
         </h3>
         
@@ -72,7 +81,8 @@ export default function UserName() {
               <Button 
                 type="button" 
                 variant="outline" 
-                onClick={signOut}
+                onClick={() => signOut()}
+                disabled={isSigningOut}
                 className="flex-1 h-12 text-lg font-medium hover:bg-muted/50 transition-colors"
               >
                 Sign Out 

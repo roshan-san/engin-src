@@ -1,3 +1,4 @@
+import Header from '@/features/platform/Header'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_p/profile')({
@@ -5,5 +6,9 @@ export const Route = createFileRoute('/_p/profile')({
 })
 
 function RouteComponent() {
-  return <div>Hello "/_p/profile"!</div>
+  return (
+    <div className="h-full flex flex-col p-4 gap-12">
+      <Header>Profile</Header>
+    </div>
+  )
 }

@@ -1,8 +1,8 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useAuth } from "@/features/authentication/context/AuthContext";
+import { useUser } from "@/features/authentication/store/authStore";
 
 export function UserAvatar() {
-  const {user}= useAuth()
+  const { data: user } = useUser();
   const avatarUrl = user?.user_metadata?.avatar_url;
 
   return (
