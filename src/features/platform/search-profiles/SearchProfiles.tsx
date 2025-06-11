@@ -1,6 +1,8 @@
 import { Input } from '@/components/ui/input';
 import { useProfileSearch } from './useProfileSearch';
 import ProfileCard from './ProfileCard';
+import ReqDrawer from '../make-connections/ReqDrawer';
+
 export default function SearchProfiles() {
   const {
     searchQuery,
@@ -14,16 +16,18 @@ export default function SearchProfiles() {
 
   return (
     <div className="h-full flex flex-col gap-6 p-4">
-      <div className="relative">
-        <Input
-          type="text"
-          placeholder="Search for profiles..."
-          value={searchQuery}
-          autoFocus
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full p-4 h-14 rounded-2xl border-2 border-gray-200 focus:border-blue-500 transition-all duration-200 shadow-sm hover:shadow-md"
-        />
-        
+      <div className="flex items-center gap-4">
+        <div className="relative flex-1">
+          <Input
+            type="text"
+            placeholder="Search for profiles..."
+            value={searchQuery}
+            autoFocus
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full p-4 h-14 rounded-2xl border-2 border-gray-200 focus:border-blue-500 transition-all duration-200 shadow-sm hover:shadow-md"
+          />
+        </div>
+        <ReqDrawer />
       </div>
 
       {status === 'pending' ? (

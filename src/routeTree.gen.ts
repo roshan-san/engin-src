@@ -20,6 +20,7 @@ import { Route as PMessageImport } from './routes/_p.message'
 import { Route as PDashboardImport } from './routes/_p.dashboard'
 import { Route as PConnectImport } from './routes/_p.connect'
 import { Route as PStartupsStartupidImport } from './routes/_p.startups.$startupid'
+import { Route as PProfileUsernameImport } from './routes/_p.profile.$username'
 
 // Create/Update Routes
 
@@ -74,6 +75,12 @@ const PStartupsStartupidRoute = PStartupsStartupidImport.update({
   id: '/$startupid',
   path: '/$startupid',
   getParentRoute: () => PStartupsRoute,
+} as any)
+
+const PProfileUsernameRoute = PProfileUsernameImport.update({
+  id: '/$username',
+  path: '/$username',
+  getParentRoute: () => PProfileRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -136,6 +143,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PStartupsImport
       parentRoute: typeof PImport
     }
+    '/_p/profile/$username': {
+      id: '/_p/profile/$username'
+      path: '/$username'
+      fullPath: '/profile/$username'
+      preLoaderRoute: typeof PProfileUsernameImport
+      parentRoute: typeof PProfileImport
+    }
     '/_p/startups/$startupid': {
       id: '/_p/startups/$startupid'
       path: '/$startupid'
@@ -147,6 +161,18 @@ declare module '@tanstack/react-router' {
 }
 
 // Create and export the route tree
+
+interface PProfileRouteChildren {
+  PProfileUsernameRoute: typeof PProfileUsernameRoute
+}
+
+const PProfileRouteChildren: PProfileRouteChildren = {
+  PProfileUsernameRoute: PProfileUsernameRoute,
+}
+
+const PProfileRouteWithChildren = PProfileRoute._addFileChildren(
+  PProfileRouteChildren,
+)
 
 interface PStartupsRouteChildren {
   PStartupsStartupidRoute: typeof PStartupsStartupidRoute
@@ -164,7 +190,7 @@ interface PRouteChildren {
   PConnectRoute: typeof PConnectRoute
   PDashboardRoute: typeof PDashboardRoute
   PMessageRoute: typeof PMessageRoute
-  PProfileRoute: typeof PProfileRoute
+  PProfileRoute: typeof PProfileRouteWithChildren
   PStartupsRoute: typeof PStartupsRouteWithChildren
 }
 
@@ -172,7 +198,7 @@ const PRouteChildren: PRouteChildren = {
   PConnectRoute: PConnectRoute,
   PDashboardRoute: PDashboardRoute,
   PMessageRoute: PMessageRoute,
-  PProfileRoute: PProfileRoute,
+  PProfileRoute: PProfileRouteWithChildren,
   PStartupsRoute: PStartupsRouteWithChildren,
 }
 
@@ -185,8 +211,9 @@ export interface FileRoutesByFullPath {
   '/connect': typeof PConnectRoute
   '/dashboard': typeof PDashboardRoute
   '/message': typeof PMessageRoute
-  '/profile': typeof PProfileRoute
+  '/profile': typeof PProfileRouteWithChildren
   '/startups': typeof PStartupsRouteWithChildren
+  '/profile/$username': typeof PProfileUsernameRoute
   '/startups/$startupid': typeof PStartupsStartupidRoute
 }
 
@@ -197,8 +224,9 @@ export interface FileRoutesByTo {
   '/connect': typeof PConnectRoute
   '/dashboard': typeof PDashboardRoute
   '/message': typeof PMessageRoute
-  '/profile': typeof PProfileRoute
+  '/profile': typeof PProfileRouteWithChildren
   '/startups': typeof PStartupsRouteWithChildren
+  '/profile/$username': typeof PProfileUsernameRoute
   '/startups/$startupid': typeof PStartupsStartupidRoute
 }
 
@@ -210,8 +238,9 @@ export interface FileRoutesById {
   '/_p/connect': typeof PConnectRoute
   '/_p/dashboard': typeof PDashboardRoute
   '/_p/message': typeof PMessageRoute
-  '/_p/profile': typeof PProfileRoute
+  '/_p/profile': typeof PProfileRouteWithChildren
   '/_p/startups': typeof PStartupsRouteWithChildren
+  '/_p/profile/$username': typeof PProfileUsernameRoute
   '/_p/startups/$startupid': typeof PStartupsStartupidRoute
 }
 
@@ -226,6 +255,7 @@ export interface FileRouteTypes {
     | '/message'
     | '/profile'
     | '/startups'
+    | '/profile/$username'
     | '/startups/$startupid'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -237,6 +267,7 @@ export interface FileRouteTypes {
     | '/message'
     | '/profile'
     | '/startups'
+    | '/profile/$username'
     | '/startups/$startupid'
   id:
     | '__root__'
@@ -248,6 +279,7 @@ export interface FileRouteTypes {
     | '/_p/message'
     | '/_p/profile'
     | '/_p/startups'
+    | '/_p/profile/$username'
     | '/_p/startups/$startupid'
   fileRoutesById: FileRoutesById
 }
@@ -309,7 +341,10 @@ export const routeTree = rootRoute
     },
     "/_p/profile": {
       "filePath": "_p.profile.tsx",
-      "parent": "/_p"
+      "parent": "/_p",
+      "children": [
+        "/_p/profile/$username"
+      ]
     },
     "/_p/startups": {
       "filePath": "_p.startups.tsx",
@@ -317,6 +352,10 @@ export const routeTree = rootRoute
       "children": [
         "/_p/startups/$startupid"
       ]
+    },
+    "/_p/profile/$username": {
+      "filePath": "_p.profile.$username.tsx",
+      "parent": "/_p/profile"
     },
     "/_p/startups/$startupid": {
       "filePath": "_p.startups.$startupid.tsx",
