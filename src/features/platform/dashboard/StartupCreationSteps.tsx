@@ -12,7 +12,7 @@ export default function StartupCreationSteps() {
 
   return (
     <>
-      <Progress hidden={step==0} value={(step/6)*100}/>
+      <Progress hidden={step==0} value={(step/7)*100}/>
       {step === 1 && <StartupName />}
       {step === 2 && <StartupLocation />}    
       {step === 3 && <StartupDescription />}

@@ -19,7 +19,7 @@ const mainNavigationItems = [
 export function LeftBar() {
   const { data: profile } = useProfile()
   return (
-    <div className="flex h-full flex-col items-center border-r border-border/40">
+    <div className="flex h-full flex-col items-center">
       <div className="flex flex-col items-center gap-8 flex-grow py-10">
         {mainNavigationItems.map((item) => (
           <TooltipProvider key={item.href}>
@@ -49,17 +49,18 @@ export function LeftBar() {
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Link
-                to="/profile"
-                activeProps={{
-                  className: "bg-primary text-primary-foreground shadow-sm p-2.5 rounded-lg transition-all duration-200"
-                }}
-                inactiveProps={{
-                  className: "text-muted-foreground hover:bg-primary/10 hover:text-foreground p-2.5 rounded-lg transition-all duration-200"
-                }}
-              >
-                <UserAvatar/>
-              </Link>
+              {profile ? (
+                <Link
+                  to={"/profile/$username"}
+                  params={{ username: profile.username }}
+                >
+                  <UserAvatar />
+                </Link>
+              ) : (
+                <div className="p-2.5">
+                  <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+                </div>
+              )}
             </TooltipTrigger>
             <TooltipContent side="right" className="font-medium">
               <p>{profile?.full_name}</p>

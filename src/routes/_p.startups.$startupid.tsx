@@ -5,5 +5,7 @@ export const Route = createFileRoute('/_p/startups/$startupid')({
 })
 
 function RouteComponent() {
-  return <div>Hello "/_p/startups/$startupid"!</div>
+  return <div>
+    
+  </div>
 }

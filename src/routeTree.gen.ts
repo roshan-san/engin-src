@@ -15,7 +15,6 @@ import { Route as RegisterImport } from './routes/register'
 import { Route as PImport } from './routes/_p'
 import { Route as IndexImport } from './routes/index'
 import { Route as PStartupsImport } from './routes/_p.startups'
-import { Route as PProfileImport } from './routes/_p.profile'
 import { Route as PMessageImport } from './routes/_p.message'
 import { Route as PDashboardImport } from './routes/_p.dashboard'
 import { Route as PConnectImport } from './routes/_p.connect'
@@ -47,12 +46,6 @@ const PStartupsRoute = PStartupsImport.update({
   getParentRoute: () => PRoute,
 } as any)
 
-const PProfileRoute = PProfileImport.update({
-  id: '/profile',
-  path: '/profile',
-  getParentRoute: () => PRoute,
-} as any)
-
 const PMessageRoute = PMessageImport.update({
   id: '/message',
   path: '/message',
@@ -78,9 +71,9 @@ const PStartupsStartupidRoute = PStartupsStartupidImport.update({
 } as any)
 
 const PProfileUsernameRoute = PProfileUsernameImport.update({
-  id: '/$username',
-  path: '/$username',
-  getParentRoute: () => PProfileRoute,
+  id: '/profile/$username',
+  path: '/profile/$username',
+  getParentRoute: () => PRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -129,13 +122,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PMessageImport
       parentRoute: typeof PImport
     }
-    '/_p/profile': {
-      id: '/_p/profile'
-      path: '/profile'
-      fullPath: '/profile'
-      preLoaderRoute: typeof PProfileImport
-      parentRoute: typeof PImport
-    }
     '/_p/startups': {
       id: '/_p/startups'
       path: '/startups'
@@ -145,10 +131,10 @@ declare module '@tanstack/react-router' {
     }
     '/_p/profile/$username': {
       id: '/_p/profile/$username'
-      path: '/$username'
+      path: '/profile/$username'
       fullPath: '/profile/$username'
       preLoaderRoute: typeof PProfileUsernameImport
-      parentRoute: typeof PProfileImport
+      parentRoute: typeof PImport
     }
     '/_p/startups/$startupid': {
       id: '/_p/startups/$startupid'
@@ -161,18 +147,6 @@ declare module '@tanstack/react-router' {
 }
 
 // Create and export the route tree
-
-interface PProfileRouteChildren {
-  PProfileUsernameRoute: typeof PProfileUsernameRoute
-}
-
-const PProfileRouteChildren: PProfileRouteChildren = {
-  PProfileUsernameRoute: PProfileUsernameRoute,
-}
-
-const PProfileRouteWithChildren = PProfileRoute._addFileChildren(
-  PProfileRouteChildren,
-)
 
 interface PStartupsRouteChildren {
   PStartupsStartupidRoute: typeof PStartupsStartupidRoute
@@ -190,16 +164,16 @@ interface PRouteChildren {
   PConnectRoute: typeof PConnectRoute
   PDashboardRoute: typeof PDashboardRoute
   PMessageRoute: typeof PMessageRoute
-  PProfileRoute: typeof PProfileRouteWithChildren
   PStartupsRoute: typeof PStartupsRouteWithChildren
+  PProfileUsernameRoute: typeof PProfileUsernameRoute
 }
 
 const PRouteChildren: PRouteChildren = {
   PConnectRoute: PConnectRoute,
   PDashboardRoute: PDashboardRoute,
   PMessageRoute: PMessageRoute,
-  PProfileRoute: PProfileRouteWithChildren,
   PStartupsRoute: PStartupsRouteWithChildren,
+  PProfileUsernameRoute: PProfileUsernameRoute,
 }
 
 const PRouteWithChildren = PRoute._addFileChildren(PRouteChildren)
@@ -211,7 +185,6 @@ export interface FileRoutesByFullPath {
   '/connect': typeof PConnectRoute
   '/dashboard': typeof PDashboardRoute
   '/message': typeof PMessageRoute
-  '/profile': typeof PProfileRouteWithChildren
   '/startups': typeof PStartupsRouteWithChildren
   '/profile/$username': typeof PProfileUsernameRoute
   '/startups/$startupid': typeof PStartupsStartupidRoute
@@ -224,7 +197,6 @@ export interface FileRoutesByTo {
   '/connect': typeof PConnectRoute
   '/dashboard': typeof PDashboardRoute
   '/message': typeof PMessageRoute
-  '/profile': typeof PProfileRouteWithChildren
   '/startups': typeof PStartupsRouteWithChildren
   '/profile/$username': typeof PProfileUsernameRoute
   '/startups/$startupid': typeof PStartupsStartupidRoute
@@ -238,7 +210,6 @@ export interface FileRoutesById {
   '/_p/connect': typeof PConnectRoute
   '/_p/dashboard': typeof PDashboardRoute
   '/_p/message': typeof PMessageRoute
-  '/_p/profile': typeof PProfileRouteWithChildren
   '/_p/startups': typeof PStartupsRouteWithChildren
   '/_p/profile/$username': typeof PProfileUsernameRoute
   '/_p/startups/$startupid': typeof PStartupsStartupidRoute
@@ -253,7 +224,6 @@ export interface FileRouteTypes {
     | '/connect'
     | '/dashboard'
     | '/message'
-    | '/profile'
     | '/startups'
     | '/profile/$username'
     | '/startups/$startupid'
@@ -265,7 +235,6 @@ export interface FileRouteTypes {
     | '/connect'
     | '/dashboard'
     | '/message'
-    | '/profile'
     | '/startups'
     | '/profile/$username'
     | '/startups/$startupid'
@@ -277,7 +246,6 @@ export interface FileRouteTypes {
     | '/_p/connect'
     | '/_p/dashboard'
     | '/_p/message'
-    | '/_p/profile'
     | '/_p/startups'
     | '/_p/profile/$username'
     | '/_p/startups/$startupid'
@@ -320,8 +288,8 @@ export const routeTree = rootRoute
         "/_p/connect",
         "/_p/dashboard",
         "/_p/message",
-        "/_p/profile",
-        "/_p/startups"
+        "/_p/startups",
+        "/_p/profile/$username"
       ]
     },
     "/register": {
@@ -339,13 +307,6 @@ export const routeTree = rootRoute
       "filePath": "_p.message.tsx",
       "parent": "/_p"
     },
-    "/_p/profile": {
-      "filePath": "_p.profile.tsx",
-      "parent": "/_p",
-      "children": [
-        "/_p/profile/$username"
-      ]
-    },
     "/_p/startups": {
       "filePath": "_p.startups.tsx",
       "parent": "/_p",
@@ -355,7 +316,7 @@ export const routeTree = rootRoute
     },
     "/_p/profile/$username": {
       "filePath": "_p.profile.$username.tsx",
-      "parent": "/_p/profile"
+      "parent": "/_p"
     },
     "/_p/startups/$startupid": {
       "filePath": "_p.startups.$startupid.tsx",

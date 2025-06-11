@@ -16,7 +16,7 @@ import { useStartupCreation } from "../context/StartupCreateContext";
 
 
 export default function StartupFunding() {
-  const { startupCreationData, nextStep, previousStep } = useStartupCreation();
+  const { startupCreationData, nextStep, previousStep ,isCreating} = useStartupCreation();
   const form = useForm<StartupFundingFormValues>({
     resolver: zodResolver(startupFundingSchema),
     defaultValues: {
@@ -77,9 +77,10 @@ export default function StartupFunding() {
         <Button 
           type="submit"
           onClick={form.handleSubmit(handleSubmit)}
+          disabled={isCreating}
           className="flex-1 h-12 text-lg font-medium transition-all hover:scale-[1.02]"
         >
-          Create Startup
+          {!isCreating? "Create Startup":"Creating...."}
         </Button>
       </div>
     </div>
