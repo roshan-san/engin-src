@@ -5,10 +5,10 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { UserAvatar } from "../UserAvatar";
 import SignOutButton from "./SignOut";
 import { Link } from "@tanstack/react-router";
-
+import { useProfile } from "@/features/authentication/store/authStore";
+import { UserAvatar } from "./UserAvatar";
 const mainNavigationItems = [
   { href: "/dashboard", icon: Laptop, label: "Dashboard" },
   { href: "/startups", icon: Search, label: "Discover" },
@@ -17,9 +17,10 @@ const mainNavigationItems = [
 ];
 
 export function LeftBar() {
+  const { data: profile } = useProfile()
   return (
-    <div className="flex h-full flex-col items-center">
-      <div className="flex flex-col items-center gap-6 flex-grow py-8">
+    <div className="flex h-full flex-col items-center border-r border-border/40">
+      <div className="flex flex-col items-center gap-8 flex-grow py-10">
         {mainNavigationItems.map((item) => (
           <TooltipProvider key={item.href}>
             <Tooltip>
@@ -27,16 +28,16 @@ export function LeftBar() {
                 <Link
                   to={item.href}
                   activeProps={{
-                    className: "bg-primary text-primary-foreground shadow-sm p-2 rounded-md"
+                    className: "bg-primary text-primary-foreground shadow-sm p-2.5 rounded-lg transition-all duration-200"
                   }}
                   inactiveProps={{
-                    className: "text-muted-foreground hover:bg-primary/10 hover:text-foreground p-2 rounded-md"
+                    className: "text-muted-foreground hover:bg-primary/10 hover:text-foreground p-2.5 rounded-lg transition-all duration-200"
                   }}
                 >
                   <item.icon className="h-5 w-5" />
                 </Link>
               </TooltipTrigger>
-              <TooltipContent side="right">
+              <TooltipContent side="right" className="font-medium">
                 <p>{item.label}</p>
               </TooltipContent>
             </Tooltip>
@@ -44,24 +45,24 @@ export function LeftBar() {
         ))}
       </div>
     
-      <div className="flex flex-col items-center gap-4 pb-8">
+      <div className="flex flex-col items-center gap-6 pb-10">
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
               <Link
                 to="/profile"
                 activeProps={{
-                  className: "bg-primary text-primary-foreground shadow-sm p-2 rounded-md"
+                  className: "bg-primary text-primary-foreground shadow-sm p-2.5 rounded-lg transition-all duration-200"
                 }}
                 inactiveProps={{
-                  className: "text-muted-foreground hover:bg-primary/10 hover:text-foreground p-2 rounded-md"
+                  className: "text-muted-foreground hover:bg-primary/10 hover:text-foreground p-2.5 rounded-lg transition-all duration-200"
                 }}
               >
-                <UserAvatar />
+                <UserAvatar/>
               </Link>
             </TooltipTrigger>
-            <TooltipContent side="right">
-              <p>Profile</p>
+            <TooltipContent side="right" className="font-medium">
+              <p>{profile?.full_name}</p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
@@ -71,7 +72,7 @@ export function LeftBar() {
             <TooltipTrigger asChild>
               <SignOutButton/>
             </TooltipTrigger>
-            <TooltipContent side="right">
+            <TooltipContent side="right" className="font-medium">
               <p>Sign out</p>
             </TooltipContent>
           </Tooltip>

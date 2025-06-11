@@ -1,6 +1,7 @@
 import { LeftBar } from '@/features/platform/navigation/LeftBar'
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
 import supabase from '@/utils/supabase'
+import { BottomBar } from '@/features/platform/navigation/BottomBar'
 
 export const Route = createFileRoute('/_p')({
   component: RouteComponent,
@@ -15,11 +16,16 @@ export const Route = createFileRoute('/_p')({
 
 function RouteComponent() {
   return (
-    <div className="flex h-screen">
-      <LeftBar />
+    <div className="flex h-screen sm:flex-row flex-col w-full border-2 border-red-500">
+      <div className="w-20 hidden md:block">
+        <LeftBar />
+      </div>
       <main className="flex-1 overflow-y-auto">
         <Outlet />
       </main>
+      <div className="w-20 md:hidden">
+        <BottomBar />
+      </div>
     </div>
   )
 }

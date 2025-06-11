@@ -8,7 +8,7 @@ export const Route = createFileRoute('/_p/startups')({
 
 function RouteComponent() {
   return (
-    <div className="h-full flex flex-col p-4 gap-12">
+    <div className="h-full flex flex-col p-4">
       <Header>Startups</Header>
       <SearchStartups />
     </div>

@@ -1,12 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import supabase from '@/utils/supabase'
+import { redirect } from '@tanstack/react-router'
 
-// Query key for the current user
-export const userQueryKey = ['user'] as const
+const userQueryKey = ['user']
 
 // Hook to get the current user
 export function useUser() {
-  return useQuery({
+  const { data: user , isLoading } = useQuery({
     queryKey: userQueryKey,
     queryFn: async () => {
       const { data: { user }, error } = await supabase.auth.getUser()
@@ -14,12 +14,29 @@ export function useUser() {
       return user
     }
   })
+  return { data: user, isLoading }
+}
+
+export function useProfile() {
+  const { data: user } = useUser()
+  return useQuery({
+    queryKey: ['profile', user?.id],
+    queryFn: async () => {
+      if (!user?.id) throw new Error('User ID is required')
+      const { data, error: profileError } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', user.id)
+        .single()
+      if (profileError) throw profileError
+      return data
+    },
+    enabled: !!user?.id
+  })
 }
 
 // Hook for GitHub sign in
-export function useSignInWithGithub() {
-  const queryClient = useQueryClient()
-  
+export function useSignInWithGithub() {  
   return useMutation({
     mutationFn: async () => {
       const { error } = await supabase.auth.signInWithOAuth({
@@ -37,9 +54,7 @@ export function useSignInWithGithub() {
 }
 
 // Hook for Google sign in
-export function useSignInWithGoogle() {
-  const queryClient = useQueryClient()
-  
+export function useSignInWithGoogle() {  
   return useMutation({
     mutationFn: async () => {
       const { error } = await supabase.auth.signInWithOAuth({
@@ -66,7 +81,8 @@ export function useSignOut() {
       if (error) throw error
     },
     onSuccess: () => {
-      queryClient.setQueryData(userQueryKey, null)
+      queryClient.clear()
+      redirect({ to: "/" })
     },
     onError: (error: Error) => {
       console.error('Sign out error:', error.message)
