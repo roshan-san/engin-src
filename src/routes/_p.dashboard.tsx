@@ -1,6 +1,6 @@
 import CreateBtn from '@/features/platform/dashboard/CreateBtn'
 import Header from '@/features/platform/Header'
-import StartupCard from '@/features/platform/StartupCard'
+import StartupCard from '@/features/platform/search-startups/StartupCard'
 import supabase from '@/utils/supabase'
 import { createFileRoute, useLoaderData } from '@tanstack/react-router'
 

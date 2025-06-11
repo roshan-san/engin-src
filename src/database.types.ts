@@ -129,9 +129,9 @@ export type Database = {
           linkedin_url: string | null
           location: string | null
           skills: string[] | null
-          user_type: Database["public"]["Enums"]["user_type"]
+          user_type: string
           username: string
-          work_type: Database["public"]["Enums"]["work_type"]
+          work_type: string
         }
         Insert: {
           avatar_url: string
@@ -145,9 +145,9 @@ export type Database = {
           linkedin_url?: string | null
           location?: string | null
           skills?: string[] | null
-          user_type: Database["public"]["Enums"]["user_type"]
+          user_type: string
           username: string
-          work_type: Database["public"]["Enums"]["work_type"]
+          work_type: string
         }
         Update: {
           avatar_url?: string
@@ -161,9 +161,9 @@ export type Database = {
           linkedin_url?: string | null
           location?: string | null
           skills?: string[] | null
-          user_type?: Database["public"]["Enums"]["user_type"]
+          user_type?: string
           username?: string
-          work_type?: Database["public"]["Enums"]["work_type"]
+          work_type?: string
         }
         Relationships: []
       }

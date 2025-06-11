@@ -4,7 +4,7 @@ import { Link } from '@tanstack/react-router'
 import type { Startup } from '@/utils/supa-types'
 export default function StartupCard({startup}:{startup:Startup}) {
   return (
-    <Link key={startup.id} to={"/startups/"+startup.id}>
+    <Link key={startup.id} to={"/startups/$startupid" } params={{startupid:startup.id}}>
       <Card className="w-full p-6 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
       <div className="space-y-4">
         <div className="flex items-center justify-between">
