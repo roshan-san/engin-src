@@ -12,8 +12,6 @@ import {
 import { FaBuilding } from "react-icons/fa";
 import { startupNameSchema, type StartupNameFormValues } from "@/features/platform/dashboard/validations/startup";
 import { useStartupCreation } from "../context/StartupCreateContext";
-import type { Startup } from "@/utils/supa-types";
-
 
 export default function StartupName() {
   const { startupCreationData, nextStep, previousStep } = useStartupCreation();
