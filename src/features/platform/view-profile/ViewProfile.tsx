@@ -1,5 +1,5 @@
 import type { Profile } from "@/types/supa-types";
-import { MapPin, Briefcase, Link as LinkIcon, Github, Linkedin } from "lucide-react";
+import { MapPin, Briefcase, Github, Linkedin } from "lucide-react";
 
 export default function PublicProfileView({ profile }: { profile: Profile }) {
   return (
