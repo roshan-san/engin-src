@@ -1,7 +1,7 @@
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectValue, SelectItem, SelectTrigger } from "@/components/ui/select"
 import { Briefcase } from "lucide-react"
-import type { Profile } from "@/utils/supa-types"
+import type { Profile } from "@/types/supa-types"
 import { updateProfile } from "@/api/profile"
 import { useMutation } from "@tanstack/react-query"
 
@@ -10,13 +10,10 @@ export default function Dropdowns({ profile }: { profile: Profile }) {
     const { mutate: updateProfileMutation } = useMutation({
         mutationFn: (updatedData: Partial<Profile>) => updateProfile(profile.id, updatedData),
     })
-
+    
   return (
-    <div className="space-y-4">
-    <h3 className="text-lg font-semiboldflex items-center gap-2">
-      <Briefcase className="h-5 w-5" />
-      Professional Details
-    </h3>
+    <div className="flex items-center justify-center border-2">
+
     <div className="space-y-2">
       <Label className="font-medium">Work Type</Label>
       <Select
@@ -43,7 +40,7 @@ export default function Dropdowns({ profile }: { profile: Profile }) {
         onValueChange={(value: 'Creator/Collaborator' | 'Investor' | 'Mentor') => {
           updateProfileMutation({ user_type: value })
         }}
-      >
+        >
         <SelectTrigger>
           <SelectValue placeholder="Select user type" />
         </SelectTrigger>
@@ -53,7 +50,7 @@ export default function Dropdowns({ profile }: { profile: Profile }) {
           <SelectItem value="Mentor">Mentor</SelectItem>
         </SelectContent>
       </Select>
-    </div>
-  </div>    
+            </div>    
+          </div>
   )
 }

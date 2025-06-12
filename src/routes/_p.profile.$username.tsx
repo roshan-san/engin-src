@@ -1,6 +1,6 @@
 
 import { createFileRoute, useLoaderData } from '@tanstack/react-router'
-import ProfileView from '@/features/profile/ProfileView'
+import ProfileView from '@/features/platform/profile/EditProfile'
 import { getProfileByUsername } from '@/api/profile'
 
 

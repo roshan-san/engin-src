@@ -1,7 +1,6 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Form,
   FormControl,
@@ -9,25 +8,27 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import { FaLightbulb } from "react-icons/fa";
-import { startupSolutionSchema, type StartupSolutionFormValues } from "@/features/platform/dashboard/validations/startup";
+import { FaInfoCircle } from "react-icons/fa";
+import { Input } from "@/components/ui/input";
+import { startupDescriptionSchema } from "@/features/platform/create-startup/validations/startup";
 import { useStartupCreation } from "../context/StartupCreateContext";
+import type { StartupInsert } from "@/types/supa-types";
 
 
-export default function StartupSolution() {
+export default function StartupDescription() {
   const { startupCreationData, nextStep, previousStep } = useStartupCreation();
-  const form = useForm<StartupSolutionFormValues>({
-    resolver: zodResolver(startupSolutionSchema),
+  const form = useForm({
+    resolver: zodResolver(startupDescriptionSchema),
     defaultValues: {
-      solution: startupCreationData.solution || "",
+      description: startupCreationData.description || "",
     },
   });
 
-  const handleSubmit = async (data: StartupSolutionFormValues) => {
+  const handleSubmit = async (data: StartupInsert) => {
     const isValid = await form.trigger();
     if (isValid) {
       nextStep({
-        solution: data.solution,
+        description: data.description,
       });
     }
   };
@@ -36,20 +37,20 @@ export default function StartupSolution() {
     <div className="w-full flex justify-center items-center gap-6 flex-col h-full p-4 max-w-2xl mx-auto">
       <div className="flex flex-col gap-6 w-full">
         <h3 className="text-xl font-semibold text-foreground tracking-wide uppercase flex items-center gap-3">
-          <FaLightbulb className="text-primary w-5 h-5" />
-          What&apos;s your solution?
+          <FaInfoCircle className="text-primary w-5 h-5" />
+          Describe your startup
         </h3>
         
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
             <FormField
               control={form.control}
-              name="solution"
+              name="description"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
                     <Input 
-                      placeholder="Describe your solution to the problem..." 
+                      placeholder="Tell us about your startup..." 
                       {...field}
                       className="h-32 text-lg rounded-xl resize-none"
                       autoFocus

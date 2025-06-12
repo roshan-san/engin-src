@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Form,
   FormControl,
@@ -8,26 +9,25 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import { FaExclamationTriangle } from "react-icons/fa";
-import { Input } from "@/components/ui/input";
-import { startupProblemSchema, type StartupProblemFormValues } from "@/features/platform/dashboard/validations/startup";
+import { FaMapMarkerAlt } from "react-icons/fa";
+import { startupLocationSchema } from "@/features/platform/create-startup/validations/startup";
 import { useStartupCreation } from "../context/StartupCreateContext";
+import type { StartupInsert } from "@/types/supa-types";
 
-
-export default function StartupProblem() {
+export default function StartupLocation() {
   const { startupCreationData, nextStep, previousStep } = useStartupCreation();
-  const form = useForm<StartupProblemFormValues>({
-    resolver: zodResolver(startupProblemSchema),
+  const form = useForm({
+    resolver: zodResolver(startupLocationSchema),
     defaultValues: {
-      problem: startupCreationData.problem || "",
+      location: startupCreationData.location || "",
     },
   });
 
-  const handleSubmit = async (data: StartupProblemFormValues) => {
+  const handleSubmit = async (data: StartupInsert) => {
     const isValid = await form.trigger();
     if (isValid) {
       nextStep({
-        problem: data.problem,
+        location: data.location,
       });
     }
   };
@@ -36,22 +36,22 @@ export default function StartupProblem() {
     <div className="w-full flex justify-center items-center gap-6 flex-col h-full p-4 max-w-2xl mx-auto">
       <div className="flex flex-col gap-6 w-full">
         <h3 className="text-xl font-semibold text-foreground tracking-wide uppercase flex items-center gap-3">
-          <FaExclamationTriangle className="text-primary w-5 h-5" />
-          What problem are you solving?
+          <FaMapMarkerAlt className="text-primary w-5 h-5" />
+          Where is your startup located?
         </h3>
         
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
             <FormField
               control={form.control}
-              name="problem"
+              name="location"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
                     <Input 
-                      placeholder="Describe the problem your startup is solving..." 
+                      placeholder="Enter your startup location" 
                       {...field}
-                      className="h-32 text-lg rounded-xl resize-none"
+                      className="h-14 text-lg rounded-xl"
                       autoFocus
                     />
                   </FormControl>

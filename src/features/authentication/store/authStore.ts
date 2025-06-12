@@ -6,7 +6,7 @@ const userQueryKey = ['user']
 
 // Hook to get the current user
 export function useUser() {
-  const { data: user , isLoading } = useQuery({
+  return useQuery({
     queryKey: userQueryKey,
     queryFn: async () => {
       const { data: { user }, error } = await supabase.auth.getUser()
@@ -14,7 +14,6 @@ export function useUser() {
       return user
     }
   })
-  return { data: user, isLoading }
 }
 
 export function useProfile() {
@@ -22,16 +21,16 @@ export function useProfile() {
   return useQuery({
     queryKey: ['profile', user?.id],
     queryFn: async () => {
-      if (!user?.id) throw new Error('User ID is required')
-      const { data, error: profileError } = await supabase
+      if (!user?.id) throw new Error('No user ID')
+      const { data, error } = await supabase
         .from('profiles')
         .select('*')
         .eq('id', user.id)
         .single()
-      if (profileError) throw profileError
+      if (error) throw error
       return data
     },
-    enabled: !!user?.id
+    enabled: !!user
   })
 }
 

@@ -1,5 +1,5 @@
 import { getConnections } from "@/api/connection"
-import type { Profile } from "@/utils/supa-types"
+import type { Profile } from "@/types/supa-types"
 import { useQuery } from "@tanstack/react-query"
 
 export default function Connections({ profile }: { profile: Profile }) {

@@ -1,12 +1,12 @@
 import { Progress } from "@/components/ui/progress";
-import StartupName from "./startup-creation/StartupName";
-import StartupLocation from "./startup-creation/StartupLocation";
-import StartupDescription from "./startup-creation/StartupDescription";
-import StartupProblem from "./startup-creation/StartupProblem";
-import StartupFunding from "./startup-creation/StartupFunding";
-import StartupSolution from "./startup-creation/StartupSolution";
+import StartupName from "./steps/StartupName";
+import StartupLocation from "./steps/StartupLocation";
+import StartupDescription from "./steps/StartupDescription";
+import StartupProblem from "./steps/StartupProblem";
+import StartupFunding from "./steps/StartupFunding";
+import StartupSolution from "./steps/StartupSolution";
 import { useStartupCreation } from "./context/StartupCreateContext";
-import StartupTeam from "./startup-creation/StartupTeam";
+import StartupTeam from "./steps/StartupTeam";
 export default function StartupCreationSteps() {
   const { step } = useStartupCreation();
 

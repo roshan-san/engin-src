@@ -3,7 +3,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { MapPin, User2} from 'lucide-react'
 import { FaGithub, FaLinkedin } from 'react-icons/fa'
 import { Link } from '@tanstack/react-router'
-import type { Profile } from '@/utils/supa-types'
+import type { Profile } from '@/types/supa-types'
 
 interface ProfileCardProps {
   profile: Profile

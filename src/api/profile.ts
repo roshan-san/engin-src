@@ -1,4 +1,4 @@
-import type { Profile } from "@/utils/supa-types"
+import type { Profile } from "@/types/supa-types"
 import supabase from "@/utils/supabase"
 
 export async function getProfileById(id: string) {
@@ -38,4 +38,25 @@ export async function updateProfile(id: string, updatedData: Partial<Profile>) {
   }
   return data
 }
+export async function updatePfp(file: File,id:string) {
+  const fileExt = file.name.split('.').pop()
+  const fileName = `${id}-${Math.random()}.${fileExt}`
+  const filePath = `avatars/${fileName}`
+
+  const { error: uploadError } = await supabase.storage
+    .from('avatars')
+    .upload(filePath, file)
+
+  if (uploadError) {
+    throw new Error(`Error uploading avatar: ${uploadError.message}`)
+  }
+
+  const { data: { publicUrl } } = supabase.storage
+    .from('avatars')
+    .getPublicUrl(filePath)
+
+  await updateProfile(id, { avatar_url: publicUrl })
+
+  return publicUrl
+} 
 

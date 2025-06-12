@@ -1,7 +1,7 @@
 import { Card } from '@/components/ui/card'
 import { Users, DollarSign, Calendar, Building2, MapPin, } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
-import type { Startup } from '@/utils/supa-types'
+import type { Startup } from '@/types/supa-types'
 export default function StartupCard({startup}:{startup:Startup}) {
   return (
     <Link key={startup.id} to={"/startups/$startupid" } params={{startupid:startup.id}}>

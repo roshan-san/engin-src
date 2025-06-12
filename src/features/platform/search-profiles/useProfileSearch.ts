@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import supabase from '@/utils/supabase';
-import type { Profile } from '@/utils/supa-types';
+import type { Profile } from '@/types/supa-types';
 import { useInView } from 'react-intersection-observer';
 import { useEffect } from 'react';
 

@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { MapPin, User2, Check, X } from 'lucide-react';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import { Link } from '@tanstack/react-router';
-import type { Profile } from '@/utils/supa-types';
+import type { Profile } from '@/types/supa-types';
 import type { Database } from '@/database.types';
 
 type Connection = Database['public']['Tables']['connections']['Row'];

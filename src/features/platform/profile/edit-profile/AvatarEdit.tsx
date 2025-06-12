@@ -4,8 +4,8 @@ import { Input } from '@/components/ui/input'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Card, CardContent } from '@/components/ui/card'
 import { Camera, Loader2 } from 'lucide-react'
-import type { Profile } from '@/utils/supa-types'
-import { useProfileAvatar } from '../hooks/useProfileAvatar'
+import type { Profile } from '@/types/supa-types'
+import { useProfileAvatar } from './hooks/useProfileAvatar'
 
 export function AvatarEditor({ profile }: { profile: Profile }) {
   const { selectedFile, previewUrl, isUploading, handleFileChange, handleAvatarUpload } = useProfileAvatar(profile)

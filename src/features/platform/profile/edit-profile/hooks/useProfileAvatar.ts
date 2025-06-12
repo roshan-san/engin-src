@@ -1,12 +1,11 @@
 import { useState } from 'react'
-import type { Profile } from '@/utils/supa-types'
-import { useEditProfile } from './useEditProfile'
+import type { Profile } from '@/types/supa-types'
+import { updatePfp } from '@/api/profile'
 
 export function useProfileAvatar(profile: Profile) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
   const [isUploading, setIsUploading] = useState(false)
-  const { uploadAvatar } = useEditProfile(profile)
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
@@ -27,7 +26,7 @@ export function useProfileAvatar(profile: Profile) {
 
     try {
       setIsUploading(true)
-      await uploadAvatar(selectedFile)
+      await updatePfp(selectedFile,profile.id)
       setSelectedFile(null)
       setPreviewUrl(null)
     } catch (error) {

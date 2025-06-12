@@ -9,25 +9,25 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import { FaUsers } from "react-icons/fa";
-import { startupTeamSchema, type StartupTeamFormValues } from "@/features/platform/dashboard/validations/startup";
+import { FaLightbulb } from "react-icons/fa";
+import { startupSolutionSchema, type StartupSolutionFormValues } from "@/features/platform/create-startup/validations/startup";
 import { useStartupCreation } from "../context/StartupCreateContext";
 
 
-export default function StartupTeam() {
+export default function StartupSolution() {
   const { startupCreationData, nextStep, previousStep } = useStartupCreation();
-  const form = useForm<StartupTeamFormValues>({
-    resolver: zodResolver(startupTeamSchema),
+  const form = useForm<StartupSolutionFormValues>({
+    resolver: zodResolver(startupSolutionSchema),
     defaultValues: {
-      teamSize: startupCreationData.teamSize || 1,
+      solution: startupCreationData.solution || "",
     },
   });
 
-  const handleSubmit = async (data: StartupTeamFormValues) => {
+  const handleSubmit = async (data: StartupSolutionFormValues) => {
     const isValid = await form.trigger();
     if (isValid) {
       nextStep({
-        teamSize: data.teamSize,
+        solution: data.solution,
       });
     }
   };
@@ -36,23 +36,22 @@ export default function StartupTeam() {
     <div className="w-full flex justify-center items-center gap-6 flex-col h-full p-4 max-w-2xl mx-auto">
       <div className="flex flex-col gap-6 w-full">
         <h3 className="text-xl font-semibold text-foreground tracking-wide uppercase flex items-center gap-3">
-          <FaUsers className="text-primary w-5 h-5" />
-          How many team members?
+          <FaLightbulb className="text-primary w-5 h-5" />
+          What&apos;s your solution?
         </h3>
         
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
             <FormField
               control={form.control}
-              name="teamSize"
+              name="solution"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
                     <Input 
-                      type="number"
-                      placeholder="Enter team size" 
+                      placeholder="Describe your solution to the problem..." 
                       {...field}
-                      className="h-14 text-lg rounded-xl"
+                      className="h-32 text-lg rounded-xl resize-none"
                       autoFocus
                     />
                   </FormControl>

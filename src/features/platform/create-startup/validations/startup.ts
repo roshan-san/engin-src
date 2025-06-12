@@ -21,7 +21,7 @@ export const startupSolutionSchema = z.object({
 });
 
 export const startupTeamSchema = z.object({
-  teamSize: z.coerce.number().min(1, "Team size must be at least 1"),
+  team_size: z.coerce.number().min(1, "Team size must be at least 1"),
 });
 
 export const startupFundingSchema = z.object({
@@ -35,17 +35,6 @@ export const startupCreationSchema = z.object({
   location: startupLocationSchema.shape.location,
   problem: startupProblemSchema.shape.problem,
   solution: startupSolutionSchema.shape.solution,
-  teamSize: startupTeamSchema.shape.teamSize,
+  team_size: startupTeamSchema.shape.team_size,
   funding: startupFundingSchema.shape.funding,
 });
-
-
-// Type exports
-export type StartupNameFormValues = z.infer<typeof startupNameSchema>;
-export type StartupDescriptionFormValues = z.infer<typeof startupDescriptionSchema>;
-export type StartupLocationFormValues = z.infer<typeof startupLocationSchema>;
-export type StartupProblemFormValues = z.infer<typeof startupProblemSchema>;
-export type StartupSolutionFormValues = z.infer<typeof startupSolutionSchema>;
-export type StartupTeamFormValues = z.infer<typeof startupTeamSchema>;
-export type StartupFundingFormValues = z.infer<typeof startupFundingSchema>;
-export type StartupCreationFormValues = z.infer<typeof startupCreationSchema>; 
