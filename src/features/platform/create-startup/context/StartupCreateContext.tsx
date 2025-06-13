@@ -2,8 +2,8 @@ import { createContext, useContext, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createStartupApi } from "@/api/startups";
-import { useUser } from "@/features/authentication/store/authStore";
 import type { StartupInsert } from "@/types/supa-types";
+import { useAuth } from "@/features/authentication/store/authStore";
 
 type StartupCreationContextType = {
   startupCreationData: Partial<StartupInsert>;
@@ -20,7 +20,7 @@ export const StartupCreateProvider = ({ children,}: { children: React.ReactNode;
   const [startupCreationData, setStartupCreationData] = useState<Partial<StartupInsert>>({});
   const [step, setStep] = useState(1);
   const navigate = useNavigate()
-  const {data:user}  = useUser()
+  const {data:user}  =useAuth()
   const queryClient=useQueryClient()
   const {mutate: createStartupMutation, isPending: isCreating} = useMutation({
     mutationKey: ["create-startup"],
@@ -43,7 +43,7 @@ export const StartupCreateProvider = ({ children,}: { children: React.ReactNode;
     },
     onSuccess: (data) => {
       setStartupCreationData({});
-      queryClient.invalidateQueries({ queryKey: ["mystartups"] });
+      queryClient.invalidateQueries({ queryKey: ["myStartups"] });
       setStep(1);
       navigate({
         to: "/startups/$startupid",
@@ -91,3 +91,4 @@ export const useStartupCreation = () => {
   if (!context) throw new Error("useStartupCreation must be used within StartupCreationProvider");
   return context;
 };
+

@@ -1,6 +1,5 @@
 import supabase from "@/utils/supabase"
-
-export async function getConnections(userId: string) {
+export async function getConnectionsApi(userId: string) {
   const { data, error } = await supabase
     .from('connections')
     .select('*')
@@ -14,7 +13,7 @@ export async function getConnections(userId: string) {
   return data
 }
 
-export async function sendConnectionRequest(senderId: string, receiverId: string) {
+export async function sendConnectionRequestApi(senderId: string, receiverId: string) {
   const { data, error } = await supabase
     .from('connections')
     .insert([
@@ -33,7 +32,7 @@ export async function sendConnectionRequest(senderId: string, receiverId: string
   return data
 }
 
-export async function acceptConnectionRequest(connectionId: string) {
+export async function acceptConnectionRequestApi(connectionId: string) {
   const { data, error } = await supabase
     .from('connections')
     .update({ status: 'accepted' })
@@ -47,7 +46,7 @@ export async function acceptConnectionRequest(connectionId: string) {
   return data
 }
 
-export async function getPendingConnections(userId: string) {
+export async function getPendingConnectionsApi(userId: string) {
   const { data, error } = await supabase
     .from('connections')
     .select('*, profiles!receiver_id(*)')
@@ -61,7 +60,7 @@ export async function getPendingConnections(userId: string) {
   return data
 }
 
-export async function removeConnection(connectionId: string) {
+export async function removeConnectionApi(connectionId: string) {
   const { error } = await supabase
     .from('connections')
     .delete()
@@ -71,4 +70,3 @@ export async function removeConnection(connectionId: string) {
     throw new Error(`Error removing connection: ${error.message}`)
   }
 }
-    

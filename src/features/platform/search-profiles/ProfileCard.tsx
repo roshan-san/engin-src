@@ -5,31 +5,14 @@ import { FaGithub, FaLinkedin } from 'react-icons/fa'
 import { Link } from '@tanstack/react-router'
 import { Button } from '@/components/ui/button'
 import type { Profile } from '@/types/supa-types'
-import { sendConnectionRequest } from '@/api/connection'
-import { useUser } from '@/features/authentication/store/authStore'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { sendConnectionMutation } from '../hooks/StartupHooks'
+import { useAuth } from '@/features/authentication/store/authStore'
 
-interface ProfileCardProps {
-  profile: Profile
-}
 
-export default function ProfileCard({ profile }: ProfileCardProps) {
-  const { data: user } = useUser()
-  const queryClient = useQueryClient()
+export default function ProfileCard({profile}:{profile:Profile}) {
+  const user= useAuth()
 
-  const sendConnectionMutation = useMutation({
-    mutationFn: async () => {
-      if (!user?.id) throw new Error('User not logged in')
-      return sendConnectionRequest(user.id, profile.id)
-    },
-    onSuccess: () => {
-      console.log('Connection request sent successfully!')
-      queryClient.invalidateQueries({ queryKey: ['connections'] })
-    },
-    onError: (error) => {
-      console.error('Failed to send connection request:', error.message)
-    }
-  })
+  const sendConnection = sendConnectionMutation()
 
   return (
     <Link to='/profile/$username' params={{username:profile.username}}>
@@ -47,7 +30,7 @@ export default function ProfileCard({ profile }: ProfileCardProps) {
             <span>{profile.user_type}</span>
           </div>
         </div>
-        {user?.id !== profile.id && (
+        {user.data?.id !== profile.id && (
           <Button
             variant="ghost"
             size="icon"
@@ -55,9 +38,9 @@ export default function ProfileCard({ profile }: ProfileCardProps) {
             onClick={(e) => {
               e.preventDefault()
               e.stopPropagation()
-              sendConnectionMutation.mutate()
+              sendConnection.mutate(profile.id)
             }}
-            disabled={sendConnectionMutation.isPending}
+            disabled={sendConnection.isPending}
           >
             <Plus className="h-4 w-4" />
           </Button>
@@ -95,6 +78,6 @@ export default function ProfileCard({ profile }: ProfileCardProps) {
         </div>
       </CardContent>
     </Card>
-            </Link>
+  </Link>
   )
 } 

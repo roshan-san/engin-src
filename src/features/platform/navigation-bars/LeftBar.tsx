@@ -7,8 +7,8 @@ import {
 } from "@/components/ui/tooltip";
 import SignOutButton from "./SignOut";
 import { Link } from "@tanstack/react-router";
-import { useProfile } from "@/features/authentication/store/authStore";
 import { UserAvatar } from "./UserAvatar";
+import { useProfile } from "@/features/authentication/store/profileStrore";
 const mainNavigationItems = [
   { href: "/dashboard", icon: Laptop, label: "Dashboard" },
   { href: "/startups", icon: Search, label: "Discover" },

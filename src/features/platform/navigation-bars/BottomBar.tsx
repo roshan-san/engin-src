@@ -1,7 +1,7 @@
 import { Laptop, Search, Users, MessageCircle } from "lucide-react";
 import { Link } from "@tanstack/react-router";
-import { useProfile } from "@/features/authentication/store/authStore";
 import { UserAvatar } from "./UserAvatar";
+import { useProfile } from "@/features/authentication/store/profileStrore";
 
 const navigationItems = [
   { href: "/dashboard", icon: Laptop, },

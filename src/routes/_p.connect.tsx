@@ -6,7 +6,7 @@ export const Route = createFileRoute('/_p/connect')({
 })
 
 function RouteComponent() {
-    return  <div className="h-full flex flex-col p-4">
+  return <div className="h-full flex flex-col p-4">
     <Header>Connect</Header>
     <SearchProfiles />
   </div>
