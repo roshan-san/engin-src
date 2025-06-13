@@ -3,7 +3,7 @@ import Connections from "./components/Connections";
 import Dropdowns from "./components/Dropdowns";
 import { AvatarEditor } from "./components/AvatarEdit";
 
-export default function ProfileView({ profile }: { profile: Profile }) {
+export default function EditProfile({ profile }: { profile: Profile }) {
   return (  
     <div className="flex items-center justify-center">
       <Connections profile={profile}/>

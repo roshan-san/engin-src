@@ -1,7 +1,6 @@
-
 import { createFileRoute, useLoaderData } from '@tanstack/react-router'
-import ProfileView from '@/features/platform/profile/EditProfile'
 import { getProfileByUsername } from '@/api/profile'
+import ViewProfile from '@/features/platform/view-profile/ViewProfile'
 
 
 export const Route = createFileRoute('/_p/profile/$username')({
@@ -14,5 +13,5 @@ export const Route = createFileRoute('/_p/profile/$username')({
 
 function ProfilePage() {
   const data = useLoaderData({ from: '/_p/profile/$username' })
-  return <ProfileView profile={data} />
+  return < ViewProfile profile={data} />
 }

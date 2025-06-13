@@ -2,9 +2,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { FaBriefcase, FaUserCog, FaUserGraduate, FaUserTie} from "react-icons/fa";
-import { userTypeSchema, type UserTypeFormValues } from "../validations/onboarding";
+import { userTypeSchema } from "../validations/onboarding";
 import { useOnboarding } from "../context/OnboardContext";
-
 
 const roles = [
   {
@@ -29,9 +28,9 @@ const roles = [
 
 export default function UserType() {
   const { nextStep, previousStep } = useOnboarding();
-  const [selectedUserType, setSelectedUserType] = useState<UserTypeFormValues['user_type'] | ''>('');
+  const [selectedUserType, setSelectedUserType] = useState('');
 
-  const handleSubmit = (value: UserTypeFormValues['user_type']) => {
+  const handleSubmit = (value: string) => {
     const result = userTypeSchema.safeParse({ user_type: value });
     if (result.success) {
       setSelectedUserType(value);

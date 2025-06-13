@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createStartupApi } from "@/api/startups";
 import { useUser } from "@/features/authentication/store/authStore";
 import type { StartupInsert } from "@/types/supa-types";
@@ -21,7 +21,7 @@ export const StartupCreateProvider = ({ children,}: { children: React.ReactNode;
   const [step, setStep] = useState(1);
   const navigate = useNavigate()
   const {data:user}  = useUser()
-  
+  const queryClient=useQueryClient()
   const {mutate: createStartupMutation, isPending: isCreating} = useMutation({
     mutationKey: ["create-startup"],
     mutationFn: async () => {
@@ -43,6 +43,7 @@ export const StartupCreateProvider = ({ children,}: { children: React.ReactNode;
     },
     onSuccess: (data) => {
       setStartupCreationData({});
+      queryClient.invalidateQueries({ queryKey: ["mystartups"] });
       setStep(1);
       navigate({
         to: "/startups/$startupid",

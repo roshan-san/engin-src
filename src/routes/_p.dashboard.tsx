@@ -4,15 +4,22 @@ import Header from '@/features/platform/Header'
 import StartupCard from '@/features/platform/search-startups/StartupCard'
 import { useQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
+import { useUser } from '@/features/authentication/store/authStore'
 
 export const Route = createFileRoute('/_p/dashboard')({
   component: RouteComponent,
 })
 
 export default function RouteComponent() {
-  const { data: myStartups, isLoading:myStartupsLoading } = useQuery({
-    queryKey: ["mystartups"],
-    queryFn: () => getAllStartupsById(profileid)
+  const { data: user } = useUser()
+  const { data: myStartups, isLoading: myStartupsLoading } = useQuery({
+    queryKey: ["mystartups", user?.id],
+    queryFn: () => {
+      if (!user?.id) throw new Error('User ID is required')
+      console.log(user.id)
+      return getAllStartupsById(user.id)
+    },
+    enabled: !!user?.id
   })
   return (
     

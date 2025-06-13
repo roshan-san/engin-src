@@ -1,13 +1,11 @@
-import type { Database } from "@/database.types";
+import type { StartupInsert } from "@/types/supa-types"
 import supabase from "@/utils/supabase"
-
-type StartupInsert = Database['public']['Tables']['startups']['Insert'];
 
 export async function getAllStartupsById(id:string) {
   const { data, error } = await supabase
     .from('startups')
     .select('*')
-    .eq('user_id',id)
+    .eq("founder_id",id)
   if (error) {
     throw new Error(`Error fetching startups: ${error.message}`)
   }

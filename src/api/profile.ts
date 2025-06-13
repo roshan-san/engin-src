@@ -1,4 +1,4 @@
-import type { Profile } from "@/types/supa-types"
+import type { Profile, ProfileInsert } from "@/types/supa-types"
 import supabase from "@/utils/supabase"
 
 export async function getProfileById(id: string) {
@@ -60,3 +60,15 @@ export async function updatePfp(file: File,id:string) {
   return publicUrl
 } 
 
+export async function createProfile(profileData: ProfileInsert) {
+  const { data, error } = await supabase
+    .from('profiles')
+    .insert(profileData)
+    .select()
+    .single()
+
+  if (error) {
+    throw new Error(`Error creating profile: ${error.message}`)
+  }
+  return data
+}

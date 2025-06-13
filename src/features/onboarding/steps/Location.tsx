@@ -9,19 +9,20 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import { type LocationFormValues, locationSchema } from "../validations/onboarding";
+import { locationSchema } from "../validations/onboarding";
 import { useOnboarding } from "../context/OnboardContext";
+import type { ProfileInsert } from "@/types/supa-types";
 
 export default function Location() {
   const { nextStep, previousStep } = useOnboarding();
-  const form = useForm<LocationFormValues>({
+  const form = useForm({
     resolver: zodResolver(locationSchema),
     defaultValues: {
       location: "",
     },
   });
 
-  const handleSubmit = async (data: LocationFormValues) => {
+  const handleSubmit = async (data: ProfileInsert) => {
     const isValid = await form.trigger();
     if (isValid) {
       nextStep({

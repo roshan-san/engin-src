@@ -3,7 +3,6 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useState } from "react";
 import { FaBriefcase, FaClock, FaFileContract } from "react-icons/fa";
 import { workTypeSchema } from "../validations/onboarding";
-import type { WorkTypeFormValues } from "../validations/onboarding";
 import { useOnboarding } from "../context/OnboardContext";
 const workTypes = [
     {
@@ -28,9 +27,9 @@ const workTypes = [
 
 export default function WorkType() {
     const { nextStep, previousStep } = useOnboarding();
-    const [selectedWorkType, setSelectedWorkType] = useState<WorkTypeFormValues['work_type'] | ''>('');
+    const [selectedWorkType, setSelectedWorkType] = useState("");
 
-    const handleSubmit = (value: WorkTypeFormValues['work_type']) => {
+    const handleSubmit = (value: string) => {
       const result = workTypeSchema.safeParse({ work_type: value });
       if (result.success) {
         setSelectedWorkType(value);

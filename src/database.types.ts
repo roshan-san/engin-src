@@ -119,47 +119,47 @@ export type Database = {
       profiles: {
         Row: {
           avatar_url: string
-          bio: string | null
+          bio: string
           created_at: string
           email: string
           full_name: string
-          github_url: string | null
+          github_url: string
           id: string
           interests: string[] | null
-          linkedin_url: string | null
-          location: string | null
+          linkedin_url: string
+          location: string
           skills: string[] | null
           user_type: string
           username: string
           work_type: string
         }
         Insert: {
-          avatar_url: string
-          bio?: string | null
-          created_at?: string
-          email: string
-          full_name: string
-          github_url?: string | null
-          id?: string
-          interests?: string[] | null
-          linkedin_url?: string | null
-          location?: string | null
-          skills?: string[] | null
-          user_type: string
-          username: string
-          work_type: string
-        }
-        Update: {
           avatar_url?: string
-          bio?: string | null
+          bio?: string
           created_at?: string
           email?: string
           full_name?: string
-          github_url?: string | null
+          github_url?: string
           id?: string
           interests?: string[] | null
-          linkedin_url?: string | null
-          location?: string | null
+          linkedin_url?: string
+          location?: string
+          skills?: string[] | null
+          user_type?: string
+          username?: string
+          work_type?: string
+        }
+        Update: {
+          avatar_url?: string
+          bio?: string
+          created_at?: string
+          email?: string
+          full_name?: string
+          github_url?: string
+          id?: string
+          interests?: string[] | null
+          linkedin_url?: string
+          location?: string
           skills?: string[] | null
           user_type?: string
           username?: string

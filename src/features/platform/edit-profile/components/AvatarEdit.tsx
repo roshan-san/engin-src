@@ -5,7 +5,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Card, CardContent } from '@/components/ui/card'
 import { Camera, Loader2 } from 'lucide-react'
 import type { Profile } from '@/types/supa-types'
-import { useProfileAvatar } from './hooks/useProfileAvatar'
+import { useProfileAvatar } from '../hooks/useProfileAvatar'
 
 export function AvatarEditor({ profile }: { profile: Profile }) {
   const { selectedFile, previewUrl, isUploading, handleFileChange, handleAvatarUpload } = useProfileAvatar(profile)

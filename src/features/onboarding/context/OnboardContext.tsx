@@ -1,9 +1,9 @@
+import type { ProfileInsert } from "@/types/supa-types";
 import { createContext, useContext, useState } from "react";
-import type { OnboardingFormValues } from "../validations/onboarding";
 type OnboardingContextType = {
-  onboardingData: Partial<OnboardingFormValues>;
+  onboardingData: Partial<ProfileInsert>;
   step: number;
-  nextStep: (data?: Partial<OnboardingFormValues>) => void;
+  nextStep: (data?: Partial<ProfileInsert>) => void;
   previousStep: () => void;
 };
 
@@ -14,13 +14,13 @@ export const OnboardingProvider = ({
 }: { 
   children: React.ReactNode;
 }) => {
-  const [onboardingData, setOnboardingData] = useState<Partial<OnboardingFormValues>>({});
+  const [onboardingData, setOnboardingData] = useState<Partial<ProfileInsert>>({});
   const [step, setStep] = useState(1);
 
-  const updateData = (newData: Partial<OnboardingFormValues>) =>
+  const updateData = (newData: Partial<ProfileInsert>) =>
     setOnboardingData((prev) => ({ ...prev, ...newData }));
 
-  const nextStep = (data?: Partial<OnboardingFormValues>) => {
+  const nextStep = (data?: Partial<ProfileInsert>) => {
     if (data) {
       updateData(data);
       console.log(onboardingData)

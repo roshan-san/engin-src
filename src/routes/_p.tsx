@@ -1,8 +1,7 @@
-import { LeftBar } from '@/features/platform/navigation/LeftBar'
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
 import supabase from '@/utils/supabase'
-import { BottomBar } from '@/features/platform/navigation/BottomBar'
-
+import { LeftBar } from '@/features/platform/navigation-bars/LeftBar'
+import { BottomBar } from '@/features/platform/navigation-bars/BottomBar'
 export const Route = createFileRoute('/_p')({
   component: RouteComponent,
   beforeLoad: async () => {

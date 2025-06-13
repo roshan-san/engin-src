@@ -3,11 +3,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { FaTools, FaPlus, FaTimes } from "react-icons/fa";
 import { useOnboarding } from "../context/OnboardContext";
-import { skillsSchema, type SkillsFormValues } from "../validations/onboarding";
+import { skillsSchema } from "../validations/onboarding";
 
 export default function Skills() {
   const { nextStep, previousStep } = useOnboarding();
-  const [skills, setSkills] = useState<SkillsFormValues['skills']>([]);
+  const [skills, setSkills] = useState<string[]>([]);
   const [newSkill, setNewSkill] = useState('');
   
   const addSkill = () => {

@@ -3,12 +3,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { FaPlus, FaTimes, FaHeart } from "react-icons/fa";
 import { useOnboarding } from "../context/OnboardContext";
-import { interestsSchema, type InterestsFormValues } from "../validations/onboarding";
+import { interestsSchema } from "../validations/onboarding";
 
 export default function Interests() {
   const { nextStep, previousStep } = useOnboarding();
-  const [interests, setInterests] = useState<InterestsFormValues['interests']>([]);
-  const [newInterest, setNewInterest] = useState('');
+  const [interests, setInterests] =useState<string[]>([]);
+
+  const [newInterest, setNewInterest] = useState("");
   
   const addInterest = () => {
     if (newInterest.trim()) {
