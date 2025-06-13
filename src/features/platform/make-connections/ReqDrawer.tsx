@@ -2,27 +2,20 @@ import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger, Drawer
 import { Button } from "@/components/ui/button"
 import { HiBell } from "react-icons/hi"
 import { Skeleton } from "@/components/ui/skeleton"
-import { useConnectionRequest } from "./useConnectionRequest"
-import ConnectionRequestCard from "./ProfileTube"
+import { usePendingConnections } from "@/features/platform/hooks/ConnectionHooks"
+import ProfileTube from "./ProfileTube"
 
 export default function ReqDrawer() {
-  const { 
-    data: connrequests, 
-    isLoading,
-    acceptConnection,
-    rejectConnection,
-    isAccepting,
-    isRejecting
-  } = useConnectionRequest()
+  const pendingConnections = usePendingConnections()
 
   return (
     <Drawer>
       <DrawerTrigger asChild>
         <Button variant="outline" size="lg" className="relative h-14 px-4">
           <HiBell className="h-6 w-6" />
-          {connrequests && connrequests.length > 0 && (
+          {pendingConnections.data && pendingConnections.data.length > 0 && (
             <span className="absolute -top-2 -right-2 h-5 w-5 rounded-full bg-red-500 text-xs text-white flex items-center justify-center font-medium">
-              {connrequests.length}
+              {pendingConnections.data.length}
             </span>
           )}
         </Button>
@@ -35,23 +28,30 @@ export default function ReqDrawer() {
           </DrawerDescription>
         </DrawerHeader>
         <div className="p-4 space-y-4">
-          {isLoading ? (
-            [...Array(3)].map((_, i) => (
-              <Skeleton key={i} className="h-[200px] w-full" />
-            ))
-          ) : connrequests?.length === 0 ? (
-            <p className="text-center text-muted-foreground">No pending connection requests</p>
+          {pendingConnections.isLoading ? (
+            <div className="space-y-4">
+              <Skeleton className="h-20 w-full" />
+              <Skeleton className="h-20 w-full" />
+              <Skeleton className="h-20 w-full" />
+            </div>
+          ) : pendingConnections.error ? (
+            <div className="text-center text-red-500">
+              Error loading connection requests
+            </div>
+          ) : pendingConnections.data?.length === 0 ? (
+            <div className="text-center text-muted-foreground">
+              No pending connection requests
+            </div>
           ) : (
-            connrequests?.map((request) => (
-              <ConnectionRequestCard
-                key={request.id}
-                request={request}
-                onAccept={acceptConnection}
-                onReject={rejectConnection}
-                isAccepting={isAccepting}
-                isRejecting={isRejecting}
-              />
-            ))
+            <div className="space-y-4">
+              {pendingConnections.data?.map((connection) => (
+                <ProfileTube
+                  key={connection.id}
+                  profile={connection.sender}
+                  connectionId={connection.id}
+                />
+              ))}
+            </div>
           )}
         </div>
       </DrawerContent>

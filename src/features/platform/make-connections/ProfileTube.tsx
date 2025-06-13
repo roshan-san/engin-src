@@ -1,104 +1,59 @@
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
-import { MapPin, User2, Check, X } from 'lucide-react';
-import { FaGithub, FaLinkedin } from 'react-icons/fa';
-import { Link } from '@tanstack/react-router';
-import type { Profile } from '@/types/supa-types';
-import type { Database } from '@/database.types';
-
-type Connection = Database['public']['Tables']['connections']['Row'];
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button"
+import { Card } from "@/components/ui/card"
+import { MapPin, User2 } from "lucide-react"
+import type { Profile } from "@/types/supa-types"
+import { acceptConnectionMutation, rejectConnectionMutation } from "../hooks/ConnectionHooks"
 
 interface ProfileTubeProps {
-  request: Connection & { sender: Profile };
-  onAccept: (id: string) => void;
-  onReject: (id: string) => void;
-  isAccepting: boolean;
-  isRejecting: boolean;
+  profile: Profile
+  connectionId: string
 }
 
-export default function ProfileTube({ 
-  request, 
-  onAccept, 
-  onReject,
-  isAccepting,
-  isRejecting
-}: ProfileTubeProps) {
+export default function ProfileTube({ profile, connectionId }: ProfileTubeProps) {
+  const acceptConnection = acceptConnectionMutation()
+  const rejectConnection = rejectConnectionMutation()
+
   return (
-    <Card className="hover:shadow-md transition-shadow">
-      <CardHeader className="flex flex-row items-center justify-between">
-        <div className="flex items-center gap-4">
-          <Avatar className="h-14 w-14">
-            <AvatarImage src={request.sender.avatar_url || undefined} />
-            <AvatarFallback className="text-lg">{request.sender.full_name?.charAt(0)}</AvatarFallback>
-          </Avatar>
-          <div className="space-y-1">
-            <Link 
-              to={"/profile/$username"}
-              params={{ username: request.sender.username }}
-              className="font-semibold text-lg hover:underline"
-            >
-              {request.sender.full_name}
-            </Link>
-            <p className="text-sm text-muted-foreground">@{request.sender.username}</p>
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <User2 className="h-4 w-4" />
-              <span>{request.sender.user_type}</span>
-            </div>
+    <Card className="p-4">
+      <div className="flex items-center gap-4">
+        <Avatar className="h-12 w-12">
+          <AvatarImage src={profile.avatar_url || undefined} />
+          <AvatarFallback>{profile.full_name?.charAt(0)}</AvatarFallback>
+        </Avatar>
+        <div className="flex-1 min-w-0">
+          <h3 className="font-semibold truncate">{profile.full_name}</h3>
+          <p className="text-sm text-muted-foreground truncate">@{profile.username}</p>
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <User2 className="h-4 w-4" />
+            <span>{profile.user_type}</span>
+            {profile.location && (
+              <>
+                <span>•</span>
+                <MapPin className="h-4 w-4" />
+                <span>{profile.location}</span>
+              </>
+            )}
           </div>
         </div>
         <div className="flex gap-2">
-          <Button 
-            variant="default" 
-            size="icon"
-            onClick={() => onAccept(request.id)}
-            disabled={isAccepting || isRejecting}
-            className="h-8 w-8"
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => rejectConnection.mutate(connectionId)}
+            disabled={rejectConnection.isPending}
           >
-            <Check className="h-4 w-4" />
+            Decline
           </Button>
-          <Button 
-            variant="outline" 
-            size="icon"
-            onClick={() => onReject(request.id)}
-            disabled={isAccepting || isRejecting}
-            className="h-8 w-8"
+          <Button
+            size="sm"
+            onClick={() => acceptConnection.mutate(connectionId)}
+            disabled={acceptConnection.isPending}
           >
-            <X className="h-4 w-4" />
+            Accept
           </Button>
         </div>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        {request.sender.bio && (
-          <p className="text-sm text-muted-foreground line-clamp-2">{request.sender.bio}</p>
-        )}
-        <div className="flex flex-wrap gap-4">
-          {request.sender.location && (
-            <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
-              <MapPin className="h-4 w-4" />
-              <span>{request.sender.location}</span>
-            </div>
-          )}
-          {request.sender.github_url && (
-            <Link 
-              to={request.sender.github_url}
-              target="_blank"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              <FaGithub className="h-4 w-4" />
-            </Link>
-          )}
-          {request.sender.linkedin_url && (
-            <Link 
-              to={request.sender.linkedin_url}
-              target="_blank"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              <FaLinkedin className="h-4 w-4" />
-            </Link>
-          )}
-        </div>
-      </CardContent>
+      </div>
     </Card>
-  );
+  )
 } 
