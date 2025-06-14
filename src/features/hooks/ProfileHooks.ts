@@ -1,33 +1,47 @@
-import { createProfileApi, getProfileById } from "@/api/profile"
-import { getUserApi } from "@/api/auth";
+import { createProfileApi, getProfileByIdApi } from "@/api/profile"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import type { ProfileInsert } from "@/types/supa-types";
+import { useAuth } from "@/features/authentication/store/authStore";
 
 export const useProfileById = (profileId: string) => {
   return useQuery({
     queryKey: ["profile", profileId],
-    queryFn: () => getProfileById(profileId),
+    queryFn: () => getProfileByIdApi(profileId),
     enabled: !!profileId,
   })
 }
-export function useMyProfile(){
+export function useMyProfile() {
+    const { data: user } = useAuth();
+    
     return useQuery({
-        queryKey:["profile"],
-        queryFn:async()=>{
-            const user = await getUserApi()
+        queryKey: ["profile"],
+        queryFn: () => {
             if (!user) {
                 return null;
             }
-            return getProfileById(user.id);
+            return getProfileByIdApi(user.id);
         },
-        staleTime:Infinity
-    })
+        enabled: !!user,
+        staleTime: Infinity
+    });
 }
 export function createProfileMutation() {
+  const { data: user } = useAuth();
+  const queryClient = useQueryClient();
+
   return useMutation({
-    mutationFn: (createProfileData: ProfileInsert) => createProfileApi(createProfileData),
+    mutationFn: (createProfileData: ProfileInsert) => {
+      if (!user) throw new Error('User not logged in');
+      
+      return createProfileApi({
+        ...createProfileData,
+        id: user.id,
+        email: user.email || '',
+        full_name: user.user_metadata?.full_name || '',
+        avatar_url: user.user_metadata?.avatar_url || '',
+      });
+    },
     onSuccess: () => {
-      const queryClient = useQueryClient();
       queryClient.invalidateQueries({ queryKey: ['profile'] });
     },
   });

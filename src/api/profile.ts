@@ -1,8 +1,6 @@
 import type { Profile, ProfileInsert } from "@/types/supa-types"
 import supabase from "@/utils/supabase"
-import { boolean } from "zod"
-
-export async function getProfileById(id: string) {
+export async function getProfileByIdApi(id: string) {
   const { data, error } = await supabase
     .from('profiles')
     .select('*')
