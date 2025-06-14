@@ -24,6 +24,7 @@ export default function Skills() {
   const handleSubmit = () => {
     const result = skillsSchema.safeParse({ skills: skills.map(skill => skill.trim()) });
     if (result.success) {
+      console.log("skil mudinju")
       nextStep({
         skills: result.data.skills
       });

@@ -2,8 +2,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { MapPin, User2 } from "lucide-react"
-import { acceptConnectionMutation, rejectConnectionMutation } from "../hooks/ConnectionHooks"
-import { useProfileById } from "../hooks/ProfileHooks"
+import { acceptConnectionMutation, rejectConnectionMutation } from "../../hooks/ConnectionHooks"
+import { useProfileById } from "../../hooks/ProfileHooks"
 
 export default function ProfileTube({ profileId, connectionId }: {
   profileId:string

@@ -15,35 +15,23 @@ export type Database = {
           id: string
           job_id: string | null
           profile_id: string | null
+          status: Database["public"]["Enums"]["application_status"] | null
         }
         Insert: {
           created_at?: string
           id?: string
           job_id?: string | null
           profile_id?: string | null
+          status?: Database["public"]["Enums"]["application_status"] | null
         }
         Update: {
           created_at?: string
           id?: string
           job_id?: string | null
           profile_id?: string | null
+          status?: Database["public"]["Enums"]["application_status"] | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "applications_job_id_jobs_id_fk"
-            columns: ["job_id"]
-            isOneToOne: false
-            referencedRelation: "jobs"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "applications_profile_id_profiles_id_fk"
-            columns: ["profile_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       connections: {
         Row: {
@@ -67,22 +55,7 @@ export type Database = {
           sender_id?: string
           status?: Database["public"]["Enums"]["connection_status"]
         }
-        Relationships: [
-          {
-            foreignKeyName: "connections_receiver_id_profiles_id_fk"
-            columns: ["receiver_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "connections_sender_id_profiles_id_fk"
-            columns: ["sender_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       jobs: {
         Row: {
@@ -106,15 +79,7 @@ export type Database = {
           startup_id?: string | null
           title?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "jobs_startup_id_startups_id_fk"
-            columns: ["startup_id"]
-            isOneToOne: false
-            referencedRelation: "startups"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       profiles: {
         Row: {
@@ -207,15 +172,7 @@ export type Database = {
           solution?: string
           team_size?: number
         }
-        Relationships: [
-          {
-            foreignKeyName: "startups_founder_id_profiles_id_fk"
-            columns: ["founder_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
     }
     Views: {
@@ -225,6 +182,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
+      application_status: "accepted" | "rejected" | "pending"
       connection_status: "pending" | "accepted" | "rejected"
       user_type: "Creator/Collaborator" | "Investor" | "Mentor"
       work_type: "Full-Time" | "Part-Time" | "Contract"
@@ -343,6 +301,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      application_status: ["accepted", "rejected", "pending"],
       connection_status: ["pending", "accepted", "rejected"],
       user_type: ["Creator/Collaborator", "Investor", "Mentor"],
       work_type: ["Full-Time", "Part-Time", "Contract"],

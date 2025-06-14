@@ -24,11 +24,8 @@ export const OnboardingProvider = ({
     if (data) {
       updateData(data);
       console.log(onboardingData)
-      if (step === 5) {
-        console.log("onboardingData", onboardingData)
-      }
     }
-    setStep(Math.min(5, step + 1));
+    setStep(Math.min(7, step + 1));
   };
 
   const previousStep = () => {

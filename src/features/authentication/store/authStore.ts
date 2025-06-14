@@ -14,7 +14,7 @@ export function signInMutation(provider: 'github' | 'google') {
     mutationKey: ["signIn"],
     mutationFn: () => signInApi(provider),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['user','profile'] })
+      queryClient.clear()
     },
     onError: (error) => {
       console.error('Sign in failed:', error)

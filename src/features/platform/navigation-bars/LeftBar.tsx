@@ -3,7 +3,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/compo
 import SignOutButton from "./SignOut";
 import { Link } from "@tanstack/react-router";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import { useMyProfile } from "../hooks/ProfileHooks";
+import { useMyProfile } from "../../hooks/ProfileHooks";
 const mainNavigationItems = [
   { href: "/dashboard", icon: Laptop, label: "Dashboard" },
   { href: "/startups", icon: Search, label: "Discover" },

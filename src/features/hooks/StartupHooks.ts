@@ -3,9 +3,9 @@ import type { StartupInsert } from "@/types/supa-types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 
-const queryClient = useQueryClient()
 export function createStartupMutation() {
     const navigate = useNavigate()
+    const queryClient = useQueryClient()
     return useMutation({
         mutationKey: ["create-startup"],
         mutationFn: (startupCreationData: StartupInsert) => createStartupApi(startupCreationData),

@@ -3,35 +3,33 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Form,FormControl,FormField,FormItem,FormMessage,} from "@/components/ui/form";
-import { FaBuilding } from "react-icons/fa";
+import { FaUser } from "react-icons/fa";
 import type {ProfileInsert } from "@/types/supa-types";
 import { usernameSchema } from "../validations/onboarding";
 import { useOnboarding } from "../context/OnboardContext";
 
-export default function StartupName() {
-  const {nextStep, previousStep ,onboardingData} = useOnboarding();
+export default function UserName() {
+  const {nextStep, previousStep, onboardingData} = useOnboarding();
+  
   const form = useForm({
     resolver: zodResolver(usernameSchema),
     defaultValues: {
       username: onboardingData.username || "",
-    },
+    }
   });
 
   const handleSubmit = async (data: ProfileInsert) => {
-    const isValid = await form.trigger();
-    if (isValid) {
-      nextStep({
-        username: data.username,
-      });
-    }
+    nextStep({
+      username: data.username,
+    });
   };
 
   return (
     <div className="w-full flex justify-center items-center gap-6 flex-col h-full p-4 max-w-2xl mx-auto">
       <div className="flex flex-col gap-6 w-full">
         <h3 className="text-xl font-semibold text-foreground tracking-wide uppercase flex items-center gap-3">
-          <FaBuilding className="text-primary w-5 h-5" />
-          What&apos;s your startup name?
+          <FaUser className="text-primary w-5 h-5" />
+          Choose your username
         </h3>
         
         <Form {...form}>
@@ -43,7 +41,7 @@ export default function StartupName() {
                 <FormItem>
                   <FormControl>
                     <Input 
-                      placeholder="Enter your startup name" 
+                      placeholder="Enter your username" 
                       {...field}
                       className="h-14 text-lg rounded-xl"
                       autoFocus

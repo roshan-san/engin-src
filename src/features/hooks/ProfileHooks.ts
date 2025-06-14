@@ -1,6 +1,7 @@
-import { getProfileById } from "@/api/profile"
+import { createProfileApi, getProfileById } from "@/api/profile"
 import { getUserApi } from "@/api/auth";
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import type { ProfileInsert } from "@/types/supa-types";
 
 export const useProfileById = (profileId: string) => {
   return useQuery({
@@ -22,3 +23,14 @@ export function useMyProfile(){
         staleTime:Infinity
     })
 }
+export function createProfileMutation() {
+  return useMutation({
+    mutationFn: (createProfileData: ProfileInsert) => createProfileApi(createProfileData),
+    onSuccess: () => {
+      const queryClient = useQueryClient();
+      queryClient.invalidateQueries({ queryKey: ['profile'] });
+    },
+  });
+}
+
+

@@ -1,5 +1,6 @@
 import type { Profile, ProfileInsert } from "@/types/supa-types"
 import supabase from "@/utils/supabase"
+import { boolean } from "zod"
 
 export async function getProfileById(id: string) {
   const { data, error } = await supabase
@@ -60,7 +61,7 @@ export async function updatePfp(file: File,id:string) {
   return publicUrl
 } 
 
-export async function createProfile(profileData: ProfileInsert) {
+export async function createProfileApi(profileData: ProfileInsert) {
   const { data, error } = await supabase
     .from('profiles')
     .insert(profileData)
@@ -72,3 +73,13 @@ export async function createProfile(profileData: ProfileInsert) {
   }
   return data
 }
+export async function checkUsernameApi(username: string) {
+  const { data, error } = await supabase
+    .from('profiles')
+    .select('username')
+    .eq('username', username)
+    .maybeSingle()
+  if (error) throw error
+  return !!data
+}
+

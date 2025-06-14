@@ -1,4 +1,3 @@
-import { useAuth } from "@/features/authentication/store/authStore"
 import type { StartupInsert } from "@/types/supa-types"
 import supabase from "@/utils/supabase"
 
@@ -26,12 +25,13 @@ export async function createStartupApi(data: StartupInsert) {
 
   return startup;
 }
-export function getMyStartupsApi() {
-  const user = useAuth()
-  if (!user.data) {
+
+export async function getMyStartupsApi() {
+  const { data: { user }, error: authError } = await supabase.auth.getUser()
+  if (authError || !user) {
     throw new Error('User not authenticated')
   }
-  return getAllStartupsByIdApi(user.data.id)
+  return getAllStartupsByIdApi(user.id)
 }
 
 
