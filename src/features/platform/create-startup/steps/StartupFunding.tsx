@@ -13,17 +13,19 @@ import { FaMoneyBillWave } from "react-icons/fa";
 import { startupFundingSchema } from "@/features/platform/create-startup/validations/startup";
 import { useStartupCreation } from "../context/StartupCreateContext";
 import type { StartupInsert } from "@/types/supa-types";
+import { createStartupMutation } from "../../hooks/StartupHooks";
 
 
 
 export default function StartupFunding() {
-  const { startupCreationData, nextStep, previousStep ,isCreating} = useStartupCreation();
+  const { startupCreationData, nextStep, previousStep} = useStartupCreation();
   const form = useForm({
     resolver: zodResolver(startupFundingSchema),
     defaultValues: {
       funding: startupCreationData.funding || 0,
     },
   });
+  const createStartup= createStartupMutation()
 
   const handleSubmit = async (data: StartupInsert) => {
     const isValid = await form.trigger();
@@ -31,6 +33,7 @@ export default function StartupFunding() {
       nextStep({
         funding: data.funding,
       });
+            createStartup.mutate(startupCreationData)
     }
   };
 
@@ -78,10 +81,10 @@ export default function StartupFunding() {
         <Button 
           type="submit"
           onClick={form.handleSubmit(handleSubmit)}
-          disabled={isCreating}
+          disabled={createStartup.isPending}
           className="flex-1 h-12 text-lg font-medium transition-all hover:scale-[1.02]"
         >
-          {!isCreating? "Create Startup":"Creating...."}
+          {createStartup.isPending ? "Creating..." : "Create Startup"}
         </Button>
       </div>
     </div>

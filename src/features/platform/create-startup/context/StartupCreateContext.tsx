@@ -1,6 +1,5 @@
 import type { StartupInsert } from "@/types/supa-types";
 import { createContext, useContext, useState } from "react";
-import { createStartupMutaion,} from "@/features/platform/hooks/StartupHooks";
 
 
 type StartupCreationContextType = {
@@ -16,7 +15,6 @@ export const StartupCreateProvider = ({ children,}: { children: React.ReactNode;
 
   const [startupCreationData, setStartupCreationData] = useState<Partial<StartupInsert>>({});
   const [step, setStep] = useState(1);
-  const createStartupMutation=createStartupMutaion()
 
   const updateData = (newData: Partial<StartupInsert>) =>
     setStartupCreationData((prev) => ({ ...prev, ...newData }));
@@ -24,10 +22,7 @@ export const StartupCreateProvider = ({ children,}: { children: React.ReactNode;
   const nextStep = (data?: Partial<StartupInsert>) => {
     if (data) {
       updateData(data);
-    }
-    if (step === 7) {
-      createStartupMutation.mutate(startupCreationData)
-    } else {
+    }{
       setStep(Math.min(7, step + 1));
     }
   };
