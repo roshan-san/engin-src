@@ -28,7 +28,7 @@ export function signOutMutation() {
     mutationKey: ["signOut"],
     mutationFn: signOutApi,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['user'] })
+      queryClient.clear()
     },
     onError: (error) => {
       console.error('Sign out failed:', error)

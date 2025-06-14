@@ -1,8 +1,15 @@
-import { useQuery } from "@tanstack/react-query";
-import { getProfileById } from "@/api/profile";
+import { getProfileById } from "@/api/profile"
 import { getUserApi } from "@/api/auth";
+import { useQuery } from "@tanstack/react-query"
 
-export function useProfile(){
+export const useProfileById = (profileId: string) => {
+  return useQuery({
+    queryKey: ["profile", profileId],
+    queryFn: () => getProfileById(profileId),
+    enabled: !!profileId,
+  })
+}
+export function useMyProfile(){
     return useQuery({
         queryKey:["profile"],
         queryFn:async()=>{

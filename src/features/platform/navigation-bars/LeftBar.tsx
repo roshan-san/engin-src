@@ -1,14 +1,9 @@
-import { Laptop, Search, Users, MessageCircle } from "lucide-react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Laptop, Search, Users, MessageCircle, Loader2, } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip";
 import SignOutButton from "./SignOut";
 import { Link } from "@tanstack/react-router";
-import { UserAvatar } from "./UserAvatar";
 import { useProfile } from "@/features/authentication/store/profileStrore";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
 const mainNavigationItems = [
   { href: "/dashboard", icon: Laptop, label: "Dashboard" },
   { href: "/startups", icon: Search, label: "Discover" },
@@ -17,7 +12,7 @@ const mainNavigationItems = [
 ];
 
 export function LeftBar() {
-  const { data: profile } = useProfile()
+  const profile = useProfile()
   return (
     <div className="flex h-full flex-col items-center">
       <div className="flex flex-col items-center gap-8 flex-grow py-10">
@@ -44,34 +39,36 @@ export function LeftBar() {
           </TooltipProvider>
         ))}
       </div>
-    
+
       <div className="flex flex-col items-center gap-6 pb-10">
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              {profile ? (
+              {profile.isLoading ? (
+                <div className="p-2.5">
+                  <Loader2 className="h-5 w-5 animate-spin text-primary" />
+                </div>
+              ) : profile.data ? (
                 <Link
                   to={"/profile/$username"}
-                  params={{ username: profile.username }}
+                  params={{ username: profile.data.username }}
                 >
-                  <UserAvatar url={profile.avatar_url}  />
+                  <Avatar>
+                    <AvatarImage src={profile.data.avatar_url} />
+                  </Avatar>
                 </Link>
-              ) : (
-                <div className="p-2.5">
-                  <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent" />
-                </div>
-              )}
+              ) : null}
             </TooltipTrigger>
             <TooltipContent side="right" className="font-medium">
-              <p>{profile?.full_name}</p>
+              <p>{profile.data?.full_name}</p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
-        
+
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <SignOutButton/>
+              <SignOutButton />
             </TooltipTrigger>
             <TooltipContent side="right" className="font-medium">
               <p>Sign out</p>

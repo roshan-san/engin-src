@@ -46,7 +46,7 @@ export async function rejectConnectionRequestApi(connectionId: string) {
 export async function getPendingConnectionsApi(userId: string) {
   const { data, error } = await supabase
     .from('connections')
-    .select('*, sender:profiles!connections_sender_id_fkey(*)')
+    .select('*')
     .eq('receiver_id', userId)
     .eq('status', 'pending')
 

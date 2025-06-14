@@ -44,13 +44,15 @@ export default function ReqDrawer() {
             </div>
           ) : (
             <div className="space-y-4">
-              {pendingConnections.data?.map((connection) => (
+              {pendingConnections.data?.map((connection) => {
+                console.log(pendingConnections.data)
+                return (
                 <ProfileTube
                   key={connection.id}
-                  profile={connection.sender}
                   connectionId={connection.id}
+                  profileId={connection.receiver_id}
                 />
-              ))}
+              )})}
             </div>
           )}
         </div>

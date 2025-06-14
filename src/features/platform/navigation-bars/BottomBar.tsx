@@ -1,7 +1,7 @@
-import { Laptop, Search, Users, MessageCircle } from "lucide-react";
+import { Laptop, Search, Users, MessageCircle, Loader2 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
-import { UserAvatar } from "./UserAvatar";
 import { useProfile } from "@/features/authentication/store/profileStrore";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
 
 const navigationItems = [
   { href: "/dashboard", icon: Laptop, },
@@ -11,7 +11,7 @@ const navigationItems = [
 ];
 
 export function BottomBar() {
-  const { data: profile } = useProfile();
+  const profile= useProfile();
   
   return (
     <div className="fixed bottom-0 left-0 right-0 h-16 bg-background border-t">
@@ -30,19 +30,20 @@ export function BottomBar() {
             <Icon className="h-5 w-5" />
           </Link>
         ))}
-        {profile ? (
+      {profile.isLoading ? (
+                <div className="p-2.5">
+                  <Loader2 className="h-5 w-5 animate-spin text-primary" />
+                </div>
+              ) : profile.data ? (
                 <Link
                   to={"/profile/$username"}
-                  params={{ username: profile.username }}
+                  params={{ username: profile.data.username }}
                 >
-                  <UserAvatar url={profile.avatar_url}  />
+                  <Avatar>
+                    <AvatarImage src={profile.data.avatar_url} />
+                  </Avatar>
                 </Link>
-              ) : (
-                <div className="p-2.5">
-                  <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent" />
-                </div>
-              )}
-      </div>
+              ) : null}
     </div>
-  );
-} 
+    </div>
+)} 

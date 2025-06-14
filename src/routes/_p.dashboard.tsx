@@ -1,26 +1,18 @@
-import { getAllStartupsById } from '@/api/startups'
 import { useAuth } from '@/features/authentication/store/authStore'
 import CreateBtn from '@/features/platform/create-startup/CreateBtn'
 import Header from '@/features/platform/Header'
+import { useMyStartups } from '@/features/platform/hooks/StartupHooks'
 import StartupCard from '@/features/platform/search-startups/StartupCard'
-import { useQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
+import { Loader2 } from 'lucide-react'
 
 export const Route = createFileRoute('/_p/dashboard')({
   component: RouteComponent,
 })
 
 export default function RouteComponent() {
-  const { data: user } = useAuth()
-  const { data: myStartups, isLoading: myStartupsLoading } = useQuery({
-    queryKey: ["mystartups", user?.id],
-    queryFn: () => {
-      if (!user?.id) throw new Error('User ID is required')
-      console.log(user.id)
-      return getAllStartupsById(user.id)
-    },
-    enabled: !!user?.id
-  })
+  const user= useAuth()
+  const myStartups = useMyStartups()
   return (
     
     <div className="h-full flex flex-col p-4 gap-12">
@@ -28,15 +20,15 @@ export default function RouteComponent() {
       <div className="space-y-6">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
 
-          {myStartupsLoading ? (
-            <div className="col-span-3 text-center py-10">
-              <p className="text-muted-foreground">Loading...</p>
+          {myStartups.isLoading ? (
+            <div className="col-span-3 flex items-center justify-center py-10">
+              <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
             </div>
           ) : !myStartups ? (
             <div className="col-span-3 text-center py-10">
               <p className="text-muted-foreground">Startup object not found</p>
             </div>
-          ) : myStartups?.length === 0 ? (
+          ) : myStartups.data === 0 ? (
             <div className="col-span-3 text-center py-10">
               <p className="text-muted-foreground">No startups found. Create your first startup!</p>
             </div>
