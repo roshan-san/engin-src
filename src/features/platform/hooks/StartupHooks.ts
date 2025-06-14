@@ -1,4 +1,4 @@
-import { createStartupApi,  } from "@/api/startups";
+import { createStartupApi, getMyStartupsApi,  } from "@/api/startups";
 import type { StartupInsert } from "@/types/supa-types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
@@ -25,6 +25,6 @@ export function createStartupMutaion(){
 export function useMyStartups(){
     return useQuery({
         queryKey:["my-startups"],
-        queryFn:getMyStartups()
+        queryFn:getMyStartupsApi()
     })
 }

@@ -1,13 +1,5 @@
 import supabase from '@/utils/supabase'
 
-export interface Connection {
-  id: string
-  sender_id: string
-  receiver_id: string
-  status: 'pending' | 'accepted' | 'rejected'
-  created_at: string
-}
-
 export async function sendConnectionRequestApi(senderId: string, receiverId: string) {
   const { data, error } = await supabase
     .from('connections')

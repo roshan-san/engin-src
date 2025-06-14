@@ -2,8 +2,8 @@ import { Laptop, Search, Users, MessageCircle, Loader2, } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip";
 import SignOutButton from "./SignOut";
 import { Link } from "@tanstack/react-router";
-import { useProfile } from "@/features/authentication/store/profileStrore";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { useMyProfile } from "../hooks/ProfileHooks";
 const mainNavigationItems = [
   { href: "/dashboard", icon: Laptop, label: "Dashboard" },
   { href: "/startups", icon: Search, label: "Discover" },
@@ -12,7 +12,7 @@ const mainNavigationItems = [
 ];
 
 export function LeftBar() {
-  const profile = useProfile()
+  const profile = useMyProfile()
   return (
     <div className="flex h-full flex-col items-center">
       <div className="flex flex-col items-center gap-8 flex-grow py-10">

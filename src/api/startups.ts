@@ -26,7 +26,7 @@ export async function createStartupApi(data: StartupInsert) {
 
   return startup;
 }
-export async function getMyStartupsApi() {
+export function getMyStartupsApi() {
   const user = useAuth()
   if (!user.data) {
     throw new Error('User not authenticated')
