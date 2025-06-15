@@ -41,8 +41,8 @@ export const interestsSchema = z.object({
 });
 
 export const contactSchema = z.object({
-  github_url: z.string().url("Please enter a valid GitHub URL").optional(),
-  linkedin_url: z.string().url("Please enter a valid LinkedIn URL").optional()
+  github_url: z.string().optional(),
+  linkedin_url: z.string().optional()
 });
 
 export const OnboardingSchema = z.object({
