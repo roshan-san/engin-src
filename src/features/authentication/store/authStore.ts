@@ -2,10 +2,11 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { signInApi, signOutApi, getUserApi } from '@/api/auth'
 export function useAuth() {
   return useQuery({
-    queryKey: ['user'],
+    queryKey: ['auth-user'],
     queryFn: getUserApi,
     staleTime: Infinity,
     gcTime:Infinity
+    
   })
 }
 

@@ -1,18 +1,29 @@
-import { useNavigate } from "@tanstack/react-router"
+import { Navigate } from "@tanstack/react-router"
 import { useAuth } from "./authStore"
-import { Loader2 } from "lucide-react"
+import { FullScreenLoader } from "@/components/FullScreenLoader"
+import type { User } from '@supabase/supabase-js'
+import { createContext, useContext } from 'react'
 
+const UserContext = createContext<User | null>(null)
+
+export function useUser() {
+  const user = useContext(UserContext)
+  if (!user) throw new Error('useUser must be used within AuthGuard')
+  return user
+}
 
 export function AuthGuard({ children }: { children: React.ReactNode }) {
-  const { data: user, isLoading } = useAuth()
-  const navigate = useNavigate()
+  const user = useAuth()
 
-  if (isLoading) return <div className="flex items-center justify-center h-screen"><Loader2 className="h-8 w-8 animate-spin" /></div>
+  if (user.isLoading) return <FullScreenLoader/>
 
-  if (!user) {
-    navigate({ to: '/' })
-    return null
-  }
+  if(user.isError) return <div>error vantu pa</div>
 
-  return <>{children}</>
+  if (!user.data) return <Navigate to="/"/>
+
+  return (
+    <UserContext.Provider value={user.data}>
+      {children}
+    </UserContext.Provider>
+  )
 }

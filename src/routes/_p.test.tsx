@@ -1,4 +1,4 @@
-import { useAuth } from '@/features/authentication/store/useAuth'
+import {  useUser } from '@/features/authentication/store/AuthGaurd'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_p/test')({
@@ -6,7 +6,10 @@ export const Route = createFileRoute('/_p/test')({
 })
 
 function RouteComponent() {
-  const user = useAuth()
-  return <div>
-  </div>
+  const user = useUser()
+  return (
+   <div>
+    {user.email}
+   </div>
+  )
 }
