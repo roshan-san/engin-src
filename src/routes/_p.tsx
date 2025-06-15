@@ -1,23 +1,16 @@
 import { LeftBar } from '@/features/platform/navigation-bars/LeftBar'
 import { BottomBar } from '@/features/platform/navigation-bars/BottomBar'
-import { createFileRoute, Outlet, Navigate } from '@tanstack/react-router'
-import { useAuth } from '@/features/authentication/store/authStore'
-import { Loader2 } from 'lucide-react'
+import { createFileRoute, Outlet } from '@tanstack/react-router'
+import { AuthGuard } from '@/features/authentication/store/AuthGaurd'
 
 export const Route = createFileRoute('/_p')({
   component: RouteComponent,
 })
 function RouteComponent() {
-  const user = useAuth()
 
   return (
+    <AuthGuard>
     <div className="flex h-screen sm:flex-row flex-col w-full">
-      {user.isLoading ? (
-        <div className="flex h-screen w-full items-center justify-center">
-          <Loader2 className="animate-spin h-8 w-8 text-primary" />
-        </div>
-      ) : user.data ? (
-        <>
           <div className="w-20 hidden md:block">
             <LeftBar />
           </div>
@@ -27,10 +20,7 @@ function RouteComponent() {
           <div className="w-20 md:hidden">
             <BottomBar />
           </div>
-        </>
-      ) :(
-        <Navigate to="/" />
-      )}
     </div>
+    </AuthGuard>
   )
 }

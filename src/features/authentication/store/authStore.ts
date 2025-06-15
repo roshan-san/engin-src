@@ -4,7 +4,8 @@ export function useAuth() {
   return useQuery({
     queryKey: ['user'],
     queryFn: getUserApi,
-    staleTime: Infinity
+    staleTime: Infinity,
+    gcTime:Infinity
   })
 }
 

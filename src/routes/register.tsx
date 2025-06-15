@@ -13,7 +13,10 @@ function RouteComponent() {
   const profile = useMyProfile()
   const navigate=useNavigate()
   if (profile.isLoading) return <Loader2 className="animate-spin" />
-  if(profile.data){navigate({to:"/dashboard"})}
+  if(profile.data){
+    navigate({to:"/dashboard"}
+      
+    )}
 
   return (
     <div className='flex flex-col items-center justify-center h-screen'>

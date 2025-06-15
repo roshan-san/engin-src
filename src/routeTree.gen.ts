@@ -14,6 +14,7 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as RegisterImport } from './routes/register'
 import { Route as PImport } from './routes/_p'
 import { Route as IndexImport } from './routes/index'
+import { Route as PTestImport } from './routes/_p.test'
 import { Route as PStartupsImport } from './routes/_p.startups'
 import { Route as PMessageImport } from './routes/_p.message'
 import { Route as PDashboardImport } from './routes/_p.dashboard'
@@ -39,6 +40,12 @@ const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRoute,
+} as any)
+
+const PTestRoute = PTestImport.update({
+  id: '/test',
+  path: '/test',
+  getParentRoute: () => PRoute,
 } as any)
 
 const PStartupsRoute = PStartupsImport.update({
@@ -136,6 +143,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PStartupsImport
       parentRoute: typeof PImport
     }
+    '/_p/test': {
+      id: '/_p/test'
+      path: '/test'
+      fullPath: '/test'
+      preLoaderRoute: typeof PTestImport
+      parentRoute: typeof PImport
+    }
     '/_p/message/$username': {
       id: '/_p/message/$username'
       path: '/$username'
@@ -191,6 +205,7 @@ interface PRouteChildren {
   PDashboardRoute: typeof PDashboardRoute
   PMessageRoute: typeof PMessageRouteWithChildren
   PStartupsRoute: typeof PStartupsRouteWithChildren
+  PTestRoute: typeof PTestRoute
   PProfileUsernameRoute: typeof PProfileUsernameRoute
 }
 
@@ -199,6 +214,7 @@ const PRouteChildren: PRouteChildren = {
   PDashboardRoute: PDashboardRoute,
   PMessageRoute: PMessageRouteWithChildren,
   PStartupsRoute: PStartupsRouteWithChildren,
+  PTestRoute: PTestRoute,
   PProfileUsernameRoute: PProfileUsernameRoute,
 }
 
@@ -212,6 +228,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof PDashboardRoute
   '/message': typeof PMessageRouteWithChildren
   '/startups': typeof PStartupsRouteWithChildren
+  '/test': typeof PTestRoute
   '/message/$username': typeof PMessageUsernameRoute
   '/profile/$username': typeof PProfileUsernameRoute
   '/startups/$startupid': typeof PStartupsStartupidRoute
@@ -225,6 +242,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof PDashboardRoute
   '/message': typeof PMessageRouteWithChildren
   '/startups': typeof PStartupsRouteWithChildren
+  '/test': typeof PTestRoute
   '/message/$username': typeof PMessageUsernameRoute
   '/profile/$username': typeof PProfileUsernameRoute
   '/startups/$startupid': typeof PStartupsStartupidRoute
@@ -239,6 +257,7 @@ export interface FileRoutesById {
   '/_p/dashboard': typeof PDashboardRoute
   '/_p/message': typeof PMessageRouteWithChildren
   '/_p/startups': typeof PStartupsRouteWithChildren
+  '/_p/test': typeof PTestRoute
   '/_p/message/$username': typeof PMessageUsernameRoute
   '/_p/profile/$username': typeof PProfileUsernameRoute
   '/_p/startups/$startupid': typeof PStartupsStartupidRoute
@@ -254,6 +273,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/message'
     | '/startups'
+    | '/test'
     | '/message/$username'
     | '/profile/$username'
     | '/startups/$startupid'
@@ -266,6 +286,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/message'
     | '/startups'
+    | '/test'
     | '/message/$username'
     | '/profile/$username'
     | '/startups/$startupid'
@@ -278,6 +299,7 @@ export interface FileRouteTypes {
     | '/_p/dashboard'
     | '/_p/message'
     | '/_p/startups'
+    | '/_p/test'
     | '/_p/message/$username'
     | '/_p/profile/$username'
     | '/_p/startups/$startupid'
@@ -321,6 +343,7 @@ export const routeTree = rootRoute
         "/_p/dashboard",
         "/_p/message",
         "/_p/startups",
+        "/_p/test",
         "/_p/profile/$username"
       ]
     },
@@ -348,6 +371,10 @@ export const routeTree = rootRoute
       "children": [
         "/_p/startups/$startupid"
       ]
+    },
+    "/_p/test": {
+      "filePath": "_p.test.tsx",
+      "parent": "/_p"
     },
     "/_p/message/$username": {
       "filePath": "_p.message.$username.tsx",
