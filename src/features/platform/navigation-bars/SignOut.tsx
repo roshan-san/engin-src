@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { LogOut } from 'lucide-react'
 import { useNavigate } from '@tanstack/react-router'
-import { signOutMutation } from '@/features/authentication/store/authStore'
+import { signOutMutation } from '@/features/authentication/contexts/useAuth'
 
 export default function SignOutButton() {
   const navigate = useNavigate()

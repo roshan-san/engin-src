@@ -2,7 +2,7 @@ import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger, Drawer
 import { Button } from "@/components/ui/button"
 import { HiBell } from "react-icons/hi"
 import { Skeleton } from "@/components/ui/skeleton"
-import { usePendingConnections } from "@/features/hooks/ConnectionHooks"
+import { usePendingConnections } from "@/features/platform/hooks/ConnectionHooks"
 import ProfileTube from "./ProfileTube"
 
 export default function ReqDrawer() {

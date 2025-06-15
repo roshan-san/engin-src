@@ -1,4 +1,4 @@
-import {  useUser } from '@/features/authentication/store/AuthGaurd'
+import {  useUser } from '@/features/authentication/contexts/AuthContext'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_p/test')({

@@ -4,11 +4,11 @@ import { MapPin, User2, Plus, Loader2, Github, Linkedin, Check } from 'lucide-re
 import { Link } from '@tanstack/react-router'
 import { Button } from '@/components/ui/button'
 import type { Profile } from '@/types/supa-types'
-import { sendConnectionMutation, useAllConnections } from '../../hooks/ConnectionHooks'
+import { sendConnectionMutation, useAllConnections } from '../hooks/ConnectionHooks'
 import type { MouseEvent } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
-import { useAuth } from '@/features/authentication/store/authStore'
+import { useAuth } from '@/features/authentication/contexts/useAuth'
 
 export default function ProfileCard({ profile }: { profile: Profile }) {
   const sendConnection = sendConnectionMutation()

@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { FcGoogle } from "react-icons/fc"
 import { Loader2 } from "lucide-react"
-import { signInMutation } from "../store/authStore"
+import { signInMutation } from "../contexts/useAuth"
 
 export function GoogleButton() {  
     const signIn = signInMutation("google")

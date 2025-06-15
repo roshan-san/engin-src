@@ -1,7 +1,7 @@
 import { LeftBar } from '@/features/platform/navigation-bars/LeftBar'
 import { BottomBar } from '@/features/platform/navigation-bars/BottomBar'
 import { createFileRoute, Outlet } from '@tanstack/react-router'
-import { AuthGuard } from '@/features/authentication/store/AuthGaurd'
+import { AuthGuard } from '@/features/authentication/contexts/AuthContext'
 
 export const Route = createFileRoute('/_p')({
   component: RouteComponent,

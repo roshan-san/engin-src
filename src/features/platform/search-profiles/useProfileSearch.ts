@@ -4,7 +4,7 @@ import supabase from '@/utils/supabase';
 import type { Profile } from '@/types/supa-types';
 import { useInView } from 'react-intersection-observer';
 import { useEffect } from 'react';
-import { useAuth } from '@/features/authentication/store/authStore';
+import { useAuth } from '@/features/authentication/contexts/useAuth';
 
 const ITEMS_PER_PAGE = 10;
 

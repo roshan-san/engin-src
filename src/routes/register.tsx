@@ -2,7 +2,7 @@ import { OnboardingProvider } from '@/features/onboarding/context/OnboardContext
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import OnboardingSteps from '@/features/onboarding/OnboardingSteps'
 import { Loader2 } from 'lucide-react'
-import { useMyProfile } from '@/features/hooks/ProfileHooks'
+import { useMyProfile } from '@/features/platform/hooks/ProfileHooks'
 
 
 export const Route = createFileRoute('/register')({

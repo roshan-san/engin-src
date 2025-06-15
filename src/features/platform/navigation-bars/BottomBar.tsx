@@ -1,7 +1,7 @@
 import { Laptop, Search, Users, MessageCircle, Loader2 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import { useMyProfile } from "../../hooks/ProfileHooks";
+import { useMyProfile } from "../hooks/ProfileHooks";
 
 const navigationItems = [
   { href: "/dashboard", icon: Laptop, },

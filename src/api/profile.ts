@@ -12,7 +12,6 @@ export async function getProfileByIdApi(id: string) {
   }
   return data
 }
-
 export async function getProfileByUsername(username: string) {
   const { data, error } = await supabase
     .from('profiles')
@@ -80,4 +79,3 @@ export async function checkUsernameApi(username: string) {
   if (error) throw error
   return !!data
 }
-

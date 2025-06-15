@@ -1,6 +1,6 @@
 import CreateBtn from '@/features/platform/create-startup/CreateBtn'
 import Header from '@/features/platform/Header'
-import { useMyStartups } from '@/features/hooks/StartupHooks'
+import { useMyStartups } from '@/features/platform/hooks/StartupHooks'
 import StartupCard from '@/features/platform/search-startups/StartupCard'
 import { createFileRoute } from '@tanstack/react-router'
 

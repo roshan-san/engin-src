@@ -13,7 +13,7 @@ import { FaMoneyBillWave } from "react-icons/fa";
 import { startupFundingSchema } from "@/features/platform/create-startup/validations/startup";
 import { useStartupCreation } from "../context/StartupCreateContext";
 import type { StartupInsert } from "@/types/supa-types";
-import { createStartupMutation } from "../../../hooks/StartupHooks";
+import { createStartupMutation } from "../../hooks/StartupHooks";
 
 
 

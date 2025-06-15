@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { useAuth } from '@/features/authentication/store/authStore'
+import { useAuth } from '@/features/authentication/contexts/useAuth'
 import { 
   sendConnectionRequestApi, 
   acceptConnectionRequestApi, 

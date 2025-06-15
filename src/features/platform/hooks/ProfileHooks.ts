@@ -1,30 +1,15 @@
 import { createProfileApi, getProfileByIdApi } from "@/api/profile"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import type { ProfileInsert } from "@/types/supa-types";
-import { useAuth } from "@/features/authentication/store/authStore";
+import { useAuth } from "@/features/authentication/contexts/useAuth";
 
 export const useProfileById = (profileId: string) => {
   return useQuery({
     queryKey: ["profile", profileId],
     queryFn: () => getProfileByIdApi(profileId),
-    enabled: !!profileId,
   })
 }
-export function useMyProfile() {
-    const { data: user } = useAuth();
-    
-    return useQuery({
-        queryKey: ["profile"],
-        queryFn: () => {
-            if (!user) {
-                return null;
-            }
-            return getProfileByIdApi(user.id);
-        },
-        enabled: !!user,
-        staleTime: Infinity
-    });
-}
+
 export function createProfileMutation() {
   const { data: user } = useAuth();
   const queryClient = useQueryClient();

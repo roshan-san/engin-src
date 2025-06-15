@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { FaGithub } from "react-icons/fa"
 import { Loader2 } from "lucide-react"
-import { signInMutation } from "../store/authStore"
+import { signInMutation } from "../contexts/useAuth"
 
 export function GithubButton() { 
     const signIn = signInMutation("github")

@@ -7,7 +7,7 @@ import { FaGithub, FaLinkedinIn } from "react-icons/fa";
 import { contactSchema } from "../validations/onboarding";
 import { useOnboarding } from "../context/OnboardContext";
 import type { ProfileInsert } from "@/types/supa-types";
-import { createProfileMutation } from "@/features/hooks/ProfileHooks";
+import { createProfileMutation } from "@/features/platform/hooks/ProfileHooks";
 
 
 
