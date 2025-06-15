@@ -41,6 +41,7 @@ export function useProfileSearch() {
         .from('profiles')
         .select('*')
         .not('id', 'in', `(${connectedUserIds.join(',')})`)
+        .neq('id', user?.id || '')
         .range(from, to)
         .order('created_at', { ascending: false });
 

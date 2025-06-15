@@ -24,7 +24,7 @@ export default function SearchProfiles() {
             value={searchQuery}
             autoFocus
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full p-4 h-14 rounded-2xl border-2 border-gray-200 focus:border-blue-500 transition-all duration-200 shadow-sm hover:shadow-md"
+            className="w-full h-14 rounded-2xl"
           />
         </div>
         <ReqDrawer />

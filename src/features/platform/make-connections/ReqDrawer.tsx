@@ -50,12 +50,12 @@ export default function ReqDrawer() {
                 <ProfileTube
                   key={connection.id}
                   connectionId={connection.id}
-                  profileId={connection.receiver_id}
+                  profileId={connection.sender_id}
                 />
               )})}
             </div>
           )}
-        </div>
+        </div>   
       </DrawerContent>
     </Drawer>
   )
