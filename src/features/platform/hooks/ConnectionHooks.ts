@@ -4,8 +4,8 @@ import {
   sendConnectionRequestApi, 
   acceptConnectionRequestApi, 
   getPendingConnectionsApi, 
-  getAllConnectionsApi,
   rejectConnectionRequestApi,
+  getAcceptedConnectionsApi,
 } from '@/api/connections'
 
 // Hooks
@@ -71,14 +71,14 @@ export function usePendingConnections() {
   })
 }
 
-export function useAllConnections() {
+export function useAcceptedConnections() {
   const { data: user } = useAuth()
 
   return useQuery({
-    queryKey: ['connections', user?.id],
+    queryKey: ['connections', 'accepted', user?.id],
     queryFn: () => {
       if (!user?.id) throw new Error('User not logged in')
-      return getAllConnectionsApi(user.id)
+      return getAcceptedConnectionsApi(user.id)
     },
     enabled: !!user?.id
   })

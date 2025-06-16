@@ -46,13 +46,12 @@ export async function getPendingConnectionsApi(userId: string) {
   return data
 }
 
-export async function getAllConnectionsApi(userId: string) {
+export async function getAcceptedConnectionsApi(userId: string) {
   const { data, error } = await supabase
     .from('connections')
-    .select('*, sender:profiles!connections_sender_id_fkey(*), receiver:profiles!connections_receiver_id_fkey(*)')
+    .select('*')
     .or(`sender_id.eq.${userId},receiver_id.eq.${userId}`)
     .eq('status', 'accepted')
-
   if (error) throw error
   return data
 } 
