@@ -15,7 +15,7 @@ export async function signInApi(provider: 'github' | 'google') {
   const { error } = await supabase.auth.signInWithOAuth({
     provider,
     options: {
-      redirectTo: `${import.meta.env.VITE_APP_URL}/register`
+      redirectTo: `${import.meta.env.VITE_APP_URL}/dashboard`
     }
   })
   if (error) throw error

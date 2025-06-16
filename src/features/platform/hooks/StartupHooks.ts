@@ -12,7 +12,7 @@ export function createStartupMutation() {
         onSuccess: (data) => {
             queryClient.invalidateQueries({ queryKey: ["my-startups"] });
             navigate({
-                to: "/startups/$startupid",
+                to: "/_protected/startups/$startupid",
                 params: { startupid: data.id }
             });
         },

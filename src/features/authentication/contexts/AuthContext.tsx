@@ -6,7 +6,6 @@ import { useProfile } from './useProfile'
 import type { User } from '@supabase/supabase-js'
 import type { Profile } from '@/types/supa-types'
 
-
 type SessionContextType = {
   user: User
   profile: Profile
@@ -24,17 +23,28 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const user = useAuth()
   const profile = useProfile()
 
-  if (user.isLoading || profile.isLoading) return <FullScreenLoader />
+  if (user.isLoading || profile.isLoading) {
+    return <FullScreenLoader />
+  }
 
-  if (user.isError || profile.isError) return <div>Session failed to load</div>
+  if (user.isError) {
+    return <div>erropa</div>
+  }
 
-  if (!user.data) return <Navigate to="/" />
+  if (!user.data) {
+    return <Navigate to="/" />
+  }
 
-  if (!profile.data) return <Navigate to="/register" />
+  if (profile.isError || !profile.data) {
+    return <Navigate to="/register" />
+  }
 
   return (
-    <SessionContext.Provider value={{ user: user.data, profile: profile.data }}>
-      {children}
-    </SessionContext.Provider>
+    <>
+      <Navigate to="/dashboard" />
+      <SessionContext.Provider value={{ user: user.data, profile: profile.data }}>
+        {children}
+      </SessionContext.Provider>
+    </>
   )
 }

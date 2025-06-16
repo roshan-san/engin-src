@@ -1,7 +1,7 @@
-import { Laptop, Search, Users, MessageCircle, Loader2 } from "lucide-react";
+import { Laptop, Search, Users, MessageCircle,} from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import { useMyProfile } from "../hooks/ProfileHooks";
+import { useMe } from "@/features/authentication/contexts/AuthContext";
 
 const navigationItems = [
   { href: "/dashboard", icon: Laptop, },
@@ -11,7 +11,7 @@ const navigationItems = [
 ];
 
 export function BottomBar() {
-  const profile = useMyProfile();
+  const {profile} = useMe();
 
   return (
     <div className="fixed bottom-0 left-0 right-0 h-16 bg-background border-t">
@@ -30,20 +30,14 @@ export function BottomBar() {
             <Icon className="h-5 w-5" />
           </Link>
         ))}
-        {profile.isLoading ? (
-          <div className="p-2.5">
-            <Loader2 className="h-5 w-5 animate-spin text-primary" />
-          </div>
-        ) : profile.data ? (
           <Link
             to={"/profile/$username"}
-            params={{ username: profile.data.username }}
+            params={{ username: profile.username }}
           >
             <Avatar>
-              <AvatarImage src={profile.data.avatar_url} />
+              <AvatarImage src={profile.avatar_url} />
             </Avatar>
           </Link>
-        ) : null}
       </div>
     </div>
   )

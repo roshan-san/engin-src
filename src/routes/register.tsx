@@ -1,23 +1,30 @@
 import { OnboardingProvider } from '@/features/onboarding/context/OnboardContext'
-import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import OnboardingSteps from '@/features/onboarding/OnboardingSteps'
-import { Loader2 } from 'lucide-react'
-import { useMyProfile } from '@/features/platform/hooks/ProfileHooks'
-
+import { createFileRoute, Navigate } from '@tanstack/react-router'
+import { useProfile } from '@/features/authentication/contexts/useProfile'
+import { useAuth } from '@/features/authentication/contexts/useAuth'
+import { FullScreenLoader } from '@/components/FullScreenLoader'
 
 export const Route = createFileRoute('/register')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
-  const profile = useMyProfile()
-  const navigate=useNavigate()
-  if (profile.isLoading) return <Loader2 className="animate-spin" />
-  if(profile.data){
-    navigate({to:"/dashboard"}
-      
-    )}
+  const { data: user, isLoading: isUserLoading } = useAuth()
+  const { data: profile, isLoading: isProfileLoading } = useProfile()
 
+  if (isUserLoading || isProfileLoading) {
+    return <FullScreenLoader />
+  }
+
+  if (!user) {
+    return <Navigate to="/" />
+  }
+
+  if (profile) {
+    return <Navigate to="/dashboard" />
+  }
+  
   return (
     <div className='flex flex-col items-center justify-center h-screen'>
       <OnboardingProvider>

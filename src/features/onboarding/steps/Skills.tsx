@@ -11,8 +11,15 @@ export default function Skills() {
   const [newSkill, setNewSkill] = useState('');
   
   const addSkill = () => {
-    if (newSkill.trim()) {
-      setSkills([...skills, newSkill.trim()]);
+    const trimmedSkill = newSkill.trim();
+    if (!trimmedSkill) return;
+    
+    const result = skillsSchema.safeParse({ 
+      skills: [...skills, trimmedSkill]
+    });
+
+    if (result.success) {
+      setSkills([...skills, trimmedSkill]);
       setNewSkill('');
     }
   };
@@ -24,7 +31,6 @@ export default function Skills() {
   const handleSubmit = () => {
     const result = skillsSchema.safeParse({ skills: skills.map(skill => skill.trim()) });
     if (result.success) {
-      console.log("skil mudinju")
       nextStep({
         skills: result.data.skills
       });
@@ -63,20 +69,24 @@ export default function Skills() {
               </Button>
             </div>
             <div className="flex flex-wrap gap-3">
-              {skills.map((skill, index) => (
-                <div
-                  key={index}
-                  className="bg-primary/10 text-primary px-5 py-2.5 rounded-full flex items-center gap-2 shadow-sm"
-                >
-                  {skill}
-                  <button
-                    onClick={() => removeSkill(index)}
-                    className="hover:text-destructive transition-colors"
+              {skills.length === 0 ? (
+                <p className="text-muted-foreground">No skills added yet. Add some to get started!</p>
+              ) : (
+                skills.map((skill, index) => (
+                  <div
+                    key={index}
+                    className="bg-primary/10 text-primary px-5 py-2.5 rounded-full flex items-center gap-2 shadow-sm"
                   >
-                    <FaTimes className="h-4 w-4" />
-                  </button>
-                </div>
-              ))}
+                    {skill}
+                    <button
+                      onClick={() => removeSkill(index)}
+                      className="hover:text-destructive transition-colors"
+                    >
+                      <FaTimes className="h-4 w-4" />
+                    </button>
+                  </div>
+                ))
+              )}
             </div>
           </div>
         </div>

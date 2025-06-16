@@ -4,7 +4,7 @@ import { useMyStartups } from '@/features/platform/hooks/StartupHooks'
 import StartupCard from '@/features/platform/search-startups/StartupCard'
 import { createFileRoute } from '@tanstack/react-router'
 
-export const Route = createFileRoute('/_p/dashboard')({
+export const Route = createFileRoute('/_protected/dashboard')({
   component: RouteComponent,
 })
 
