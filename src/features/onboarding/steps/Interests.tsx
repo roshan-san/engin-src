@@ -7,13 +7,19 @@ import { interestsSchema } from "../validations/onboarding";
 
 export default function Interests() {
   const { nextStep, previousStep } = useOnboarding();
-  const [interests, setInterests] =useState<string[]>([]);
-
+  const [interests, setInterests] = useState<string[]>([]);
   const [newInterest, setNewInterest] = useState("");
   
   const addInterest = () => {
-    if (newInterest.trim()) {
-      setInterests([...interests, newInterest.trim()]);
+    const trimmedInterest = newInterest.trim();
+    if (!trimmedInterest) return;
+    
+    const result = interestsSchema.safeParse({ 
+      interests: [...interests, trimmedInterest]
+    });
+
+    if (result.success) {
+      setInterests([...interests, trimmedInterest]);
       setNewInterest('');
     }
   };
@@ -63,20 +69,24 @@ export default function Interests() {
               </Button>
             </div>
             <div className="flex flex-wrap gap-3">
-              {interests.map((interest, index) => (
-                <div
-                  key={index}
-                  className="bg-primary/10 text-primary px-5 py-2.5 rounded-full flex items-center gap-2 shadow-sm"
-                >
-                  {interest}
-                  <button
-                    onClick={() => removeInterest(index)}
-                    className="hover:text-destructive transition-colors"
+              {interests.length === 0 ? (
+                <p className="text-muted-foreground">No interests added yet. Add some to get started!</p>
+              ) : (
+                interests.map((interest, index) => (
+                  <div
+                    key={index}
+                    className="bg-primary/10 text-primary px-5 py-2.5 rounded-full flex items-center gap-2 shadow-sm"
                   >
-                    <FaTimes className="h-4 w-4" />
-                  </button>
-                </div>
-              ))}
+                    {interest}
+                    <button
+                      onClick={() => removeInterest(index)}
+                      className="hover:text-destructive transition-colors"
+                    >
+                      <FaTimes className="h-4 w-4" />
+                    </button>
+                  </div>
+                ))
+              )}
             </div>
           </div>
         </div>
