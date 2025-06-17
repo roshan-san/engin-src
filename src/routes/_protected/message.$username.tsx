@@ -5,5 +5,7 @@ export const Route = createFileRoute('/_protected/message/$username')({
 })
 
 function RouteComponent() {
-  return <div>Hello "/_message/$username"!</div>
+  return <div>
+    yele yale 
+    </div>
 }

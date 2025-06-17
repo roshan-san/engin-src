@@ -71,15 +71,13 @@ export function usePendingConnections() {
   })
 }
 
-export function useAcceptedConnections() {
-  const { data: user } = useAuth()
-
+export function useAcceptedConnections(userId: string) {
   return useQuery({
-    queryKey: ['connections', 'accepted', user?.id],
+    queryKey: ['connections', 'accepted', userId],
     queryFn: () => {
-      if (!user?.id) throw new Error('User not logged in')
-      return getAcceptedConnectionsApi(user.id)
+      if (!userId) throw new Error('User ID is required')
+      return getAcceptedConnectionsApi(userId)
     },
-    enabled: !!user?.id
+    enabled: !!userId
   })
 }
