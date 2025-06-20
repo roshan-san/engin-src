@@ -4,11 +4,15 @@ import { Input } from "@/components/ui/input";
 import { FaPlus, FaTimes, FaHeart } from "react-icons/fa";
 import { useOnboarding } from "../context/OnboardContext";
 import { interestsSchema } from "../validations/onboarding";
+import { useMutation } from "convex/react";
+import { api } from "@/../convex/_generated/api";
 
 export default function Interests() {
   const { nextStep, previousStep } = useOnboarding();
   const [interests, setInterests] = useState<string[]>([]);
   const [newInterest, setNewInterest] = useState("");
+  const createProfile = useMutation(api.onboarding.createProfile);
+  const [isLoading, setIsLoading] = useState(false);
   
   const addInterest = () => {
     const trimmedInterest = newInterest.trim();
@@ -28,12 +32,24 @@ export default function Interests() {
     setInterests(interests.filter((_, i) => i !== index));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async (data: any) => {
     const result = interestsSchema.safeParse({ interests: interests.map(interest => interest.trim()) });
     if (result.success) {
-      nextStep({
-        interests: result.data.interests
-      });
+      setIsLoading(true);
+      try {
+        // Convert null interests/skills to undefined for Convex
+        const convexData = {
+          ...data,
+          interests: result.data.interests ?? undefined,
+          skills: data.skills ?? undefined,
+        };
+        await createProfile(convexData);
+        nextStep({
+          interests: result.data.interests
+        });
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -102,11 +118,11 @@ export default function Interests() {
           Previous
         </Button>
         <Button 
-          type="button"
+          type="submit"
           onClick={handleSubmit}
           className="flex-1 h-12 text-lg font-medium transition-all hover:scale-[1.02]"
         >
-          Next
+          {isLoading ? 'Saving...' : 'Finish'}
         </Button>
       </div>
     </div>

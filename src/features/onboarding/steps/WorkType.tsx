@@ -4,6 +4,9 @@ import { useState } from "react";
 import { FaBriefcase, FaClock, FaFileContract } from "react-icons/fa";
 import { workTypeSchema } from "../validations/onboarding";
 import { useOnboarding } from "../context/OnboardContext";
+import { useMutation } from "convex/react";
+import { api } from "@/../convex/_generated/api";
+
 const workTypes = [
     {
       id: 'Full-Time' as const,
@@ -28,14 +31,24 @@ const workTypes = [
 export default function WorkType() {
     const { nextStep, previousStep } = useOnboarding();
     const [selectedWorkType, setSelectedWorkType] = useState("");
+    const createProfile = useMutation(api.onboarding.createProfile);
+    const [isLoading, setIsLoading] = useState(false);
 
-    const handleSubmit = (value: string) => {
+    const handleSubmit = async (value: string) => {
       const result = workTypeSchema.safeParse({ work_type: value });
       if (result.success) {
         setSelectedWorkType(value);
-        nextStep({
-          work_type: value,
-        });
+        setIsLoading(true);
+        try {
+          await nextStep({
+            work_type: value,
+          });
+          await createProfile({
+            work_type: value,
+          });
+        } finally {
+          setIsLoading(false);
+        }
       }
     };
 
@@ -92,6 +105,13 @@ export default function WorkType() {
             className="flex-1 h-12 text-lg font-medium hover:bg-muted/50 transition-colors"
           >
             Previous
+          </Button>
+          <Button 
+            type="submit"
+            onClick={handleSubmit}
+            className="flex-1 h-12 text-lg font-medium transition-all hover:scale-[1.02]"
+          >
+            {isLoading ? 'Saving...' : 'Finish'}
           </Button>
       </div>
     </div>

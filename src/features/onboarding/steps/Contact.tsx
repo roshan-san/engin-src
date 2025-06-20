@@ -7,7 +7,9 @@ import { FaGithub, FaLinkedinIn } from "react-icons/fa";
 import { contactSchema } from "../validations/onboarding";
 import { useOnboarding } from "../context/OnboardContext";
 import type { ProfileInsert } from "@/types/supa-types";
-import { createProfileMutation } from "@/features/platform/hooks/ProfileHooks";
+import { useMutation } from "convex/react";
+import { api } from "@/../convex/_generated/api";
+import { useState } from "react";
 
 
 
@@ -20,7 +22,8 @@ export default function Contact() {
       linkedin_url: onboardingData.linkedin_url || "",
     },
   });
-  const createProfile=createProfileMutation()
+  const createProfile = useMutation(api.onboarding.createProfile);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (data: ProfileInsert) => {
     const isValid = await form.trigger();
@@ -29,8 +32,18 @@ export default function Contact() {
         github_url: data.github_url,
         linkedin_url: data.linkedin_url,
       });
-      console.log(onboardingData)
-      createProfile.mutate(onboardingData)
+      console.log(onboardingData);
+      const convexData = {
+        ...onboardingData,
+        interests: onboardingData.interests ?? undefined,
+        skills: onboardingData.skills ?? undefined,
+      };
+      setIsLoading(true);
+      try {
+        await createProfile(convexData);
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -102,7 +115,7 @@ export default function Contact() {
           onClick={form.handleSubmit(handleSubmit)}
           className="flex-1 h-12 text-lg font-medium transition-all hover:scale-[1.02]"
         >
-          {createProfile.isPending ? 'Saving...' : 'Finish'}
+          {isLoading ? 'Saving...' : 'Finish'}
         </Button>
       </div>
     </div>

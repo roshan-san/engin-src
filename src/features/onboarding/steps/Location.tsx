@@ -12,6 +12,9 @@ import {
 import { locationSchema } from "../validations/onboarding";
 import { useOnboarding } from "../context/OnboardContext";
 import type { ProfileInsert } from "@/types/supa-types";
+import { useMutation } from "convex/react";
+import { api } from "@/../convex/_generated/api";
+import { useState } from "react";
 
 export default function Location() {
   const { nextStep, previousStep } = useOnboarding();
@@ -22,12 +25,27 @@ export default function Location() {
     },
   });
 
+  const createProfile = useMutation(api.onboarding.createProfile);
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleSubmit = async (data: ProfileInsert) => {
     const isValid = await form.trigger();
     if (isValid) {
-      nextStep({
-        location: data.location,
-      });
+      setIsLoading(true);
+      try {
+        // Convert null interests/skills to undefined for Convex
+        const convexData = {
+          ...data,
+          interests: data.interests ?? undefined,
+          skills: data.skills ?? undefined,
+        };
+        await createProfile(convexData);
+        nextStep({
+          location: data.location,
+        });
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -75,7 +93,7 @@ export default function Location() {
           onClick={form.handleSubmit(handleSubmit)}
           className="flex-1 h-12 text-lg font-medium transition-all hover:scale-[1.02]"
         >
-          Next
+          {isLoading ? 'Saving...' : 'Finish'}
         </Button>
       </div>
     </div>

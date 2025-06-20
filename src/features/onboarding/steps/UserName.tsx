@@ -7,6 +7,9 @@ import { FaUser } from "react-icons/fa";
 import type {ProfileInsert } from "@/types/supa-types";
 import { usernameSchema } from "../validations/onboarding";
 import { useOnboarding } from "../context/OnboardContext";
+import { useMutation } from "convex/react";
+import { api } from "@/../convex/_generated/api";
+import { useState } from "react";
 
 export default function UserName() {
   const {nextStep, previousStep, onboardingData} = useOnboarding();
@@ -18,10 +21,25 @@ export default function UserName() {
     }
   });
 
+  const createProfile = useMutation(api.onboarding.createProfile);
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleSubmit = async (data: ProfileInsert) => {
     nextStep({
       username: data.username,
     });
+    setIsLoading(true);
+    try {
+      // Convert null interests/skills to undefined for Convex
+      const convexData = {
+        ...onboardingData,
+        interests: onboardingData.interests ?? undefined,
+        skills: onboardingData.skills ?? undefined,
+      };
+      await createProfile(convexData);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -69,7 +87,7 @@ export default function UserName() {
           onClick={form.handleSubmit(handleSubmit)}
           className="flex-1 h-12 text-lg font-medium transition-all hover:scale-[1.02]"
         >
-          Next
+          {isLoading ? 'Saving...' : 'Finish'}
         </Button>
       </div>
     </div>

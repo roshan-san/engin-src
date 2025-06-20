@@ -5,8 +5,5 @@ export const Route = createFileRoute('/_protected/startups/$startupid')({
 })
 
 function RouteComponent() {
-  const { startupid } = Route.useParams()
-  return <div>
-    <h1>not fully ready yet , {startupid} , tis will be editable if the user owns this startup  othe wise for viewing anlone </h1>
-  </div>
+  return <div>Hello "/_protected/startups/$startupid"!</div>
 }

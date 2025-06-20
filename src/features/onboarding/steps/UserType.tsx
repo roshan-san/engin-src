@@ -4,6 +4,8 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { FaBriefcase, FaUserCog, FaUserGraduate, FaUserTie} from "react-icons/fa";
 import { userTypeSchema } from "../validations/onboarding";
 import { useOnboarding } from "../context/OnboardContext";
+import { useMutation } from "convex/react";
+import { api } from "@/../convex/_generated/api";
 
 const roles = [
   {
@@ -29,14 +31,24 @@ const roles = [
 export default function UserType() {
   const { nextStep, previousStep } = useOnboarding();
   const [selectedUserType, setSelectedUserType] = useState('');
+  const createProfile = useMutation(api.onboarding.createProfile);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (value: string) => {
+  const handleSubmit = async (value: string) => {
     const result = userTypeSchema.safeParse({ user_type: value });
     if (result.success) {
       setSelectedUserType(value);
-      nextStep({
-        user_type: value,
-      });
+      setIsLoading(true);
+      try {
+        await createProfile({
+          user_type: value,
+        });
+        nextStep({
+          user_type: value,
+        });
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -93,6 +105,13 @@ export default function UserType() {
           className="flex-1 h-12 text-lg font-medium hover:bg-muted/50 transition-colors"
         >
           Previous
+        </Button>
+        <Button 
+          type="submit"
+          onClick={handleSubmit}
+          className="flex-1 h-12 text-lg font-medium transition-all hover:scale-[1.02]"
+        >
+          {isLoading ? 'Saving...' : 'Finish'}
         </Button>
       </div>
     </div>

@@ -10,7 +10,7 @@ export const useProfileById = (profileId: string) => {
   })
 }
 
-export function createProfileMutation() {
+export function   createProfileMutation() {
   const { data: user } = useAuth();
   const queryClient = useQueryClient();
 
