@@ -1,27 +1,26 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { FaBriefcase, FaUserCog, FaUserGraduate, FaUserTie} from "react-icons/fa";
-import { userTypeSchema } from "../validations/onboarding";
+import { FaBriefcase, FaUserCog, FaUserGraduate, FaUserTie } from "react-icons/fa";
 import { useOnboarding } from "../context/OnboardContext";
 import { useMutation } from "convex/react";
 import { api } from "@/../convex/_generated/api";
 
 const roles = [
   {
-    id: 'Creator/Collaborator' as const,
+    id: 'Creator/Collaborator',
     title: 'Creator/Collaborator',
     icon: FaUserCog,
     description: 'Build and collaborate on projects'
   },
   {
-    id: 'Mentor' as const,
+    id: 'Mentor',
     title: 'Mentor',
     icon: FaUserGraduate,
     description: 'Guide and support others'
   },
   {
-    id: 'Investor' as const,
+    id: 'Investor',
     title: 'Investor',
     icon: FaUserTie,
     description: 'Support promising projects'
@@ -29,39 +28,31 @@ const roles = [
 ];
 
 export default function UserType() {
-  const { nextStep, previousStep } = useOnboarding();
-  const [selectedUserType, setSelectedUserType] = useState('');
+  const { nextStep, previousStep, onboardingData } = useOnboarding();
+  const [selectedUserType, setSelectedUserType] = useState(onboardingData.user_type || "");
   const createProfile = useMutation(api.onboarding.createProfile);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async (value: string) => {
-    const result = userTypeSchema.safeParse({ user_type: value });
-    if (result.success) {
-      setSelectedUserType(value);
-      setIsLoading(true);
-      try {
-        await createProfile({
-          user_type: value,
-        });
-        nextStep({
-          user_type: value,
-        });
-      } finally {
-        setIsLoading(false);
-      }
+  const handleSubmit = async () => {
+    setIsLoading(true);
+    try {
+      await createProfile({ ...onboardingData, user_type: selectedUserType });
+      nextStep({ user_type: selectedUserType });
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <div className="w-full flex justify-center items-center gap-6 flex-col h-full p-4 max-w-2xl mx-auto">   
+    <div className="w-full flex justify-center items-center gap-6 flex-col h-full p-4 max-w-2xl mx-auto">
       <div className="flex flex-col gap-6 w-full">
         <h3 className="text-xl font-semibold text-foreground tracking-wide uppercase flex items-center gap-3">
           <FaBriefcase className="text-primary w-5 h-5" />
           Select your primary role
-        </h3>                 
-        <RadioGroup 
-          value={selectedUserType} 
-          onValueChange={handleSubmit}
+        </h3>
+        <RadioGroup
+          value={selectedUserType}
+          onValueChange={setSelectedUserType}
           className="grid gap-4 w-full"
         >
           {roles.map((type) => {
@@ -70,17 +61,17 @@ export default function UserType() {
               <label
                 key={type.id}
                 className={`flex items-center space-x-4 p-6 rounded-xl border cursor-pointer transition-all duration-200 ease-in-out ${
-                  selectedUserType === type.id 
-                  ? 'border-primary bg-primary/10 shadow-lg scale-[1.02]' 
-                  : 'border-border hover:border-primary/50 hover:shadow-md hover:scale-[1.01]'
+                  selectedUserType === type.id
+                    ? 'border-primary bg-primary/10 shadow-lg scale-[1.02]'
+                    : 'border-border hover:border-primary/50 hover:shadow-md hover:scale-[1.01]'
                 }`}
               >
-                <RadioGroupItem hidden value={type.id} id={type.id} className="mt-1" />
+                <RadioGroupItem value={type.id} id={type.id} className="mt-1" />
                 <div className="flex items-center gap-5 flex-1">
-                  <div 
+                  <div
                     className={`p-3.5 rounded-full transition-all duration-200 ${
-                      selectedUserType === type.id 
-                        ? 'bg-primary text-primary-foreground scale-110' 
+                      selectedUserType === type.id
+                        ? 'bg-primary text-primary-foreground scale-110'
                         : 'bg-muted/80 hover:bg-muted'
                     }`}
                   >
@@ -96,22 +87,21 @@ export default function UserType() {
           })}
         </RadioGroup>
       </div>
-
       <div className="w-full p-4 flex justify-between gap-4 mt-4">
-        <Button 
-          type="button" 
-          variant="outline" 
+        <Button
+          type="button"
+          variant="outline"
           onClick={previousStep}
           className="flex-1 h-12 text-lg font-medium hover:bg-muted/50 transition-colors"
         >
           Previous
         </Button>
-        <Button 
-          type="submit"
+        <Button
+          type="button"
           onClick={handleSubmit}
           className="flex-1 h-12 text-lg font-medium transition-all hover:scale-[1.02]"
         >
-          {isLoading ? 'Saving...' : 'Finish'}
+          {isLoading ? "Saving..." : "Finish"}
         </Button>
       </div>
     </div>

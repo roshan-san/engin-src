@@ -1,42 +1,22 @@
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Form,FormControl,FormField,FormItem,FormMessage,} from "@/components/ui/form";
 import { FaUser } from "react-icons/fa";
-import type {ProfileInsert } from "@/types/supa-types";
-import { usernameSchema } from "../validations/onboarding";
 import { useOnboarding } from "../context/OnboardContext";
 import { useMutation } from "convex/react";
 import { api } from "@/../convex/_generated/api";
-import { useState } from "react";
 
 export default function UserName() {
-  const {nextStep, previousStep, onboardingData} = useOnboarding();
-  
-  const form = useForm({
-    resolver: zodResolver(usernameSchema),
-    defaultValues: {
-      username: onboardingData.username || "",
-    }
-  });
-
+  const { nextStep, previousStep, onboardingData } = useOnboarding();
+  const [username, setUsername] = useState(onboardingData.username || "");
   const createProfile = useMutation(api.onboarding.createProfile);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async (data: ProfileInsert) => {
-    nextStep({
-      username: data.username,
-    });
+  const handleSubmit = async () => {
     setIsLoading(true);
     try {
-      // Convert null interests/skills to undefined for Convex
-      const convexData = {
-        ...onboardingData,
-        interests: onboardingData.interests ?? undefined,
-        skills: onboardingData.skills ?? undefined,
-      };
-      await createProfile(convexData);
+      await createProfile({ ...onboardingData, username });
+      nextStep({ username });
     } finally {
       setIsLoading(false);
     }
@@ -49,45 +29,31 @@ export default function UserName() {
           <FaUser className="text-primary w-5 h-5" />
           Choose your username
         </h3>
-        
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
-            <FormField
-              control={form.control}
-              name="username"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input 
-                      placeholder="Enter your username" 
-                      {...field}
-                      className="h-14 text-lg rounded-xl"
-                      autoFocus
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </form>
-        </Form>
+        <div className="space-y-4">
+          <Input
+            placeholder="Enter your username"
+            value={username}
+            onChange={e => setUsername(e.target.value)}
+            className="h-14 text-lg rounded-xl"
+            autoFocus
+          />
+        </div>
       </div>
-
       <div className="w-full p-4 flex justify-between gap-4 mt-4">
-        <Button 
-          type="button" 
-          variant="outline" 
+        <Button
+          type="button"
+          variant="outline"
           onClick={previousStep}
           className="flex-1 h-12 text-lg font-medium hover:bg-muted/50 transition-colors"
         >
           Previous
         </Button>
-        <Button 
-          type="submit"
-          onClick={form.handleSubmit(handleSubmit)}
+        <Button
+          type="button"
+          onClick={handleSubmit}
           className="flex-1 h-12 text-lg font-medium transition-all hover:scale-[1.02]"
         >
-          {isLoading ? 'Saving...' : 'Finish'}
+          {isLoading ? "Saving..." : "Finish"}
         </Button>
       </div>
     </div>

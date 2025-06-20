@@ -14,13 +14,7 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as RegisterImport } from './routes/register'
 import { Route as ProtectedImport } from './routes/_protected'
 import { Route as IndexImport } from './routes/index'
-import { Route as ProtectedStartupsImport } from './routes/_protected/startups'
-import { Route as ProtectedMessageImport } from './routes/_protected/message'
 import { Route as ProtectedDashboardImport } from './routes/_protected/dashboard'
-import { Route as ProtectedConnectImport } from './routes/_protected/connect'
-import { Route as ProtectedStartupsStartupidImport } from './routes/_protected/startups.$startupid'
-import { Route as ProtectedProfileUsernameImport } from './routes/_protected/profile.$username'
-import { Route as ProtectedMessageUsernameImport } from './routes/_protected/message.$username'
 
 // Create/Update Routes
 
@@ -41,48 +35,10 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const ProtectedStartupsRoute = ProtectedStartupsImport.update({
-  id: '/startups',
-  path: '/startups',
-  getParentRoute: () => ProtectedRoute,
-} as any)
-
-const ProtectedMessageRoute = ProtectedMessageImport.update({
-  id: '/message',
-  path: '/message',
-  getParentRoute: () => ProtectedRoute,
-} as any)
-
 const ProtectedDashboardRoute = ProtectedDashboardImport.update({
   id: '/dashboard',
   path: '/dashboard',
   getParentRoute: () => ProtectedRoute,
-} as any)
-
-const ProtectedConnectRoute = ProtectedConnectImport.update({
-  id: '/connect',
-  path: '/connect',
-  getParentRoute: () => ProtectedRoute,
-} as any)
-
-const ProtectedStartupsStartupidRoute = ProtectedStartupsStartupidImport.update(
-  {
-    id: '/$startupid',
-    path: '/$startupid',
-    getParentRoute: () => ProtectedStartupsRoute,
-  } as any,
-)
-
-const ProtectedProfileUsernameRoute = ProtectedProfileUsernameImport.update({
-  id: '/profile/$username',
-  path: '/profile/$username',
-  getParentRoute: () => ProtectedRoute,
-} as any)
-
-const ProtectedMessageUsernameRoute = ProtectedMessageUsernameImport.update({
-  id: '/$username',
-  path: '/$username',
-  getParentRoute: () => ProtectedMessageRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -110,13 +66,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RegisterImport
       parentRoute: typeof rootRoute
     }
-    '/_protected/connect': {
-      id: '/_protected/connect'
-      path: '/connect'
-      fullPath: '/connect'
-      preLoaderRoute: typeof ProtectedConnectImport
-      parentRoute: typeof ProtectedImport
-    }
     '/_protected/dashboard': {
       id: '/_protected/dashboard'
       path: '/dashboard'
@@ -124,82 +73,17 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedDashboardImport
       parentRoute: typeof ProtectedImport
     }
-    '/_protected/message': {
-      id: '/_protected/message'
-      path: '/message'
-      fullPath: '/message'
-      preLoaderRoute: typeof ProtectedMessageImport
-      parentRoute: typeof ProtectedImport
-    }
-    '/_protected/startups': {
-      id: '/_protected/startups'
-      path: '/startups'
-      fullPath: '/startups'
-      preLoaderRoute: typeof ProtectedStartupsImport
-      parentRoute: typeof ProtectedImport
-    }
-    '/_protected/message/$username': {
-      id: '/_protected/message/$username'
-      path: '/$username'
-      fullPath: '/message/$username'
-      preLoaderRoute: typeof ProtectedMessageUsernameImport
-      parentRoute: typeof ProtectedMessageImport
-    }
-    '/_protected/profile/$username': {
-      id: '/_protected/profile/$username'
-      path: '/profile/$username'
-      fullPath: '/profile/$username'
-      preLoaderRoute: typeof ProtectedProfileUsernameImport
-      parentRoute: typeof ProtectedImport
-    }
-    '/_protected/startups/$startupid': {
-      id: '/_protected/startups/$startupid'
-      path: '/$startupid'
-      fullPath: '/startups/$startupid'
-      preLoaderRoute: typeof ProtectedStartupsStartupidImport
-      parentRoute: typeof ProtectedStartupsImport
-    }
   }
 }
 
 // Create and export the route tree
 
-interface ProtectedMessageRouteChildren {
-  ProtectedMessageUsernameRoute: typeof ProtectedMessageUsernameRoute
-}
-
-const ProtectedMessageRouteChildren: ProtectedMessageRouteChildren = {
-  ProtectedMessageUsernameRoute: ProtectedMessageUsernameRoute,
-}
-
-const ProtectedMessageRouteWithChildren =
-  ProtectedMessageRoute._addFileChildren(ProtectedMessageRouteChildren)
-
-interface ProtectedStartupsRouteChildren {
-  ProtectedStartupsStartupidRoute: typeof ProtectedStartupsStartupidRoute
-}
-
-const ProtectedStartupsRouteChildren: ProtectedStartupsRouteChildren = {
-  ProtectedStartupsStartupidRoute: ProtectedStartupsStartupidRoute,
-}
-
-const ProtectedStartupsRouteWithChildren =
-  ProtectedStartupsRoute._addFileChildren(ProtectedStartupsRouteChildren)
-
 interface ProtectedRouteChildren {
-  ProtectedConnectRoute: typeof ProtectedConnectRoute
   ProtectedDashboardRoute: typeof ProtectedDashboardRoute
-  ProtectedMessageRoute: typeof ProtectedMessageRouteWithChildren
-  ProtectedStartupsRoute: typeof ProtectedStartupsRouteWithChildren
-  ProtectedProfileUsernameRoute: typeof ProtectedProfileUsernameRoute
 }
 
 const ProtectedRouteChildren: ProtectedRouteChildren = {
-  ProtectedConnectRoute: ProtectedConnectRoute,
   ProtectedDashboardRoute: ProtectedDashboardRoute,
-  ProtectedMessageRoute: ProtectedMessageRouteWithChildren,
-  ProtectedStartupsRoute: ProtectedStartupsRouteWithChildren,
-  ProtectedProfileUsernameRoute: ProtectedProfileUsernameRoute,
 }
 
 const ProtectedRouteWithChildren = ProtectedRoute._addFileChildren(
@@ -210,26 +94,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '': typeof ProtectedRouteWithChildren
   '/register': typeof RegisterRoute
-  '/connect': typeof ProtectedConnectRoute
   '/dashboard': typeof ProtectedDashboardRoute
-  '/message': typeof ProtectedMessageRouteWithChildren
-  '/startups': typeof ProtectedStartupsRouteWithChildren
-  '/message/$username': typeof ProtectedMessageUsernameRoute
-  '/profile/$username': typeof ProtectedProfileUsernameRoute
-  '/startups/$startupid': typeof ProtectedStartupsStartupidRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '': typeof ProtectedRouteWithChildren
   '/register': typeof RegisterRoute
-  '/connect': typeof ProtectedConnectRoute
   '/dashboard': typeof ProtectedDashboardRoute
-  '/message': typeof ProtectedMessageRouteWithChildren
-  '/startups': typeof ProtectedStartupsRouteWithChildren
-  '/message/$username': typeof ProtectedMessageUsernameRoute
-  '/profile/$username': typeof ProtectedProfileUsernameRoute
-  '/startups/$startupid': typeof ProtectedStartupsStartupidRoute
 }
 
 export interface FileRoutesById {
@@ -237,52 +109,15 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_protected': typeof ProtectedRouteWithChildren
   '/register': typeof RegisterRoute
-  '/_protected/connect': typeof ProtectedConnectRoute
   '/_protected/dashboard': typeof ProtectedDashboardRoute
-  '/_protected/message': typeof ProtectedMessageRouteWithChildren
-  '/_protected/startups': typeof ProtectedStartupsRouteWithChildren
-  '/_protected/message/$username': typeof ProtectedMessageUsernameRoute
-  '/_protected/profile/$username': typeof ProtectedProfileUsernameRoute
-  '/_protected/startups/$startupid': typeof ProtectedStartupsStartupidRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | ''
-    | '/register'
-    | '/connect'
-    | '/dashboard'
-    | '/message'
-    | '/startups'
-    | '/message/$username'
-    | '/profile/$username'
-    | '/startups/$startupid'
+  fullPaths: '/' | '' | '/register' | '/dashboard'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | ''
-    | '/register'
-    | '/connect'
-    | '/dashboard'
-    | '/message'
-    | '/startups'
-    | '/message/$username'
-    | '/profile/$username'
-    | '/startups/$startupid'
-  id:
-    | '__root__'
-    | '/'
-    | '/_protected'
-    | '/register'
-    | '/_protected/connect'
-    | '/_protected/dashboard'
-    | '/_protected/message'
-    | '/_protected/startups'
-    | '/_protected/message/$username'
-    | '/_protected/profile/$username'
-    | '/_protected/startups/$startupid'
+  to: '/' | '' | '/register' | '/dashboard'
+  id: '__root__' | '/' | '/_protected' | '/register' | '/_protected/dashboard'
   fileRoutesById: FileRoutesById
 }
 
@@ -319,49 +154,15 @@ export const routeTree = rootRoute
     "/_protected": {
       "filePath": "_protected.tsx",
       "children": [
-        "/_protected/connect",
-        "/_protected/dashboard",
-        "/_protected/message",
-        "/_protected/startups",
-        "/_protected/profile/$username"
+        "/_protected/dashboard"
       ]
     },
     "/register": {
       "filePath": "register.tsx"
     },
-    "/_protected/connect": {
-      "filePath": "_protected/connect.tsx",
-      "parent": "/_protected"
-    },
     "/_protected/dashboard": {
       "filePath": "_protected/dashboard.tsx",
       "parent": "/_protected"
-    },
-    "/_protected/message": {
-      "filePath": "_protected/message.tsx",
-      "parent": "/_protected",
-      "children": [
-        "/_protected/message/$username"
-      ]
-    },
-    "/_protected/startups": {
-      "filePath": "_protected/startups.tsx",
-      "parent": "/_protected",
-      "children": [
-        "/_protected/startups/$startupid"
-      ]
-    },
-    "/_protected/message/$username": {
-      "filePath": "_protected/message.$username.tsx",
-      "parent": "/_protected/message"
-    },
-    "/_protected/profile/$username": {
-      "filePath": "_protected/profile.$username.tsx",
-      "parent": "/_protected"
-    },
-    "/_protected/startups/$startupid": {
-      "filePath": "_protected/startups.$startupid.tsx",
-      "parent": "/_protected/startups"
     }
   }
 }

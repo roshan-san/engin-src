@@ -3,28 +3,21 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { FaTools, FaPlus, FaTimes } from "react-icons/fa";
 import { useOnboarding } from "../context/OnboardContext";
-import { skillsSchema } from "../validations/onboarding";
 import { useMutation } from "convex/react";
 import { api } from "@/../convex/_generated/api";
 
 export default function Skills() {
-  const { nextStep, previousStep } = useOnboarding();
-  const [skills, setSkills] = useState<string[]>([]);
-  const [newSkill, setNewSkill] = useState('');
+  const { nextStep, previousStep, onboardingData } = useOnboarding();
+  const [skills, setSkills] = useState<string[]>(onboardingData.skills || []);
+  const [newSkill, setNewSkill] = useState("");
   const createProfile = useMutation(api.onboarding.createProfile);
   const [isLoading, setIsLoading] = useState(false);
-  
-  const addSkill = () => {
-    const trimmedSkill = newSkill.trim();
-    if (!trimmedSkill) return;
-    
-    const result = skillsSchema.safeParse({ 
-      skills: [...skills, trimmedSkill]
-    });
 
-    if (result.success) {
-      setSkills([...skills, trimmedSkill]);
-      setNewSkill('');
+  const addSkill = () => {
+    const trimmed = newSkill.trim();
+    if (trimmed && !skills.includes(trimmed)) {
+      setSkills([...skills, trimmed]);
+      setNewSkill("");
     }
   };
 
@@ -32,24 +25,13 @@ export default function Skills() {
     setSkills(skills.filter((_, i) => i !== index));
   };
 
-  const handleSubmit = async (data: any) => {
-    const result = skillsSchema.safeParse({ skills: skills.map(skill => skill.trim()) });
-    if (result.success) {
-      setIsLoading(true);
-      try {
-        // Convert null interests/skills to undefined for Convex
-        const convexData = {
-          ...data,
-          interests: data.interests ?? undefined,
-          skills: result.data.skills ?? undefined,
-        };
-        await createProfile(convexData);
-        nextStep({
-          skills: result.data.skills
-        });
-      } finally {
-        setIsLoading(false);
-      }
+  const handleSubmit = async () => {
+    setIsLoading(true);
+    try {
+      await createProfile({ ...onboardingData, skills });
+      nextStep({ skills });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -62,13 +44,13 @@ export default function Skills() {
               <FaTools className="text-primary w-5 h-5" />
               Add Your Skills
             </h3>
-            <div className="flex gap-3">
-              <Input 
-                placeholder="Add a skill" 
+            <div className="flex gap-3 mb-2">
+              <Input
+                placeholder="Add a skill"
                 value={newSkill}
-                onChange={(e) => setNewSkill(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
+                onChange={e => setNewSkill(e.target.value)}
+                onKeyDown={e => {
+                  if (e.key === "Enter") {
                     e.preventDefault();
                     addSkill();
                   }
@@ -95,6 +77,7 @@ export default function Skills() {
                   >
                     {skill}
                     <button
+                      type="button"
                       onClick={() => removeSkill(index)}
                       className="hover:text-destructive transition-colors"
                     >
@@ -107,22 +90,21 @@ export default function Skills() {
           </div>
         </div>
       </div>
-
       <div className="w-full p-4 flex justify-between gap-4 mt-4">
-        <Button 
-          type="button" 
-          variant="outline" 
+        <Button
+          type="button"
+          variant="outline"
           onClick={previousStep}
           className="flex-1 h-12 text-lg font-medium hover:bg-muted/50 transition-colors"
         >
           Previous
         </Button>
-        <Button 
-          type="submit"
+        <Button
+          type="button"
           onClick={handleSubmit}
           className="flex-1 h-12 text-lg font-medium transition-all hover:scale-[1.02]"
         >
-          {isLoading ? 'Saving...' : 'Finish'}
+          {isLoading ? "Saving..." : "Finish"}
         </Button>
       </div>
     </div>

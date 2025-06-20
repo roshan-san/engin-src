@@ -1,9 +1,9 @@
-import type { ProfileInsert } from "@/types/supa-types";
 import { createContext, useContext, useState } from "react";
+
 type OnboardingContextType = {
-  onboardingData: Partial<ProfileInsert>;
+  onboardingData: Record<string, any>;
   step: number;
-  nextStep: (data?: Partial<ProfileInsert>) => void;
+  nextStep: (data?: Record<string, any>) => void;
   previousStep: () => void;
 };
 
@@ -14,16 +14,16 @@ export const OnboardingProvider = ({
 }: { 
   children: React.ReactNode;
 }) => {
-  const [onboardingData, setOnboardingData] = useState<Partial<ProfileInsert>>({});
+  const [onboardingData, setOnboardingData] = useState<Record<string, any>>({});
   const [step, setStep] = useState(1);
 
-  const updateData = (newData: Partial<ProfileInsert>) =>
+  const updateData = (newData: Record<string, any>) =>
     setOnboardingData((prev) => ({ ...prev, ...newData }));
 
-  const nextStep = (data?: Partial<ProfileInsert>) => {
+  const nextStep = (data?: Record<string, any>) => {
     if (data) {
       updateData(data);
-      console.log(onboardingData)
+    console.log(onboardingData)
     }
     setStep(Math.min(7, step + 1));
   };

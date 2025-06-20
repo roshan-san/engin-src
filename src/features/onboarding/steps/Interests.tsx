@@ -3,28 +3,21 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { FaPlus, FaTimes, FaHeart } from "react-icons/fa";
 import { useOnboarding } from "../context/OnboardContext";
-import { interestsSchema } from "../validations/onboarding";
 import { useMutation } from "convex/react";
 import { api } from "@/../convex/_generated/api";
 
 export default function Interests() {
-  const { nextStep, previousStep } = useOnboarding();
-  const [interests, setInterests] = useState<string[]>([]);
+  const { nextStep, previousStep, onboardingData } = useOnboarding();
+  const [interests, setInterests] = useState<string[]>(onboardingData.interests || []);
   const [newInterest, setNewInterest] = useState("");
   const createProfile = useMutation(api.onboarding.createProfile);
   const [isLoading, setIsLoading] = useState(false);
-  
-  const addInterest = () => {
-    const trimmedInterest = newInterest.trim();
-    if (!trimmedInterest) return;
-    
-    const result = interestsSchema.safeParse({ 
-      interests: [...interests, trimmedInterest]
-    });
 
-    if (result.success) {
-      setInterests([...interests, trimmedInterest]);
-      setNewInterest('');
+  const addInterest = () => {
+    const trimmed = newInterest.trim();
+    if (trimmed && !interests.includes(trimmed)) {
+      setInterests([...interests, trimmed]);
+      setNewInterest("");
     }
   };
 
@@ -32,24 +25,13 @@ export default function Interests() {
     setInterests(interests.filter((_, i) => i !== index));
   };
 
-  const handleSubmit = async (data: any) => {
-    const result = interestsSchema.safeParse({ interests: interests.map(interest => interest.trim()) });
-    if (result.success) {
-      setIsLoading(true);
-      try {
-        // Convert null interests/skills to undefined for Convex
-        const convexData = {
-          ...data,
-          interests: result.data.interests ?? undefined,
-          skills: data.skills ?? undefined,
-        };
-        await createProfile(convexData);
-        nextStep({
-          interests: result.data.interests
-        });
-      } finally {
-        setIsLoading(false);
-      }
+  const handleSubmit = async () => {
+    setIsLoading(true);
+    try {
+      await createProfile({ ...onboardingData, interests });
+      nextStep({ interests });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -62,13 +44,13 @@ export default function Interests() {
               <FaHeart className="text-primary w-5 h-5" />
               Add Your Interests
             </h3>
-            <div className="flex gap-3">
-              <Input 
-                placeholder="Add a interest" 
+            <div className="flex gap-3 mb-2">
+              <Input
+                placeholder="Add an interest"
                 value={newInterest}
-                onChange={(e) => setNewInterest(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
+                onChange={e => setNewInterest(e.target.value)}
+                onKeyDown={e => {
+                  if (e.key === "Enter") {
                     e.preventDefault();
                     addInterest();
                   }
@@ -95,6 +77,7 @@ export default function Interests() {
                   >
                     {interest}
                     <button
+                      type="button"
                       onClick={() => removeInterest(index)}
                       className="hover:text-destructive transition-colors"
                     >
@@ -107,22 +90,21 @@ export default function Interests() {
           </div>
         </div>
       </div>
-
       <div className="w-full p-4 flex justify-between gap-4 mt-4">
-        <Button 
-          type="button" 
-          variant="outline" 
+        <Button
+          type="button"
+          variant="outline"
           onClick={previousStep}
           className="flex-1 h-12 text-lg font-medium hover:bg-muted/50 transition-colors"
         >
           Previous
         </Button>
-        <Button 
-          type="submit"
+        <Button
+          type="button"
           onClick={handleSubmit}
           className="flex-1 h-12 text-lg font-medium transition-all hover:scale-[1.02]"
         >
-          {isLoading ? 'Saving...' : 'Finish'}
+          {isLoading ? "Saving..." : "Finish"}
         </Button>
       </div>
     </div>

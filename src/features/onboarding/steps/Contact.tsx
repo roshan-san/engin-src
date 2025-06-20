@@ -1,49 +1,32 @@
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { FaGithub, FaLinkedinIn } from "react-icons/fa";
-import { contactSchema } from "../validations/onboarding";
 import { useOnboarding } from "../context/OnboardContext";
-import type { ProfileInsert } from "@/types/supa-types";
 import { useMutation } from "convex/react";
 import { api } from "@/../convex/_generated/api";
-import { useState } from "react";
-
-
 
 export default function Contact() {
   const { nextStep, previousStep, onboardingData } = useOnboarding();
-  const form = useForm({
-    resolver: zodResolver(contactSchema),
-    defaultValues: {
-      github_url: onboardingData.github_url || "",
-      linkedin_url: onboardingData.linkedin_url || "",
-    },
-  });
+  const [githubUrl, setGithubUrl] = useState(onboardingData.github_url || "");
+  const [linkedinUrl, setLinkedinUrl] = useState(onboardingData.linkedin_url || "");
   const createProfile = useMutation(api.onboarding.createProfile);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async (data: ProfileInsert) => {
-    const isValid = await form.trigger();
-    if (isValid) {
-      nextStep({
-        github_url: data.github_url,
-        linkedin_url: data.linkedin_url,
-      });
-      console.log(onboardingData);
+  const handleSubmit = async () => {
+    setIsLoading(true);
+    try {
       const convexData = {
         ...onboardingData,
+        github_url: githubUrl,
+        linkedin_url: linkedinUrl,
         interests: onboardingData.interests ?? undefined,
         skills: onboardingData.skills ?? undefined,
       };
-      setIsLoading(true);
-      try {
-        await createProfile(convexData);
-      } finally {
-        setIsLoading(false);
-      }
+      await createProfile(convexData);
+      nextStep({ github_url: githubUrl, linkedin_url: linkedinUrl });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -54,68 +37,43 @@ export default function Contact() {
           <FaGithub className="text-primary w-5 h-5" />
           Add your social links
         </h3>
-        
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
-            <FormField
-              control={form.control}
-              name="github_url"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <div className="flex items-center gap-3">
-                      <FaGithub className="w-6 h-6 text-foreground/80" />
-                      <Input 
-                        placeholder="GitHub URL" 
-                        {...field}
-                        className="h-14 text-lg rounded-xl"
-                        autoFocus
-                      />
-                    </div>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+        <div className="space-y-4">
+          <div className="flex items-center gap-3">
+            <FaGithub className="w-6 h-6 text-foreground/80" />
+            <Input
+              placeholder="GitHub URL"
+              value={githubUrl}
+              onChange={e => setGithubUrl(e.target.value)}
+              className="h-14 text-lg rounded-xl"
+              autoFocus
             />
-
-            <FormField
-              control={form.control}
-              name="linkedin_url"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <div className="flex items-center gap-3">
-                      <FaLinkedinIn className="w-6 h-6 text-foreground/80" />
-                      <Input 
-                        placeholder="LinkedIn URL" 
-                        {...field}
-                        className="h-14 text-lg rounded-xl"
-                      />
-                    </div>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+          </div>
+          <div className="flex items-center gap-3">
+            <FaLinkedinIn className="w-6 h-6 text-foreground/80" />
+            <Input
+              placeholder="LinkedIn URL"
+              value={linkedinUrl}
+              onChange={e => setLinkedinUrl(e.target.value)}
+              className="h-14 text-lg rounded-xl"
             />
-          </form>
-        </Form>
+          </div>
+        </div>
       </div>
-
       <div className="w-full p-4 flex justify-between gap-4 mt-4">
-        <Button 
-          type="button" 
-          variant="outline" 
+        <Button
+          type="button"
+          variant="outline"
           onClick={previousStep}
           className="flex-1 h-12 text-lg font-medium hover:bg-muted/50 transition-colors"
         >
           Previous
         </Button>
-        <Button 
-          type="submit"
-          onClick={form.handleSubmit(handleSubmit)}
+        <Button
+          type="button"
+          onClick={handleSubmit}
           className="flex-1 h-12 text-lg font-medium transition-all hover:scale-[1.02]"
         >
-          {isLoading ? 'Saving...' : 'Finish'}
+          {isLoading ? "Saving..." : "Finish"}
         </Button>
       </div>
     </div>
