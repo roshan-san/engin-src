@@ -41,6 +41,21 @@ const schema = defineSchema({
     .index("by_sender", ["senderid", "status"])
     .index("by_receiver", ["receiverid", "status"])
     .index("by_sender_receiver", ["senderid", "receiverid"]),
+
+  startups: defineTable({
+    name: v.string(),
+    description: v.string(),
+    problem: v.string(),
+    solution: v.string(),
+    location: v.string(),
+    funding: v.number(),
+    team_size: v.number(),
+    ownerId: v.id("profiles"),
+  })
+    .index("by_owner", ["ownerId"])
+    .searchIndex("by_name", {
+      searchField: "name",
+    }),
 });
 
 export default schema;

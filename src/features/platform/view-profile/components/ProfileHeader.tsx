@@ -17,9 +17,9 @@ interface ProfileHeaderProps {
 
 export function ProfileHeader({ profile }: ProfileHeaderProps) {
   return (
-    <Card className="w-full flex border">
+    <Card className="w-full flex">
       <CardContent>
-        <div className="flex items-center justify-around gap-6 ring">
+        <div className="flex items-center justify-around gap-6">
           <Avatar className="w-24 h-24 shadow-lg">
             <AvatarImage src={profile.avatar_url} alt={profile.name} />
             <AvatarFallback className="text-2xl">
@@ -27,7 +27,7 @@ export function ProfileHeader({ profile }: ProfileHeaderProps) {
             </AvatarFallback>
           </Avatar>
 
-          <div className="flex-1 ring">
+          <div className="flex-1">
             <div className="flex flex-col md:flex-row md:items-center jusity-between gap-4">
               <div>
                 <h1 className="text-xl md:text-3xl font-bold tracking-tight">
@@ -37,7 +37,7 @@ export function ProfileHeader({ profile }: ProfileHeaderProps) {
                   @{profile.username}
                 </p>
               </div>
-              <div className="flex gap-2 ring">
+              <div className="flex gap-2">
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>

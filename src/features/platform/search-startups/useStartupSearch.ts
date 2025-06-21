@@ -1,58 +1,38 @@
 import { useState } from "react";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import supabase from "@/utils/supabase";
-import type { Startup } from "@/types/supa-types";
+import { usePaginatedQuery } from "convex/react";
 import { useInView } from "react-intersection-observer";
-import { useEffect } from "react";
+import { api } from "@/../convex/_generated/api";
 
-const ITEMS_PER_PAGE = 10;
-
-export function useStartupSearch() {
+export const useStartupSearch = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const { ref, inView } = useInView();
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
-    useInfiniteQuery({
-      queryKey: ["startups", searchQuery],
-      queryFn: async ({ pageParam = 0 }) => {
-        const from = pageParam * ITEMS_PER_PAGE;
-        const to = from + ITEMS_PER_PAGE - 1;
+  const {
+    results: profiles,
+    status,
+    loadMore,
+    isLoading,
+  } = usePaginatedQuery(
+    api.startups.startupSearch.getStartups,
+    { searchQuery },
+    { initialNumItems: 9 },
+  );
 
-        let query = supabase
-          .from("startups")
-          .select("*")
-          .range(from, to)
-          .order("created_at", { ascending: false });
-
-        if (searchQuery) {
-          query = query.or(
-            `name.ilike.%${searchQuery}%,description.ilike.%${searchQuery}%`,
-          );
-        }
-
-        const { data, error } = await query;
-        if (error) throw error;
-        return data as Startup[];
-      },
-      getNextPageParam: (lastPage, allPages) => {
-        return lastPage.length === ITEMS_PER_PAGE ? allPages.length : undefined;
-      },
-      initialPageParam: 0,
-    });
-
-  useEffect(() => {
-    if (inView && hasNextPage) {
-      fetchNextPage();
-    }
-  }, [inView, fetchNextPage, hasNextPage]);
+  const { ref } = useInView({
+    threshold: 0.5,
+    onChange: (inView: boolean) => {
+      if (inView && status === "CanLoadMore") {
+        loadMore(9);
+      }
+    },
+  });
 
   return {
     searchQuery,
     setSearchQuery,
-    data,
+    profiles,
     status,
-    isFetchingNextPage,
-    hasNextPage,
+    loadMore,
+    isLoading,
     ref,
   };
-}
+};
