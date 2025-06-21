@@ -12,7 +12,7 @@ export const Route = createFileRoute('/')({
 })
 
 function RouteComponent() {
-  const data = useQuery(api.profile.getUserProfile) 
+  const data = useQuery(api.auth.getUser) 
   
   return (
     <div className="min-h-screen flex flex-col">
