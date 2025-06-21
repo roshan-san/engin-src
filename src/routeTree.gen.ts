@@ -14,8 +14,11 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as ProtectedImport } from './routes/_protected'
 import { Route as IndexImport } from './routes/index'
 import { Route as ProtectedTestImport } from './routes/_protected/test'
+import { Route as ProtectedMessageImport } from './routes/_protected/message'
 import { Route as ProtectedDashboardImport } from './routes/_protected/dashboard'
+import { Route as ProtectedConnectImport } from './routes/_protected/connect'
 import { Route as ProtectedProfileUsernameImport } from './routes/_protected/profile.$username'
+import { Route as ProtectedMessageUsernameImport } from './routes/_protected/message.$username'
 
 // Create/Update Routes
 
@@ -36,9 +39,21 @@ const ProtectedTestRoute = ProtectedTestImport.update({
   getParentRoute: () => ProtectedRoute,
 } as any)
 
+const ProtectedMessageRoute = ProtectedMessageImport.update({
+  id: '/message',
+  path: '/message',
+  getParentRoute: () => ProtectedRoute,
+} as any)
+
 const ProtectedDashboardRoute = ProtectedDashboardImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => ProtectedRoute,
+} as any)
+
+const ProtectedConnectRoute = ProtectedConnectImport.update({
+  id: '/connect',
+  path: '/connect',
   getParentRoute: () => ProtectedRoute,
 } as any)
 
@@ -46,6 +61,12 @@ const ProtectedProfileUsernameRoute = ProtectedProfileUsernameImport.update({
   id: '/profile/$username',
   path: '/profile/$username',
   getParentRoute: () => ProtectedRoute,
+} as any)
+
+const ProtectedMessageUsernameRoute = ProtectedMessageUsernameImport.update({
+  id: '/$username',
+  path: '/$username',
+  getParentRoute: () => ProtectedMessageRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -66,11 +87,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedImport
       parentRoute: typeof rootRoute
     }
+    '/_protected/connect': {
+      id: '/_protected/connect'
+      path: '/connect'
+      fullPath: '/connect'
+      preLoaderRoute: typeof ProtectedConnectImport
+      parentRoute: typeof ProtectedImport
+    }
     '/_protected/dashboard': {
       id: '/_protected/dashboard'
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof ProtectedDashboardImport
+      parentRoute: typeof ProtectedImport
+    }
+    '/_protected/message': {
+      id: '/_protected/message'
+      path: '/message'
+      fullPath: '/message'
+      preLoaderRoute: typeof ProtectedMessageImport
       parentRoute: typeof ProtectedImport
     }
     '/_protected/test': {
@@ -79,6 +114,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/test'
       preLoaderRoute: typeof ProtectedTestImport
       parentRoute: typeof ProtectedImport
+    }
+    '/_protected/message/$username': {
+      id: '/_protected/message/$username'
+      path: '/$username'
+      fullPath: '/message/$username'
+      preLoaderRoute: typeof ProtectedMessageUsernameImport
+      parentRoute: typeof ProtectedMessageImport
     }
     '/_protected/profile/$username': {
       id: '/_protected/profile/$username'
@@ -92,14 +134,29 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
+interface ProtectedMessageRouteChildren {
+  ProtectedMessageUsernameRoute: typeof ProtectedMessageUsernameRoute
+}
+
+const ProtectedMessageRouteChildren: ProtectedMessageRouteChildren = {
+  ProtectedMessageUsernameRoute: ProtectedMessageUsernameRoute,
+}
+
+const ProtectedMessageRouteWithChildren =
+  ProtectedMessageRoute._addFileChildren(ProtectedMessageRouteChildren)
+
 interface ProtectedRouteChildren {
+  ProtectedConnectRoute: typeof ProtectedConnectRoute
   ProtectedDashboardRoute: typeof ProtectedDashboardRoute
+  ProtectedMessageRoute: typeof ProtectedMessageRouteWithChildren
   ProtectedTestRoute: typeof ProtectedTestRoute
   ProtectedProfileUsernameRoute: typeof ProtectedProfileUsernameRoute
 }
 
 const ProtectedRouteChildren: ProtectedRouteChildren = {
+  ProtectedConnectRoute: ProtectedConnectRoute,
   ProtectedDashboardRoute: ProtectedDashboardRoute,
+  ProtectedMessageRoute: ProtectedMessageRouteWithChildren,
   ProtectedTestRoute: ProtectedTestRoute,
   ProtectedProfileUsernameRoute: ProtectedProfileUsernameRoute,
 }
@@ -111,16 +168,22 @@ const ProtectedRouteWithChildren = ProtectedRoute._addFileChildren(
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '': typeof ProtectedRouteWithChildren
+  '/connect': typeof ProtectedConnectRoute
   '/dashboard': typeof ProtectedDashboardRoute
+  '/message': typeof ProtectedMessageRouteWithChildren
   '/test': typeof ProtectedTestRoute
+  '/message/$username': typeof ProtectedMessageUsernameRoute
   '/profile/$username': typeof ProtectedProfileUsernameRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '': typeof ProtectedRouteWithChildren
+  '/connect': typeof ProtectedConnectRoute
   '/dashboard': typeof ProtectedDashboardRoute
+  '/message': typeof ProtectedMessageRouteWithChildren
   '/test': typeof ProtectedTestRoute
+  '/message/$username': typeof ProtectedMessageUsernameRoute
   '/profile/$username': typeof ProtectedProfileUsernameRoute
 }
 
@@ -128,22 +191,44 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/_protected': typeof ProtectedRouteWithChildren
+  '/_protected/connect': typeof ProtectedConnectRoute
   '/_protected/dashboard': typeof ProtectedDashboardRoute
+  '/_protected/message': typeof ProtectedMessageRouteWithChildren
   '/_protected/test': typeof ProtectedTestRoute
+  '/_protected/message/$username': typeof ProtectedMessageUsernameRoute
   '/_protected/profile/$username': typeof ProtectedProfileUsernameRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '' | '/dashboard' | '/test' | '/profile/$username'
+  fullPaths:
+    | '/'
+    | ''
+    | '/connect'
+    | '/dashboard'
+    | '/message'
+    | '/test'
+    | '/message/$username'
+    | '/profile/$username'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '' | '/dashboard' | '/test' | '/profile/$username'
+  to:
+    | '/'
+    | ''
+    | '/connect'
+    | '/dashboard'
+    | '/message'
+    | '/test'
+    | '/message/$username'
+    | '/profile/$username'
   id:
     | '__root__'
     | '/'
     | '/_protected'
+    | '/_protected/connect'
     | '/_protected/dashboard'
+    | '/_protected/message'
     | '/_protected/test'
+    | '/_protected/message/$username'
     | '/_protected/profile/$username'
   fileRoutesById: FileRoutesById
 }
@@ -178,18 +263,35 @@ export const routeTree = rootRoute
     "/_protected": {
       "filePath": "_protected.tsx",
       "children": [
+        "/_protected/connect",
         "/_protected/dashboard",
+        "/_protected/message",
         "/_protected/test",
         "/_protected/profile/$username"
       ]
+    },
+    "/_protected/connect": {
+      "filePath": "_protected/connect.tsx",
+      "parent": "/_protected"
     },
     "/_protected/dashboard": {
       "filePath": "_protected/dashboard.tsx",
       "parent": "/_protected"
     },
+    "/_protected/message": {
+      "filePath": "_protected/message.tsx",
+      "parent": "/_protected",
+      "children": [
+        "/_protected/message/$username"
+      ]
+    },
     "/_protected/test": {
       "filePath": "_protected/test.tsx",
       "parent": "/_protected"
+    },
+    "/_protected/message/$username": {
+      "filePath": "_protected/message.$username.tsx",
+      "parent": "/_protected/message"
     },
     "/_protected/profile/$username": {
       "filePath": "_protected/profile.$username.tsx",

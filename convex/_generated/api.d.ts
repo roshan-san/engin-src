@@ -15,6 +15,9 @@ import type {
 } from "convex/server";
 import type * as auth from "../auth.js";
 import type * as http from "../http.js";
+import type * as profile_mutations from "../profile/mutations.js";
+import type * as profile_profileSearch from "../profile/profileSearch.js";
+import type * as profile_queries from "../profile/queries.js";
 import type * as profile from "../profile.js";
 
 /**
@@ -28,6 +31,9 @@ import type * as profile from "../profile.js";
 declare const fullApi: ApiFromModules<{
   auth: typeof auth;
   http: typeof http;
+  "profile/mutations": typeof profile_mutations;
+  "profile/profileSearch": typeof profile_profileSearch;
+  "profile/queries": typeof profile_queries;
   profile: typeof profile;
 }>;
 export declare const api: FilterApi<

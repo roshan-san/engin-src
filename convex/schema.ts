@@ -27,6 +27,7 @@ const schema = defineSchema({
     github_url: v.optional(v.string()),
     linkedin_url: v.optional(v.string()),
   }).index("email", ["email"])
+  .searchIndex("by_username", { searchField: "username" })
 });
  
 export default schema;

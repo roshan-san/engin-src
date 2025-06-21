@@ -1,7 +1,7 @@
 import { BottomBar } from '@/features/platform/navigation-bars/BottomBar'
 import { LeftBar } from '@/features/platform/navigation-bars/LeftBar'
 import { createFileRoute, Outlet } from '@tanstack/react-router'
-import { UserProvider } from '@/features/auth/UserContext'
+import { UserProvider } from '@/features/authentication/UserContext'
 
 export const Route = createFileRoute('/_protected')({
   component: RouteComponent,

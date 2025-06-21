@@ -7,10 +7,9 @@ export default function SearchProfiles() {
   const {
     searchQuery,
     setSearchQuery,
-    data,
+    profiles,
     status,
-    isFetchingNextPage,
-    hasNextPage,
+    loadMore,
     ref,
   } = useProfileSearch();
 
@@ -27,32 +26,41 @@ export default function SearchProfiles() {
             className="w-full h-14 rounded-2xl"
           />
         </div>
-        <ReqDrawer />
+        {/* <ReqDrawer /> */}
       </div>
 
-      {status === 'pending' ? (
-        <div className="flex items-center justify-center h-32 text-gray-500">Loading...</div>
-      ) : status === 'error' ? (
-        <div className="flex items-center justify-center h-32 text-red-500">Error loading Profiles</div>
-      ) : data ? (
+      {status === 'LoadingFirstPage' ? (
+        <div className="flex items-center justify-center h-32 text-gray-500">
+          Loading...
+        </div>
+      ) : profiles && profiles.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-          {data.pages.map((page) => (
-            page.map((profile) => (
-              <ProfileCard key={profile.id} profile={profile} />
-            ))
+          {profiles.map((profile) => (
+            <ProfileCard key={profile._id} profile={profile} />
           ))}
-          
-          <div ref={ref} className="col-span-full h-16 flex items-center justify-center text-gray-500">
-            {isFetchingNextPage ? (
+          <div
+            ref={ref}
+            className="col-span-full h-16 flex items-center justify-center text-gray-500"
+          >
+            {status === 'LoadingMore' ? (
               <div className="animate-pulse">Loading more...</div>
-            ) : hasNextPage ? (
-              <div className="cursor-pointer hover:text-blue-500 transition-colors">Load more</div>
+            ) : status === 'CanLoadMore' ? (
+              <button
+                onClick={() => loadMore(9)}
+                className="cursor-pointer hover:text-blue-500 transition-colors"
+              >
+                Load more
+              </button>
             ) : (
               <div>No more profiles to load</div>
             )}
           </div>
         </div>
-      ) : null}
+      ) : (
+        <div className="flex items-center justify-center h-32 text-gray-500">
+          No profiles found.
+        </div>
+      )}
     </div>
   );
 }
