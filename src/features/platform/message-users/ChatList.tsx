@@ -13,7 +13,7 @@ export function ChatList() {
           <div className="flex flex-col">
             {acceptedConnections.map((profile, index) => (
               <div key={profile?._id}>
-                <Link to="/message/$username" params={{ username: profile?.username! }}>
+                <Link to="/message/$username" params={{ username: profile?.username }}>
                   <div
                     className="flex items-center gap-4 p-2 hover:bg-gray-100 dark:hover:bg-gray-800"
                   >

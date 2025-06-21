@@ -14,7 +14,7 @@ function RouteComponent() {
         <div className="w-20 hidden md:block">
           <LeftBar />
         </div>
-        <main className="flex-1 w-full overflow-y-auto ">
+        <main className="flex-1 w-full flex">
           <Outlet />
         </main>
         <div className="h-20  flex items-center justify-center md:hidden">

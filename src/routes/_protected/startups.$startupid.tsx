@@ -5,5 +5,5 @@ export const Route = createFileRoute("/_protected/startups/$startupid")({
 });
 
 function RouteComponent() {
-  return <div>Hello "/_protected/startups/$startupid"!</div>;
+  return <div>Hllo "/_protected/startups/$startupid"!</div>;
 }

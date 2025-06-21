@@ -8,19 +8,19 @@ export const getMyConnectedProfiles = query({
 
         const senderConnections = await ctx.db
             .query("connections")
-            .withIndex("by_sender", (q) => q.eq("senderid", myProfile._id))
+            .withIndex("by_sender", (q) => q.eq("senderId", myProfile._id))
             .filter((q) => q.eq(q.field("status"), "accepted"))
             .collect();
 
         const receiverConnections = await ctx.db
             .query("connections")
-            .withIndex("by_receiver", (q) => q.eq("receiverid", myProfile._id))
+            .withIndex("by_receiver", (q) => q.eq("receiverId", myProfile._id))
             .filter((q) => q.eq(q.field("status"), "accepted"))
             .collect();
 
         const connectedProfileIds = [
-            ...senderConnections.map((c) => c.receiverid),
-            ...receiverConnections.map((c) => c.senderid),
+            ...senderConnections.map((c) => c.receiverId),
+            ...receiverConnections.map((c) => c.senderId),
         ];
 
         const profiles = await Promise.all(
