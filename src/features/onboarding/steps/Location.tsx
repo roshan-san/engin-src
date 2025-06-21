@@ -7,14 +7,14 @@ import { useOnboarding } from "../context/OnboardContext";
 export default function Location() {
   const { nextStep, previousStep, onboardingData } = useOnboarding();
   const [location, setLocation] = useState(onboardingData.location || "");
-  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async () => {
-    setIsLoading(true);
-    try {
-      nextStep({ location });
-    } finally {
-      setIsLoading(false);
+  const handleSubmit = () => {
+    nextStep({ location });
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && location.trim()) {
+      handleSubmit();
     }
   };
 
@@ -29,6 +29,7 @@ export default function Location() {
             placeholder="Enter your location"
             value={location}
             onChange={e => setLocation(e.target.value)}
+            onKeyDown={handleKeyDown}
             className="h-14 text-lg rounded-xl"
             autoFocus
           />
@@ -48,7 +49,7 @@ export default function Location() {
           onClick={handleSubmit}
           className="flex-1 h-12 text-lg font-medium transition-all hover:scale-[1.02]"
         >
-          {isLoading ? "Saving..." : "Next"}
+          Next
         </Button>
       </div>
     </div>

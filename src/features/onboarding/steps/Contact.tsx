@@ -9,14 +9,14 @@ export default function Contact() {
   const { nextStep, previousStep, onboardingData } = useOnboarding();
   const [githubUrl, setGithubUrl] = useState(onboardingData.github_url || "");
   const [linkedinUrl, setLinkedinUrl] = useState(onboardingData.linkedin_url || "");
-  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async () => {
-    setIsLoading(true);
-    try {
-      nextStep({ github_url: githubUrl, linkedin_url: linkedinUrl });
-    } finally {
-      setIsLoading(false);
+  const handleSubmit = () => {
+    nextStep({ github_url: githubUrl, linkedin_url: linkedinUrl });
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      handleSubmit();
     }
   };
 
@@ -34,6 +34,7 @@ export default function Contact() {
               placeholder="GitHub URL"
               value={githubUrl}
               onChange={e => setGithubUrl(e.target.value)}
+              onKeyDown={handleKeyDown}
               className="h-14 text-lg rounded-xl"
               autoFocus
             />
@@ -44,6 +45,7 @@ export default function Contact() {
               placeholder="LinkedIn URL"
               value={linkedinUrl}
               onChange={e => setLinkedinUrl(e.target.value)}
+              onKeyDown={handleKeyDown}
               className="h-14 text-lg rounded-xl"
             />
           </div>
@@ -63,7 +65,7 @@ export default function Contact() {
           onClick={handleSubmit}
           className="flex-1 h-12 text-lg font-medium transition-all hover:scale-[1.02]"
         >
-          {isLoading ? "Saving..." : "Finish"}
+          Finish
         </Button>
       </div>
     </div>

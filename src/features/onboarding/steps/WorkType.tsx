@@ -39,8 +39,14 @@ export default function WorkType() {
     }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && selectedWorkType) {
+      handleSubmit();
+    }
+  };
+
   return (
-    <div className="w-full flex justify-center items-center gap-6 flex-col h-full p-4 max-w-2xl mx-auto">
+    <div className="w-full flex justify-center items-center gap-6 flex-col h-full p-4 max-w-2xl mx-auto" onKeyDown={handleKeyDown} tabIndex={0}>
       <div className="flex flex-col gap-6 w-full">
         <h3 className="text-xl font-semibold text-foreground tracking-wide uppercase flex items-center gap-3">
           <FaBriefcase className="text-primary w-5 h-5" />

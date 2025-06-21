@@ -1,4 +1,7 @@
+import { useMutation } from "convex/react";
 import { createContext, useContext, useState } from "react";
+import {api} from "@/../convex/_generated/api"
+import { useConvexAuth } from "convex/react";
 
 type OnboardingContextType = {
   onboardingData: Record<string, any>;
@@ -16,16 +19,29 @@ export const OnboardingProvider = ({
 }) => {
   const [onboardingData, setOnboardingData] = useState<Record<string, any>>({});
   const [step, setStep] = useState(1);
+  const { isAuthenticated } = useConvexAuth();
 
   const updateData = (newData: Record<string, any>) =>
     setOnboardingData((prev) => ({ ...prev, ...newData }));
-
+  const createProfile = useMutation(api.onboarding.createProfile)
   const nextStep = (data?: Record<string, any>) => {
     if (data) {
       updateData(data);
-      console.log(onboardingData)
-      if (step==7){
-        console.log("final dat", onboardingData)
+      if (step == 7) {
+        if (!isAuthenticated) {
+          console.error("User is not authenticated, cannot create profile");
+          alert("Please sign in to complete your profile");
+          return;
+        }
+        const finalData = { ...onboardingData, ...data };
+        console.log("final data", finalData);
+        createProfile(finalData)
+          .then((result) => {
+            console.log("Profile created successfully:", result);
+          })
+          .catch((error) => {
+            console.error("Failed to create profile:", error);
+          });
       }
     }
     setStep(Math.min(7, step + 1));

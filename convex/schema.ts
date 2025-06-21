@@ -14,7 +14,19 @@ const schema = defineSchema({
     isAnonymous: v.optional(v.boolean()),
     // other "users" fields...
   }).index("email", ["email"]),
-  // Your other tables...
+  profiles:defineTable({
+    name:v.optional(v.string()),
+    email: v.optional(v.string()),
+    avatar_url:v.optional(v.string()),
+    username: v.optional(v.string()),
+    user_type: v.optional(v.string()),
+    work_type: v.optional(v.string()),
+    location: v.optional(v.string()),
+    skills: v.optional(v.array(v.string())),
+    interests: v.optional(v.array(v.string())),
+    github_url: v.optional(v.string()),
+    linkedin_url: v.optional(v.string()),
+  }).index("email", ["email"])
 });
  
 export default schema;

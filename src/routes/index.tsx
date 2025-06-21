@@ -13,13 +13,13 @@ function RouteComponent() {
   return (
       <div className="min-h-screen flex flex-col">
         <Authenticated>
-        <Header />
-        <Hero />
-        </Authenticated>
-        <Unauthenticated>
-          <OnboardingProvider>
+        <OnboardingProvider>
             <OnboardingSteps/>
           </OnboardingProvider>
+        </Authenticated>
+        <Unauthenticated>
+        <Header />
+        <Hero />
         </Unauthenticated>
       </div>
   )

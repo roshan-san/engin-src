@@ -11,7 +11,7 @@ export default function OnboardingSteps() {
   const { step } = useOnboarding();
 
   return (
-    <>
+    <div className="h-screen p-2">
       <Progress hidden={step==0} value={(step/7)*100}/>
       {step === 1 && <UserName />}
       {step === 2 && <UserType />}
@@ -20,6 +20,6 @@ export default function OnboardingSteps() {
       {step === 5 && <Skills />}
       {step === 6 && <Interests />}
       {step === 7 && <Contact />}
-    </>
+    </div>
   );
 }
