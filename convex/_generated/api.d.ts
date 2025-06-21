@@ -14,6 +14,7 @@ import type {
   FunctionReference,
 } from "convex/server";
 import type * as auth from "../auth.js";
+import type * as helper from "../helper.js";
 import type * as http from "../http.js";
 import type * as profile_mutations from "../profile/mutations.js";
 import type * as profile_profileSearch from "../profile/profileSearch.js";
@@ -29,6 +30,7 @@ import type * as profile_queries from "../profile/queries.js";
  */
 declare const fullApi: ApiFromModules<{
   auth: typeof auth;
+  helper: typeof helper;
   http: typeof http;
   "profile/mutations": typeof profile_mutations;
   "profile/profileSearch": typeof profile_profileSearch;

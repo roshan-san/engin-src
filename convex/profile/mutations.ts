@@ -1,6 +1,6 @@
 import { v } from "convex/values";
-import { mutation, query } from "../_generated/server";
-import { getAuthUserId } from "@convex-dev/auth/server";
+import { mutation} from "../_generated/server";
+import { getAuthenticatedUser } from "../helper";
 
 export const createProfile = mutation({
   args: {
@@ -14,14 +14,10 @@ export const createProfile = mutation({
     linkedin_url: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    const userId = await getAuthUserId(ctx)
-    if (!userId) {
-      throw new Error("Failed to find user Id")
-    }
-    const user = await ctx.db.get(userId)
+    const user = await getAuthenticatedUser(ctx);
     
     if (!user) {
-      throw new Error("Failed to find user in database")
+      throw new Error("Failed to find user in database");
     }
 
     const profile = await ctx.db.insert("profiles", {
