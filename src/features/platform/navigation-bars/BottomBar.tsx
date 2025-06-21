@@ -1,48 +1,63 @@
-import { Laptop, Search, Users, MessageCircle } from "lucide-react";
+import { Laptop, Search, Users, MessageCircle, type LucideIcon } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { useUser } from "@/features/authentication/UserContext";
 
-const navigationItems = [
+type NavigationItem = {
+  href: string;
+  icon: LucideIcon;
+};
+
+const navigationItems: NavigationItem[] = [
   { href: "/dashboard", icon: Laptop },
   { href: "/startups", icon: Search },
   { href: "/connect", icon: Users },
   { href: "/message", icon: MessageCircle },
 ];
 
+const navLinkBaseClasses =
+  "flex h-12 w-12 items-center justify-center rounded-xl transition-all duration-200";
+const navLinkActiveClasses = "bg-primary text-primary-foreground";
+const navLinkInactiveClasses = "text-muted-foreground hover:bg-primary/10";
+
+function NavigationLink({ href, icon: Icon }: NavigationItem) {
+  return (
+    <Link
+      to={href}
+      activeProps={{
+        className: `${navLinkBaseClasses} ${navLinkActiveClasses}`,
+      }}
+      inactiveProps={{
+        className: `${navLinkBaseClasses} ${navLinkInactiveClasses}`,
+      }}
+    >
+      <Icon className="h-5 w-5" />
+    </Link>
+  );
+}
+
 export function BottomBar() {
   const { profile } = useUser();
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 h-16 bg-background border-t">
-      <div className="flex justify-around items-center h-full p-2">
-        {navigationItems.map(({ href, icon: Icon }) => (
-          <Link
-            key={href}
-            to={href}
-            activeProps={{
-              className:
-                "flex h-12 w-12 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-sm transition-all duration-200",
-            }}
-            inactiveProps={{
-              className:
-                "flex h-12 w-12 items-center justify-center rounded-xl text-muted-foreground hover:bg-primary/10 hover:text-foreground transition-all duration-200",
-            }}
-          >
-            <Icon className="h-5 w-5" />
-          </Link>
-        ))}
-        {profile.username && (
-          <Link
-            to={"/profile/$username"}
-            params={{ username: profile.username }}
-          >
-            <Avatar>
-              <AvatarImage src={profile.avatar_url} />
-            </Avatar>
-          </Link>
-        )}
-      </div>
-    </div>
+    <nav className="flex justify-evenly items-center w-full h-full">
+      {navigationItems.map((item) => (
+        <NavigationLink key={item.href} {...item} />
+      ))}
+      {profile.username && (
+        <Link
+          to={"/profile/$username"}
+          params={{ username: profile.username }}
+          activeProps={{
+            className: "ring-2 ring-primary ring-offset-2",
+          }}
+          className="rounded-full"
+        >
+          <Avatar>
+            <AvatarImage src={profile.avatar_url} />
+          </Avatar>
+        </Link>
+      )}
+    </nav>
   );
 }

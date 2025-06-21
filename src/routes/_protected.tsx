@@ -10,14 +10,14 @@ export const Route = createFileRoute("/_protected")({
 function RouteComponent() {
   return (
     <UserProvider>
-      <div className="flex h-screen sm:flex-row flex-col w-full">
+      <div className="flex min-h-screen sm:flex-row flex-col w-ful">
         <div className="w-20 hidden md:block">
           <LeftBar />
         </div>
-        <main className="flex-1 overflow-y-auto">
+        <main className="flex-1 w-full overflow-y-auto ">
           <Outlet />
         </main>
-        <div className="w-20 md:hidden">
+        <div className="h-20  flex items-center justify-center md:hidden">
           <BottomBar />
         </div>
       </div>
