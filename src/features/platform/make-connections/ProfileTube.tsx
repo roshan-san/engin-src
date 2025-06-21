@@ -2,16 +2,15 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { MapPin, User2 } from "lucide-react"
-import { acceptConnectionMutation, rejectConnectionMutation } from "../hooks/ConnectionHooks"
-import { useProfileById } from "../hooks/ProfileHooks"
+import { useMutation } from "convex/react"
+import { api } from "../../../../convex/_generated/api"
 
 export default function ProfileTube({ profileId, connectionId }: {
   profileId:string
   connectionId: string
 }) {
-  const acceptConnection = acceptConnectionMutation()
-  const rejectConnection = rejectConnectionMutation()
-  const profile= useProfileById(profileId)
+  const acceptConnection = useMutation(api.connections.mutations.acceptConnection)
+  const rejectConnection = useMutation(api.connections.mutations.rejectConnection)
 
   return (
     <Card className="p-4">
@@ -39,14 +38,14 @@ export default function ProfileTube({ profileId, connectionId }: {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => rejectConnection.mutate(connectionId)}
+            onClick={() => rejectConnection({ id: connectionId })}
             disabled={rejectConnection.isPending}
           >
             Decline
           </Button>
           <Button
             size="sm"
-            onClick={() => acceptConnection.mutate(connectionId)}
+            onClick={() => acceptConnection({ id: connectionId })}
             disabled={acceptConnection.isPending}
           >
             Accept

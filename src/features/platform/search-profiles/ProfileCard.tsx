@@ -1,13 +1,24 @@
 import { Card, CardContent } from '@/components/ui/card'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { MapPin, User2, Github, Linkedin, MessageSquare, UserPlus } from 'lucide-react'
+import { MapPin, User2, Github, Linkedin, MessageSquare, UserPlus, Check } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import type { Doc } from '@/../convex/_generated/dataModel'
+import { useMutation, useQuery } from 'convex/react'
+import { api } from '@/../convex/_generated/api'
 
 export default function ProfileCard({ profile }: { profile:Doc<"profiles"> }) {
+  const connection = useQuery(api.connections.queries.getConnection, {
+    receiverId: profile._id
+  })
+  const createConnection = useMutation(api.connections.mutations.createConnection)
+  const handleConnect = () => {
+    createConnection({
+      receiverId: profile._id
+    })
+  }
 
   return (
     <Card className="transition-colors duration-200 hover:bg-accent">
@@ -47,12 +58,12 @@ export default function ProfileCard({ profile }: { profile:Doc<"profiles"> }) {
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <Button size="icon" className="h-8 w-8">
-                        <UserPlus className="h-4 w-4" />
+                      <Button size="icon" className="h-8 w-8" onClick={handleConnect} disabled={!!connection}>
+                        {connection ? <Check className="h-4 w-4" /> : <UserPlus className="h-4 w-4" />}
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent>
-                      <p>Connect</p>
+                      <p>{connection ? (connection.status === 'accepted' ? 'Connected' : 'Request Sent') : 'Connect'}</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>

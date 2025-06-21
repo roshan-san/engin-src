@@ -16,3 +16,17 @@ export async function getAuthenticatedUser(ctx: QueryCtx | MutationCtx) {
     
     return user;
   }
+
+export async function getAuthenticatedProfile(ctx:QueryCtx | MutationCtx ){
+    const user = await getAuthenticatedUser(ctx);
+    const profile = await ctx.db
+      .query("profiles")
+      .withIndex("email", (q) => q.eq("email", user.email))
+      .first();
+
+    if (!profile) {
+      throw new Error("Profile not found");
+    }
+
+    return profile;
+}

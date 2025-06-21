@@ -27,7 +27,18 @@ const schema = defineSchema({
     github_url: v.optional(v.string()),
     linkedin_url: v.optional(v.string()),
   }).index("email", ["email"])
-  .searchIndex("by_username", { searchField: "username" })
+  .searchIndex("by_username", { searchField: "username" }),
+  connections: defineTable({
+    senderid: v.id("profiles"),
+    receiverid: v.id("profiles"),
+    status: v.union(
+      v.literal("pending"),
+      v.literal("accepted"),
+      v.literal("declined"),
+    ),
+  })
+    .index("by_sender", ["senderid", "status"])
+    .index("by_receiver", ["receiverid", "status"]),
 });
  
 export default schema;

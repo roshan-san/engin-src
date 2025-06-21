@@ -14,6 +14,9 @@ import type {
   FunctionReference,
 } from "convex/server";
 import type * as auth from "../auth.js";
+import type * as connections_functions from "../connections/functions.js";
+import type * as connections_mutations from "../connections/mutations.js";
+import type * as connections_queries from "../connections/queries.js";
 import type * as helper from "../helper.js";
 import type * as http from "../http.js";
 import type * as profile_mutations from "../profile/mutations.js";
@@ -30,6 +33,9 @@ import type * as profile_queries from "../profile/queries.js";
  */
 declare const fullApi: ApiFromModules<{
   auth: typeof auth;
+  "connections/functions": typeof connections_functions;
+  "connections/mutations": typeof connections_mutations;
+  "connections/queries": typeof connections_queries;
   helper: typeof helper;
   http: typeof http;
   "profile/mutations": typeof profile_mutations;
