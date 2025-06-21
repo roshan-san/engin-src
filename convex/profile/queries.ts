@@ -7,6 +7,15 @@ export const getProfileByUsername = query({
         username: v.optional(v.string())
     },
     handler: async function (ctx, args) {
+        const userId = await getAuthUserId(ctx)
+        if (!userId) {
+            throw new Error("Failed to find user Id")
+        }
+        const user = await ctx.db.get(userId)
+
+        if (!user) {
+            throw new Error("Failed to find user in database")
+        }
         const profile = ctx.db.query("profiles")
             .filter((q) => q.eq(q.field("username"), args.username))
         return profile
@@ -14,25 +23,3 @@ export const getProfileByUsername = query({
 }
 )
 
-export const getUserProfile = query({
-    args: {},
-    handler: async (ctx) => {
-        const userId = await getAuthUserId(ctx);
-        if (!userId) {
-            return null;
-        }
-        const user = await ctx.db.get(userId);
-        if (!user) {
-            throw new Error("User not found or not authenticated");
-        }
-        const profile = await ctx.db
-            .query("profiles")
-            .withIndex("email", (q) => q.eq("email", user.email))
-            .unique();
-
-        return {
-            user,
-            profile: profile || null
-        };
-    }
-});

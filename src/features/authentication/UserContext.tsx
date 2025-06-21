@@ -12,7 +12,7 @@ type UserContextType = {
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
-  const data = useQuery(api.profile.getUserProfile);
+  const data = useQuery(api.profile.queries);
   const profile = data?.profile;
 
   if (profile === undefined) {

@@ -14,13 +14,14 @@ export const createProfile = mutation({
     linkedin_url: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    const userId = await getAuthUserId(ctx);
+    const userId = await getAuthUserId(ctx)
     if (!userId) {
-        return null;
+      throw new Error("Failed to find user Id")
     }
-    const user = await ctx.db.get(userId);
+    const user = await ctx.db.get(userId)
+    
     if (!user) {
-      throw new Error("User not found or not authenticated");
+      throw new Error("Failed to find user in database")
     }
 
     const profile = await ctx.db.insert("profiles", {
