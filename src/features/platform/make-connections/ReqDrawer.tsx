@@ -8,7 +8,7 @@ import { api } from "../../../../convex/_generated/api"
 import type { Doc } from "../../../../convex/_generated/dataModel"
 
 export default function ReqDrawer() {
-  const pendingConnections = useQuery(api.connections.queries.getRequests);
+  const pendingConnections = useQuery(api.connections.queries.getMyPendingConnections);
 
   return (
     <Drawer>

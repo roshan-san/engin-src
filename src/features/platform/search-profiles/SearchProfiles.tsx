@@ -26,7 +26,7 @@ export default function SearchProfiles() {
             className="w-full h-14 rounded-2xl"
           />
         </div>
-        {/* <ReqDrawer /> */}
+        <ReqDrawer />
       </div>
 
       {status === 'LoadingFirstPage' ? (

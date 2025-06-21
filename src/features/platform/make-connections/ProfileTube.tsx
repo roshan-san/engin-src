@@ -1,57 +1,63 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
-import { MapPin, User2 } from "lucide-react"
-import { useMutation } from "convex/react"
-import { api } from "../../../../convex/_generated/api"
+import { useMutation, useQuery } from "convex/react";
+import { api } from "../../../../convex/_generated/api";
+import type { Id } from "../../../../convex/_generated/dataModel";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Link } from "@tanstack/react-router";
 
-export default function ProfileTube({ profileId, connectionId }: {
-  profileId:string
-  connectionId: string
+export default function ProfileTube({
+  profileId,
+  connectionId,
+}: {
+  profileId: Id<"profiles">;
+  connectionId: Id<"connections">;
 }) {
-  const acceptConnection = useMutation(api.connections.mutations.acceptConnection)
-  const rejectConnection = useMutation(api.connections.mutations.rejectConnection)
+  const profile = useQuery(api.profile.queries.getProfileById, {
+    profileId,
+  });
+  const acceptConnection = useMutation(
+    api.connections.mutations.acceptConnection
+  );
+  const rejectConnection = useMutation(
+    api.connections.mutations.rejectConnection
+  );
+
+  const handleAccept = () => {
+    acceptConnection({ id: connectionId });
+  };
+
+  const handleReject = () => {
+    rejectConnection({ id: connectionId });
+  };
+
+  if (!profile) return <div>Loading...</div>;
 
   return (
-    <Card className="p-4">
-      <div className="flex items-center gap-4">
-        <Avatar className="h-12 w-12">
-          <AvatarImage src={profile.data?.avatar_url || undefined} />
-          <AvatarFallback>{profile.data?.full_name.charAt(0)}</AvatarFallback>
-        </Avatar>
-        <div className="flex-1 min-w-0">
-          <h3 className="font-semibold truncate">{profile.data?.full_name}</h3>
-          <p className="text-sm text-muted-foreground truncate">@{profile.data?.username}</p>
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <User2 className="h-4 w-4" />
-            <span>{profile.data?.user_type}</span>
-            {profile.data?.location && (
-              <>
-                <span>•</span>
-                <MapPin className="h-4 w-4" />
-                <span>{profile.data?.location}</span>
-              </>
-            )}
-          </div>
-        </div>
-        <div className="flex gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => rejectConnection({ id: connectionId })}
-            disabled={rejectConnection.isPending}
-          >
-            Decline
-          </Button>
-          <Button
-            size="sm"
-            onClick={() => acceptConnection({ id: connectionId })}
-            disabled={acceptConnection.isPending}
-          >
-            Accept
-          </Button>
+    <div className="flex items-center justify-between p-2 rounded-lg transition-colors hover:bg-accent">
+      <div className="flex items-center gap-3">
+        <Link to="/profile/$username" params={{ username: profile.username ?? ''}}>
+          <Avatar>
+            <AvatarImage src={profile.avatar_url} />
+            <AvatarFallback>{profile.name?.charAt(0)}</AvatarFallback>
+          </Avatar>
+        </Link>
+        <div className="flex flex-col">
+          <Link to="/profile/$username" params={{ username: profile.username ?? '' }}>
+            <span className="font-semibold">{profile.name}</span>
+          </Link>
+          <span className="text-sm text-muted-foreground">
+            @{profile.username}
+          </span>
         </div>
       </div>
-    </Card>
-  )
+      <div className="flex items-center gap-2">
+        <Button size="sm" onClick={handleAccept}>
+          Accept
+        </Button>
+        <Button size="sm" variant="destructive" onClick={handleReject}>
+          Reject
+        </Button>
+      </div>
+    </div>
+  );
 } 

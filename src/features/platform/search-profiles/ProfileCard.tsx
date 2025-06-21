@@ -1,6 +1,15 @@
 import { Card, CardContent } from '@/components/ui/card'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { MapPin, User2, Github, Linkedin, MessageSquare, UserPlus, Check } from 'lucide-react'
+import {
+  FaMapMarkerAlt,
+  FaUser,
+  FaGithub,
+  FaLinkedin,
+  FaEnvelope,
+  FaUserPlus,
+  FaTimes,
+  FaUserMinus
+} from 'react-icons/fa'
 import { Link } from '@tanstack/react-router'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -10,15 +19,51 @@ import { useMutation, useQuery } from 'convex/react'
 import { api } from '@/../convex/_generated/api'
 
 export default function ProfileCard({ profile }: { profile:Doc<"profiles"> }) {
-  const connection = useQuery(api.connections.queries.getConnection, {
+  const connection = useQuery(api.connections.queries.getConnectionStatus, {
     receiverId: profile._id
   })
+
   const createConnection = useMutation(api.connections.mutations.createConnection)
-  const handleConnect = () => {
-    createConnection({
-      receiverId: profile._id
-    })
+  const rejectConnection = useMutation(api.connections.mutations.rejectConnection)
+
+  const handleConnectionAction = () => {
+    if (!connection) {
+      createConnection({
+        receiverId: profile._id
+      })
+    } else {
+      rejectConnection({
+        id: connection._id
+      })
+    }
   }
+
+  const getButtonContent = () => {
+    if (!connection) {
+      return {
+        icon: <FaUserPlus className="h-4 w-4" />,
+        text: 'Connect'
+      }
+    }
+    if (connection.status === 'accepted') {
+      return {
+        icon: <FaUserMinus className="h-4 w-4" />,
+        text: 'Remove Friend'
+      }
+    }
+    if (connection.status === 'pending') {
+      return {
+        icon: <FaTimes className="h-4 w-4" />,
+        text: 'Cancel Request'
+      }
+    }
+    return {
+      icon: <FaUserPlus className="h-4 w-4" />,
+      text: 'Connect'
+    }
+  }
+
+  const buttonContent = getButtonContent()
 
   return (
     <Card className="transition-colors duration-200 hover:bg-accent">
@@ -46,7 +91,7 @@ export default function ProfileCard({ profile }: { profile:Doc<"profiles"> }) {
                     <TooltipTrigger asChild>
                       <Button size="icon" variant="outline" className="h-8 w-8" asChild>
                         <Link to='/message/$username' params={{ username: profile.username ?? '' }}>
-                          <MessageSquare className="h-4 w-4" />
+                          <FaEnvelope className="h-4 w-4" />
                         </Link>
                       </Button>
                     </TooltipTrigger>
@@ -58,12 +103,12 @@ export default function ProfileCard({ profile }: { profile:Doc<"profiles"> }) {
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <Button size="icon" className="h-8 w-8" onClick={handleConnect} disabled={!!connection}>
-                        {connection ? <Check className="h-4 w-4" /> : <UserPlus className="h-4 w-4" />}
+                      <Button size="icon" className="h-8 w-8" onClick={handleConnectionAction}>
+                        {buttonContent.icon}
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent>
-                      <p>{connection ? (connection.status === 'accepted' ? 'Connected' : 'Request Sent') : 'Connect'}</p>
+                      <p>{buttonContent.text}</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -77,7 +122,7 @@ export default function ProfileCard({ profile }: { profile:Doc<"profiles"> }) {
                           target="_blank"
                           className="text-muted-foreground hover:text-foreground"
                         >
-                          <Github className="h-4 w-4" />
+                          <FaGithub className="h-4 w-4" />
                         </Link>
                       </TooltipTrigger>
                       <TooltipContent>
@@ -95,7 +140,7 @@ export default function ProfileCard({ profile }: { profile:Doc<"profiles"> }) {
                           target="_blank"
                           className="text-muted-foreground hover:text-foreground"
                         >
-                          <Linkedin className="h-4 w-4" />
+                          <FaLinkedin className="h-4 w-4" />
                         </Link>
                       </TooltipTrigger>
                       <TooltipContent>
@@ -109,12 +154,12 @@ export default function ProfileCard({ profile }: { profile:Doc<"profiles"> }) {
 
             <div className="flex items-center gap-2 mt-3 flex-wrap">
                 <Badge variant="secondary" className="gap-1.5 text-xs">
-                  <User2 className="h-3 w-3" />
+                  <FaUser className="h-3 w-3" />
                   {profile.user_type}
                 </Badge>
                 {profile.location && (
                   <Badge variant="outline" className="gap-1.5 text-xs">
-                    <MapPin className="h-3 w-3" />
+                    <FaMapMarkerAlt className="h-3 w-3" />
                     {profile.location}
                   </Badge>
                 )}

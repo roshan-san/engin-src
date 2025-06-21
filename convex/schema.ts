@@ -38,7 +38,8 @@ const schema = defineSchema({
     ),
   })
     .index("by_sender", ["senderid", "status"])
-    .index("by_receiver", ["receiverid", "status"]),
+    .index("by_receiver", ["receiverid", "status"])
+    .index("by_sender_receiver", ["senderid", "receiverid"]),
 });
  
 export default schema;

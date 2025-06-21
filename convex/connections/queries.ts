@@ -45,6 +45,32 @@ export const getAcceptedConnectionsById = query({
         return [...connections, ...connections2];
     },
 });
+
+export const getConnectionStatus = query({
+    args:{
+        receiverId: v.id("profiles")
+    },
+    handler: async (ctx, args) => {
+        const sender = await getAuthenticatedProfile(ctx)
+
+        const connection = await ctx.db
+            .query("connections")
+            .withIndex("by_sender_receiver", q => q.eq("senderid", sender._id).eq("receiverid", args.receiverId))
+            .first()
+        
+        if (connection) {
+            return connection;
+        }
+
+        const connection2 = await ctx.db
+            .query("connections")
+            .withIndex("by_sender_receiver", q => q.eq("senderid", args.receiverId).eq("receiverid", sender._id))
+            .first()
+
+        return connection2;
+    }
+})
+
 export const getMyPendingConnections = query({
     handler: async (ctx) => {
         const profile = await getAuthenticatedProfile(ctx)

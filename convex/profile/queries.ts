@@ -1,6 +1,7 @@
 import { v } from "convex/values";
 import { query } from "../_generated/server";
 import { getAuthUserId } from "@convex-dev/auth/server";
+import { getProfileByIdfn } from "../connections/functions";
 
 export const getProfileByUsername = query({
     args: {
@@ -12,6 +13,14 @@ export const getProfileByUsername = query({
             .filter((q) => q.eq(q.field("username"), args.username))
         return profile
     }
-}
-)
+})
+
+export const getProfileById = query({
+    args:{
+        profileId: v.id("profiles")
+    },
+    handler: async (ctx, args) => {
+        return await getProfileByIdfn(ctx, args.profileId);
+    }
+})
 
