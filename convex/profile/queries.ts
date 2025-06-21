@@ -2,6 +2,13 @@ import { v } from "convex/values";
 import { query } from "../_generated/server";
 import { getAuthUserId } from "@convex-dev/auth/server";
 import { getProfileByIdfn } from "../connections/functions";
+import { getAuthenticatedProfile } from "../helper";
+
+export const getMyProfile = query({
+  handler: async (ctx) => {
+    return await getAuthenticatedProfile(ctx);
+  },
+});
 
 export const getProfileByUsername = query({
   args: {

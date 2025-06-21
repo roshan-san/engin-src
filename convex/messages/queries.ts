@@ -47,9 +47,12 @@ export const getProfileByUsername = query({
 
 export const getMessages = query({
     args: {
-        otherUserId: v.id("profiles"),
+        otherUserId: v.optional(v.id("profiles")),
     },
     handler: async (ctx, args) => {
+        if (!args.otherUserId) {
+            return [];
+        }
         const myProfile = await getAuthenticatedProfile(ctx);
         const myId = myProfile._id;
         const otherUserId = args.otherUserId;
