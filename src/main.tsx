@@ -5,27 +5,14 @@ import "./index.css"
 // Import the generated route tree
 import { routeTree } from './routeTree.gen'
 import { ThemeProvider } from './components/ThemeProvider'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
-// Create a new router instance
+import { ConvexReactClient } from 'convex/react'
+import { ConvexAuthProvider } from '@convex-dev/auth/react'
+    
 const router = createRouter({ routeTree })
 
-// Create a client with custom defaults
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 1000 * 60 * 5, // 5 minutes
-      retry: 1,
-      refetchOnWindowFocus: false,
-    },
-    mutations: {
-      retry: 1,
-    },
-  },
-})
+const convex = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL);
 
-// Register the router instance for type safety
 declare module '@tanstack/react-router' {
   interface Register {
     router: typeof router
@@ -37,11 +24,10 @@ const rootElement = document.getElementById('root')!
 if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement)
   root.render(
-      <ThemeProvider>
-        <QueryClientProvider client={queryClient}>
+    <ThemeProvider>
+      <ConvexAuthProvider client={convex}>
           <RouterProvider router={router} />
-          <ReactQueryDevtools initialIsOpen={false} />
-        </QueryClientProvider>
-      </ThemeProvider>
+      </ConvexAuthProvider>
+    </ThemeProvider>
   )
 }

@@ -5,24 +5,27 @@ import { Authenticated, Unauthenticated, useQuery } from 'convex/react'
 import { OnboardingProvider } from '@/features/onboarding/context/OnboardContext'
 import OnboardingSteps from '@/features/onboarding/OnboardingSteps'
 import {api} from "@/../convex/_generated/api"
+import { FullScreenLoader } from '@/components/FullScreenLoader'
+
 export const Route = createFileRoute('/')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
   const data = useQuery(api.profile.getUserProfile) 
+  
   return (
     <div className="min-h-screen flex flex-col">
       <Authenticated>
-        {data?.profile? 
-          (<Navigate to='/dashboard'/>):
-          (
-            <OnboardingProvider>
+        {data === undefined ? (
+          <FullScreenLoader/>
+        ) : data?.profile ? (
+          <Navigate to='/dashboard'/>
+        ) : (
+          <OnboardingProvider>
             <OnboardingSteps />
           </OnboardingProvider>
-          )
-        }
-        
+        )}
       </Authenticated>
       <Unauthenticated>
         <Header />

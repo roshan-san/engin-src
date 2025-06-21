@@ -13,7 +13,9 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as ProtectedImport } from './routes/_protected'
 import { Route as IndexImport } from './routes/index'
+import { Route as ProtectedTestImport } from './routes/_protected/test'
 import { Route as ProtectedDashboardImport } from './routes/_protected/dashboard'
+import { Route as ProtectedProfileUsernameImport } from './routes/_protected/profile.$username'
 
 // Create/Update Routes
 
@@ -28,9 +30,21 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const ProtectedTestRoute = ProtectedTestImport.update({
+  id: '/test',
+  path: '/test',
+  getParentRoute: () => ProtectedRoute,
+} as any)
+
 const ProtectedDashboardRoute = ProtectedDashboardImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => ProtectedRoute,
+} as any)
+
+const ProtectedProfileUsernameRoute = ProtectedProfileUsernameImport.update({
+  id: '/profile/$username',
+  path: '/profile/$username',
   getParentRoute: () => ProtectedRoute,
 } as any)
 
@@ -59,6 +73,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedDashboardImport
       parentRoute: typeof ProtectedImport
     }
+    '/_protected/test': {
+      id: '/_protected/test'
+      path: '/test'
+      fullPath: '/test'
+      preLoaderRoute: typeof ProtectedTestImport
+      parentRoute: typeof ProtectedImport
+    }
+    '/_protected/profile/$username': {
+      id: '/_protected/profile/$username'
+      path: '/profile/$username'
+      fullPath: '/profile/$username'
+      preLoaderRoute: typeof ProtectedProfileUsernameImport
+      parentRoute: typeof ProtectedImport
+    }
   }
 }
 
@@ -66,10 +94,14 @@ declare module '@tanstack/react-router' {
 
 interface ProtectedRouteChildren {
   ProtectedDashboardRoute: typeof ProtectedDashboardRoute
+  ProtectedTestRoute: typeof ProtectedTestRoute
+  ProtectedProfileUsernameRoute: typeof ProtectedProfileUsernameRoute
 }
 
 const ProtectedRouteChildren: ProtectedRouteChildren = {
   ProtectedDashboardRoute: ProtectedDashboardRoute,
+  ProtectedTestRoute: ProtectedTestRoute,
+  ProtectedProfileUsernameRoute: ProtectedProfileUsernameRoute,
 }
 
 const ProtectedRouteWithChildren = ProtectedRoute._addFileChildren(
@@ -80,12 +112,16 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '': typeof ProtectedRouteWithChildren
   '/dashboard': typeof ProtectedDashboardRoute
+  '/test': typeof ProtectedTestRoute
+  '/profile/$username': typeof ProtectedProfileUsernameRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '': typeof ProtectedRouteWithChildren
   '/dashboard': typeof ProtectedDashboardRoute
+  '/test': typeof ProtectedTestRoute
+  '/profile/$username': typeof ProtectedProfileUsernameRoute
 }
 
 export interface FileRoutesById {
@@ -93,14 +129,22 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_protected': typeof ProtectedRouteWithChildren
   '/_protected/dashboard': typeof ProtectedDashboardRoute
+  '/_protected/test': typeof ProtectedTestRoute
+  '/_protected/profile/$username': typeof ProtectedProfileUsernameRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '' | '/dashboard'
+  fullPaths: '/' | '' | '/dashboard' | '/test' | '/profile/$username'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '' | '/dashboard'
-  id: '__root__' | '/' | '/_protected' | '/_protected/dashboard'
+  to: '/' | '' | '/dashboard' | '/test' | '/profile/$username'
+  id:
+    | '__root__'
+    | '/'
+    | '/_protected'
+    | '/_protected/dashboard'
+    | '/_protected/test'
+    | '/_protected/profile/$username'
   fileRoutesById: FileRoutesById
 }
 
@@ -134,11 +178,21 @@ export const routeTree = rootRoute
     "/_protected": {
       "filePath": "_protected.tsx",
       "children": [
-        "/_protected/dashboard"
+        "/_protected/dashboard",
+        "/_protected/test",
+        "/_protected/profile/$username"
       ]
     },
     "/_protected/dashboard": {
       "filePath": "_protected/dashboard.tsx",
+      "parent": "/_protected"
+    },
+    "/_protected/test": {
+      "filePath": "_protected/test.tsx",
+      "parent": "/_protected"
+    },
+    "/_protected/profile/$username": {
+      "filePath": "_protected/profile.$username.tsx",
       "parent": "/_protected"
     }
   }

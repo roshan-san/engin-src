@@ -1,10 +1,10 @@
-import type { Profile } from "@/types/supa-types";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ProfileHeader } from "@/features/platform/view-profile/components/ProfileHeader";
 import { ProfileAbout } from "@/features/platform/view-profile/components/ProfileAbout";
 import { ProfileSkills } from "@/features/platform/view-profile/components/ProfileSkills";
+import type { Doc } from "@/../convex/_generated/dataModel";
 
-export default function PublicProfileView({ profile }: { profile: Profile }) {
+export default function PublicProfileView({ profile }: { profile: Doc<"profiles"> }) {
   return (
     <div className="h-full flex flex-col border-2 gap-4 items-center justify-center border-red-800">
       <ProfileHeader profile={profile}/>

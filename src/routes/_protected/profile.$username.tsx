@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import ViewProfile from '@/features/platform/view-profile/ViewProfile'
-import { useMe } from '@/features/authentication/contexts/AuthContext'
+import { useUser } from '@/features/auth/UserContext'
 
 
 export const Route = createFileRoute('/_protected/profile/$username')({
@@ -8,6 +8,6 @@ export const Route = createFileRoute('/_protected/profile/$username')({
 })
 
 function ProfilePage() {
-  const {profile} =useMe()
+  const {profile} =useUser()
   return < ViewProfile profile={profile} />
 }
