@@ -3,6 +3,8 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/compo
 import SignOutButton from "./SignOut";
 import { Link } from "@tanstack/react-router";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { useQuery } from "convex/react";
+import { api } from "@/../convex/_generated/api";
 
 const mainNavigationItems = [
   { href: "/dashboard", icon: Laptop, label: "Dashboard" },
@@ -12,6 +14,7 @@ const mainNavigationItems = [
 ];
 
 export function LeftBar() {
+  const profile = useQuery(api.profile.getUserProfile)?.profile
   return (
     <div className="flex h-full flex-col items-center">
       <div className="flex flex-col items-center gap-8 flex-grow py-10">
@@ -40,23 +43,23 @@ export function LeftBar() {
       </div>
 
       <div className="flex flex-col items-center gap-6 pb-10">
-        {/* <TooltipProvider>
+        <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
                 <Link
                   to={"/profile/$username"}
-                  params={{ username: profile.username }}
+                  params={{ username: profile?.username }}
                 >
                   <Avatar>
-                    <AvatarImage src={profile.avatar_url} />
+                    <AvatarImage src={profile?.avatar_url} />
                   </Avatar>
                 </Link>
             </TooltipTrigger>
             <TooltipContent side="right" className="font-medium">
-              <p>{profile.full_name}</p>
+              <p>{profile?.name}</p>
             </TooltipContent>
           </Tooltip>
-        </TooltipProvider> */}
+        </TooltipProvider>
 
         <TooltipProvider>
           <Tooltip>

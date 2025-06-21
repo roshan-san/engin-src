@@ -1,29 +1,25 @@
 import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
+import { getAuthUserId } from "@convex-dev/auth/server";
 
 export const getUserProfile = query({
   args: {},
   handler: async (ctx) => {
-    const identity = await ctx.auth.getUserIdentity();
+    const userId = await getAuthUserId(ctx);
     
-    if (!identity || !identity.email) {
+    if (!userId) {
       return null;
     }
     
-    // Check if user exists in users table
-    const user = await ctx.db
-      .query("users")
-      .withIndex("email", (q) => q.eq("email", identity.email))
-      .unique();
-      
+    const user = await ctx.db.get(userId);
+    
     if (!user) {
       return null;
     }
     
-    // Check if profile exists
     const profile = await ctx.db
       .query("profiles")
-      .withIndex("email", (q) => q.eq("email", identity.email))
+      .withIndex("email", (q) => q.eq("email", user.email))
       .unique();
       
     return {
@@ -45,36 +41,14 @@ export const createProfile = mutation({
     linkedin_url: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-  
-    const identity = await ctx.auth.getUserIdentity();
-    console.log("Identity check:", identity);
-    
-    if (!identity) {
-      throw new Error("Not authenticated - no identity found");
+    const userId = await getAuthUserId(ctx)
+    if (!userId) {
+      throw new Error("Failed to find user Id")
     }
-    
-    if (!identity.subject) {
-      throw new Error("Not authenticated - no subject found in identity");
-    }
-    
-    if (!identity.email) {
-      throw new Error("Not authenticated - no email found in identity");
-    }
-    
-    console.log("Identity details:", {
-      subject: identity.subject,
-      email: identity.email,
-      name: identity.name,
-      picture: identity.picture
-    });
-    
-    let user = await ctx.db
-      .query("users")
-      .withIndex("email", (q) => q.eq("email", identity.email))
-      .unique();
+    const user = await ctx.db.get(userId)
     
     if (!user) {
-      throw new Error("Failed to create user in database");
+      throw new Error("Failed to find user in database")
     }
 
     const profile = await ctx.db.insert("profiles", {

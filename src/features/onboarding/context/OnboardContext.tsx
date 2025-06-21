@@ -23,7 +23,7 @@ export const OnboardingProvider = ({
 
   const updateData = (newData: Record<string, any>) =>
     setOnboardingData((prev) => ({ ...prev, ...newData }));
-  const createProfile = useMutation(api.onboarding.createProfile)
+  const createProfile = useMutation(api.profile.createProfile)
   const nextStep = (data?: Record<string, any>) => {
     if (data) {
       updateData(data);

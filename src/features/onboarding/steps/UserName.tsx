@@ -3,31 +3,23 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { FaUser } from "react-icons/fa";
 import { useOnboarding } from "../context/OnboardContext";
-import { GithubButton } from "../../authentication/login-buttons/GithubButton";
-import { GoogleButton } from "../../authentication/login-buttons/GoogleButton";
-import { useConvexAuth } from "convex/react";
 
 export default function UserName() {
   const { nextStep, previousStep, onboardingData } = useOnboarding();
   const [username, setUsername] = useState(onboardingData.username || "");
-  const { isAuthenticated } = useConvexAuth();
 
   const handleSubmit = () => {
-    if (!isAuthenticated) {
-      alert("Please sign in first to continue with onboarding");
-      return;
-    }
     nextStep({ username });
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && isAuthenticated && username.trim()) {
+    if (e.key === "Enter" && username.trim()) {
       handleSubmit();
     }
   };
 
   return (
-    <div className="w-full flex justify-center items-center gap-6 flex-col h-full p-4 ">
+    <div className="w-full flex justify-center items-center gap-6 flex-col h-full p-4 max-w-2xl mx-auto">
       <div className="flex flex-col gap-6 w-full">
         <h3 className="text-xl font-semibold text-foreground tracking-wide uppercase flex items-center gap-3">
           <FaUser className="text-primary w-5 h-5" />
@@ -41,7 +33,6 @@ export default function UserName() {
             onKeyDown={handleKeyDown}
             className="h-14 text-lg rounded-xl"
             autoFocus
-            disabled={!isAuthenticated}
           />
         </div>
       </div>
@@ -57,7 +48,7 @@ export default function UserName() {
         <Button
           type="button"
           onClick={handleSubmit}
-          disabled={!isAuthenticated || !username.trim()}
+          disabled={!username.trim()}
           className="flex-1 h-12 text-lg font-medium transition-all hover:scale-[1.02]"
         >
           Next

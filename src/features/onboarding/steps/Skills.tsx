@@ -32,12 +32,6 @@ export default function Skills() {
     }
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && skills.length > 0) {
-      handleSubmit();
-    }
-  };
-
   return (
     <div className="w-full flex justify-center items-center gap-6 flex-col h-full p-4 max-w-2xl mx-auto">
       <div className="flex flex-col gap-6 w-full">
