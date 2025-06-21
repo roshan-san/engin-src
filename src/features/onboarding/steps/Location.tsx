@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useOnboarding } from "../context/OnboardContext";
 
-
 export default function Location() {
   const { nextStep, previousStep, onboardingData } = useOnboarding();
   const [location, setLocation] = useState(onboardingData.location || "");
@@ -28,7 +27,7 @@ export default function Location() {
           <Input
             placeholder="Enter your location"
             value={location}
-            onChange={e => setLocation(e.target.value)}
+            onChange={(e) => setLocation(e.target.value)}
             onKeyDown={handleKeyDown}
             className="h-14 text-lg rounded-xl"
             autoFocus
@@ -54,4 +53,4 @@ export default function Location() {
       </div>
     </div>
   );
-} 
+}

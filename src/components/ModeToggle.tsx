@@ -1,10 +1,10 @@
-import { Moon, Sun } from "lucide-react"
-import { Switch } from "./ui/switch"
-import { Label } from "./ui/label"
-import { useTheme } from "./ThemeProvider"
+import { Moon, Sun } from "lucide-react";
+import { Switch } from "./ui/switch";
+import { Label } from "./ui/label";
+import { useTheme } from "./ThemeProvider";
 
 export function ModeToggle() {
-  const { theme, setTheme } = useTheme()
+  const { theme, setTheme } = useTheme();
 
   return (
     <div className="flex items-center space-x-2">
@@ -12,7 +12,7 @@ export function ModeToggle() {
         id="theme-mode"
         checked={theme === "dark"}
         onCheckedChange={(checked) => {
-          setTheme(checked ? "dark" : "light")
+          setTheme(checked ? "dark" : "light");
         }}
       />
       <Label htmlFor="theme-mode" className="flex items-center gap-2">
@@ -24,5 +24,5 @@ export function ModeToggle() {
         <span className="sr-only">Toggle theme</span>
       </Label>
     </div>
-  )
+  );
 }

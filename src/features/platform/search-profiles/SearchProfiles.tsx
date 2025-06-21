@@ -1,17 +1,11 @@
-import { Input } from '@/components/ui/input';
-import { useProfileSearch } from './useProfileSearch';
-import ProfileCard from './ProfileCard';
-import ReqDrawer from '../make-connections/ReqDrawer';
+import { Input } from "@/components/ui/input";
+import { useProfileSearch } from "./useProfileSearch";
+import ProfileCard from "./ProfileCard";
+import ReqDrawer from "../make-connections/ReqDrawer";
 
 export default function SearchProfiles() {
-  const {
-    searchQuery,
-    setSearchQuery,
-    profiles,
-    status,
-    loadMore,
-    ref,
-  } = useProfileSearch();
+  const { searchQuery, setSearchQuery, profiles, status, loadMore, ref } =
+    useProfileSearch();
 
   return (
     <div className="h-full flex flex-col gap-6 p-4">
@@ -29,7 +23,7 @@ export default function SearchProfiles() {
         <ReqDrawer />
       </div>
 
-      {status === 'LoadingFirstPage' ? (
+      {status === "LoadingFirstPage" ? (
         <div className="flex items-center justify-center h-32 text-gray-500">
           Loading...
         </div>
@@ -42,9 +36,9 @@ export default function SearchProfiles() {
             ref={ref}
             className="col-span-full h-16 flex items-center justify-center text-gray-500"
           >
-            {status === 'LoadingMore' ? (
+            {status === "LoadingMore" ? (
               <div className="animate-pulse">Loading more...</div>
-            ) : status === 'CanLoadMore' ? (
+            ) : status === "CanLoadMore" ? (
               <button
                 onClick={() => loadMore(9)}
                 className="cursor-pointer hover:text-blue-500 transition-colors"

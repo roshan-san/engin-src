@@ -1,81 +1,81 @@
-import type { Profile, ProfileInsert } from "@/types/supa-types"
-import supabase from "@/utils/supabase"
+import type { Profile, ProfileInsert } from "@/types/supa-types";
+import supabase from "@/utils/supabase";
 export async function getProfileByIdApi(id: string) {
   const { data, error } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('id', id)
-    .single()
+    .from("profiles")
+    .select("*")
+    .eq("id", id)
+    .single();
 
   if (error) {
-    throw new Error(`Error fetching user: ${error.message}`)
+    throw new Error(`Error fetching user: ${error.message}`);
   }
-  return data
+  return data;
 }
 export async function getProfileByUsername(username: string) {
   const { data, error } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('username', username)
-    .single()
+    .from("profiles")
+    .select("*")
+    .eq("username", username)
+    .single();
 
   if (error) {
-    throw new Error(`Error fetching user: ${error.message}`)
+    throw new Error(`Error fetching user: ${error.message}`);
   }
-  return data
+  return data;
 }
 
 export async function updateProfile(id: string, updatedData: Partial<Profile>) {
   const { data, error } = await supabase
-    .from('profiles')
+    .from("profiles")
     .update(updatedData)
-    .eq('id', id)
+    .eq("id", id);
 
   if (error) {
-    throw new Error(`Error updating user: ${error.message}`)
+    throw new Error(`Error updating user: ${error.message}`);
   }
-  return data
+  return data;
 }
-export async function updatePfp(file: File,id:string) {
-  const fileExt = file.name.split('.').pop()
-  const fileName = `${id}-${Math.random()}.${fileExt}`
-  const filePath = `avatars/${fileName}`
+export async function updatePfp(file: File, id: string) {
+  const fileExt = file.name.split(".").pop();
+  const fileName = `${id}-${Math.random()}.${fileExt}`;
+  const filePath = `avatars/${fileName}`;
 
   const { error: uploadError } = await supabase.storage
-    .from('avatars')
-    .upload(filePath, file)
+    .from("avatars")
+    .upload(filePath, file);
 
   if (uploadError) {
-    throw new Error(`Error uploading avatar: ${uploadError.message}`)
+    throw new Error(`Error uploading avatar: ${uploadError.message}`);
   }
 
-  const { data: { publicUrl } } = supabase.storage
-    .from('avatars')
-    .getPublicUrl(filePath)
+  const {
+    data: { publicUrl },
+  } = supabase.storage.from("avatars").getPublicUrl(filePath);
 
-  await updateProfile(id, { avatar_url: publicUrl })
+  await updateProfile(id, { avatar_url: publicUrl });
 
-  return publicUrl
-} 
+  return publicUrl;
+}
 
 export async function createProfileApi(profileData: ProfileInsert) {
   const { data, error } = await supabase
-    .from('profiles')
+    .from("profiles")
     .insert(profileData)
     .select()
-    .single()
+    .single();
 
   if (error) {
-    throw new Error(`Error creating profile: ${error.message}`)
+    throw new Error(`Error creating profile: ${error.message}`);
   }
-  return data
+  return data;
 }
 export async function checkUsernameApi(username: string) {
   const { data, error } = await supabase
-    .from('profiles')
-    .select('username')
-    .eq('username', username)
-    .maybeSingle()
-  if (error) throw error
-  return !!data
+    .from("profiles")
+    .select("username")
+    .eq("username", username)
+    .maybeSingle();
+  if (error) throw error;
+  return !!data;
 }

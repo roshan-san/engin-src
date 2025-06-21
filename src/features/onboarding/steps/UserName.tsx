@@ -24,12 +24,12 @@ export default function UserName() {
         <h3 className="text-xl font-semibold text-foreground tracking-wide uppercase flex items-center gap-3">
           <FaUser className="text-primary w-5 h-5" />
           Choose your username
-        </h3>        
+        </h3>
         <div className="space-y-4">
           <Input
             placeholder="Enter your username"
             value={username}
-            onChange={e => setUsername(e.target.value)}
+            onChange={(e) => setUsername(e.target.value)}
             onKeyDown={handleKeyDown}
             className="h-14 text-lg rounded-xl"
             autoFocus
@@ -56,4 +56,4 @@ export default function UserName() {
       </div>
     </div>
   );
-} 
+}

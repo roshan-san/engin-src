@@ -1,20 +1,20 @@
-import type { StartupInsert } from "@/types/supa-types"
-import supabase from "@/utils/supabase"
+import type { StartupInsert } from "@/types/supa-types";
+import supabase from "@/utils/supabase";
 
-export async function getAllStartupsByIdApi(id:string) {
+export async function getAllStartupsByIdApi(id: string) {
   const { data, error } = await supabase
-    .from('startups')
-    .select('*')
-    .eq("founder_id",id)
+    .from("startups")
+    .select("*")
+    .eq("founder_id", id);
   if (error) {
-    throw new Error(`Error fetching startups: ${error.message}`)
+    throw new Error(`Error fetching startups: ${error.message}`);
   }
-  return data
+  return data;
 }
 
 export async function createStartupApi(data: StartupInsert) {
   const { data: startup, error } = await supabase
-    .from('startups')
+    .from("startups")
     .insert([data])
     .select()
     .single();
@@ -27,11 +27,12 @@ export async function createStartupApi(data: StartupInsert) {
 }
 
 export async function getMyStartupsApi() {
-  const { data: { user }, error: authError } = await supabase.auth.getUser()
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser();
   if (authError || !user) {
-    throw new Error('User not authenticated')
+    throw new Error("User not authenticated");
   }
-  return getAllStartupsByIdApi(user.id)
+  return getAllStartupsByIdApi(user.id);
 }
-
-

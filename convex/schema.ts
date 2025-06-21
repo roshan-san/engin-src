@@ -1,7 +1,7 @@
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 import { authTables } from "@convex-dev/auth/server";
- 
+
 const schema = defineSchema({
   ...authTables,
   users: defineTable({
@@ -14,10 +14,10 @@ const schema = defineSchema({
     isAnonymous: v.optional(v.boolean()),
     // other "users" fields...
   }).index("email", ["email"]),
-  profiles:defineTable({
-    name:v.optional(v.string()),
+  profiles: defineTable({
+    name: v.optional(v.string()),
     email: v.optional(v.string()),
-    avatar_url:v.optional(v.string()),
+    avatar_url: v.optional(v.string()),
     username: v.optional(v.string()),
     user_type: v.optional(v.string()),
     work_type: v.optional(v.string()),
@@ -26,8 +26,9 @@ const schema = defineSchema({
     interests: v.optional(v.array(v.string())),
     github_url: v.optional(v.string()),
     linkedin_url: v.optional(v.string()),
-  }).index("email", ["email"])
-  .searchIndex("by_username", { searchField: "username" }),
+  })
+    .index("email", ["email"])
+    .searchIndex("by_username", { searchField: "username" }),
   connections: defineTable({
     senderid: v.id("profiles"),
     receiverid: v.id("profiles"),
@@ -41,5 +42,5 @@ const schema = defineSchema({
     .index("by_receiver", ["receiverid", "status"])
     .index("by_sender_receiver", ["senderid", "receiverid"]),
 });
- 
+
 export default schema;

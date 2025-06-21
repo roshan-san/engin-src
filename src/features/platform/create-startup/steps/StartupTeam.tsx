@@ -2,12 +2,17 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {Form,FormControl,FormField,FormItem,FormMessage} from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
 import { FaUsers } from "react-icons/fa";
 import { startupTeamSchema } from "@/features/platform/create-startup/validations/startup";
 import { useStartupCreation } from "../context/StartupCreateContext";
 import type { StartupInsert } from "@/types/supa-types";
-
 
 export default function StartupTeam() {
   const { startupCreationData, nextStep, previousStep } = useStartupCreation();
@@ -34,18 +39,21 @@ export default function StartupTeam() {
           <FaUsers className="text-primary w-5 h-5" />
           How many team members?
         </h3>
-        
+
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="space-y-4"
+          >
             <FormField
               control={form.control}
               name="team_size"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input 
+                    <Input
                       type="number"
-                      placeholder="Enter team size" 
+                      placeholder="Enter team size"
                       {...field}
                       className="h-14 text-lg rounded-xl"
                       autoFocus
@@ -60,15 +68,15 @@ export default function StartupTeam() {
       </div>
 
       <div className="w-full p-4 flex justify-between gap-4 mt-4">
-        <Button 
-          type="button" 
-          variant="outline" 
+        <Button
+          type="button"
+          variant="outline"
           onClick={previousStep}
           className="flex-1 h-12 text-lg font-medium hover:bg-muted/50 transition-colors"
         >
           Previous
         </Button>
-        <Button 
+        <Button
           type="submit"
           onClick={form.handleSubmit(handleSubmit)}
           className="flex-1 h-12 text-lg font-medium transition-all hover:scale-[1.02]"
@@ -78,4 +86,4 @@ export default function StartupTeam() {
       </div>
     </div>
   );
-} 
+}

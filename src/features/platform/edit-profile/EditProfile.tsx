@@ -4,11 +4,11 @@ import Dropdowns from "./components/Dropdowns";
 import { AvatarEditor } from "./components/AvatarEdit";
 
 export default function EditProfile({ profile }: { profile: Profile }) {
-  return (  
+  return (
     <div className="flex items-center justify-center">
-      <Connections profile={profile}/>
-      <Dropdowns profile={profile}/>
-      <AvatarEditor profile={profile}/>
+      <Connections profile={profile} />
+      <Dropdowns profile={profile} />
+      <AvatarEditor profile={profile} />
     </div>
-  )
+  );
 }

@@ -1,10 +1,10 @@
-import { useAuthActions } from '@convex-dev/auth/react';
-import { createFileRoute } from '@tanstack/react-router'
-import { useConvexAuth } from 'convex/react';
+import { useAuthActions } from "@convex-dev/auth/react";
+import { createFileRoute } from "@tanstack/react-router";
+import { useConvexAuth } from "convex/react";
 
-export const Route = createFileRoute('/_protected/dashboard')({
+export const Route = createFileRoute("/_protected/dashboard")({
   component: RouteComponent,
-})
+});
 
 function RouteComponent() {
   const { isAuthenticated } = useConvexAuth();

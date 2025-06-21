@@ -15,17 +15,15 @@ import { useStartupCreation } from "../context/StartupCreateContext";
 import type { StartupInsert } from "@/types/supa-types";
 import { createStartupMutation } from "../../hooks/StartupHooks";
 
-
-
 export default function StartupFunding() {
-  const { startupCreationData, nextStep, previousStep} = useStartupCreation();
+  const { startupCreationData, nextStep, previousStep } = useStartupCreation();
   const form = useForm({
     resolver: zodResolver(startupFundingSchema),
     defaultValues: {
       funding: startupCreationData.funding || 0,
     },
   });
-  const createStartup= createStartupMutation()
+  const createStartup = createStartupMutation();
 
   const handleSubmit = async (data: StartupInsert) => {
     const isValid = await form.trigger();
@@ -33,7 +31,7 @@ export default function StartupFunding() {
       nextStep({
         funding: data.funding,
       });
-            createStartup.mutate(startupCreationData)
+      createStartup.mutate(startupCreationData);
     }
   };
 
@@ -44,18 +42,21 @@ export default function StartupFunding() {
           <FaMoneyBillWave className="text-primary w-5 h-5" />
           How much funding do you have?
         </h3>
-        
+
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="space-y-4"
+          >
             <FormField
               control={form.control}
               name="funding"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input 
+                    <Input
                       type="number"
-                      placeholder="Enter funding amount" 
+                      placeholder="Enter funding amount"
                       {...field}
                       className="h-14 text-lg rounded-xl"
                       autoFocus
@@ -70,15 +71,15 @@ export default function StartupFunding() {
       </div>
 
       <div className="w-full p-4 flex justify-between gap-4 mt-4">
-        <Button 
-          type="button" 
-          variant="outline" 
+        <Button
+          type="button"
+          variant="outline"
           onClick={previousStep}
           className="flex-1 h-12 text-lg font-medium hover:bg-muted/50 transition-colors"
         >
           Previous
         </Button>
-        <Button 
+        <Button
           type="submit"
           onClick={form.handleSubmit(handleSubmit)}
           disabled={createStartup.isPending}
@@ -89,4 +90,4 @@ export default function StartupFunding() {
       </div>
     </div>
   );
-} 
+}

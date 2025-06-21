@@ -1,14 +1,26 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
-import { Card, CardContent } from '@/components/ui/card'
-import { Camera, Loader2 } from 'lucide-react'
-import type { Profile } from '@/types/supa-types'
-import { useProfileAvatar } from '../hooks/useProfileAvatar'
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Card, CardContent } from "@/components/ui/card";
+import { Camera, Loader2 } from "lucide-react";
+import type { Profile } from "@/types/supa-types";
+import { useProfileAvatar } from "../hooks/useProfileAvatar";
 
 export function AvatarEditor({ profile }: { profile: Profile }) {
-  const { selectedFile, previewUrl, isUploading, handleFileChange, handleAvatarUpload } = useProfileAvatar(profile)
+  const {
+    selectedFile,
+    previewUrl,
+    isUploading,
+    handleFileChange,
+    handleAvatarUpload,
+  } = useProfileAvatar(profile);
 
   return (
     <Dialog>
@@ -17,7 +29,12 @@ export function AvatarEditor({ profile }: { profile: Profile }) {
           <CardContent className="p-0">
             <Avatar className="h-40 w-40">
               <AvatarImage src={profile.avatar_url} alt={profile.full_name} />
-              <AvatarFallback className="text-2xl">{profile.full_name.split(' ').map((n: string) => n[0]).join('')}</AvatarFallback>
+              <AvatarFallback className="text-2xl">
+                {profile.full_name
+                  .split(" ")
+                  .map((n: string) => n[0])
+                  .join("")}
+              </AvatarFallback>
             </Avatar>
             <div className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
               <Camera className="h-10 w-10 text-white" />
@@ -38,7 +55,12 @@ export function AvatarEditor({ profile }: { profile: Profile }) {
             ) : (
               <Avatar className="h-32 w-32">
                 <AvatarImage src={profile.avatar_url} alt={profile.full_name} />
-                <AvatarFallback>{profile.full_name.split(' ').map((n: string) => n[0]).join('')}</AvatarFallback>
+                <AvatarFallback>
+                  {profile.full_name
+                    .split(" ")
+                    .map((n: string) => n[0])
+                    .join("")}
+                </AvatarFallback>
               </Avatar>
             )}
             <Input
@@ -60,11 +82,11 @@ export function AvatarEditor({ profile }: { profile: Profile }) {
                 Uploading...
               </>
             ) : (
-              'Upload Avatar'
+              "Upload Avatar"
             )}
           </Button>
         </CardContent>
       </DialogContent>
     </Dialog>
-  )
-} 
+  );
+}

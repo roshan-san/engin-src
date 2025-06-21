@@ -1,5 +1,5 @@
 import { v } from "convex/values";
-import { mutation} from "../_generated/server";
+import { mutation } from "../_generated/server";
 import { getAuthenticatedUser } from "../helper";
 
 export const createProfile = mutation({
@@ -15,7 +15,7 @@ export const createProfile = mutation({
   },
   handler: async (ctx, args) => {
     const user = await getAuthenticatedUser(ctx);
-    
+
     if (!user) {
       throw new Error("Failed to find user in database");
     }
@@ -35,5 +35,5 @@ export const createProfile = mutation({
     });
 
     return profile;
-  }
-}); 
+  },
+});

@@ -1,13 +1,13 @@
 import { mutation } from "../_generated/server";
 import { v } from "convex/values";
-import { getAuthenticatedProfile, } from "../helper";
+import { getAuthenticatedProfile } from "../helper";
 
 export const createConnection = mutation({
   args: {
     receiverId: v.id("profiles"),
   },
   handler: async (ctx, args) => {
-    const sender = await getAuthenticatedProfile(ctx)
+    const sender = await getAuthenticatedProfile(ctx);
 
     const request = await ctx.db.insert("connections", {
       senderid: sender._id,
@@ -23,7 +23,7 @@ export const acceptConnection = mutation({
     id: v.id("connections"),
   },
   handler: async (ctx, args) => {
-    await getAuthenticatedProfile(ctx)
+    await getAuthenticatedProfile(ctx);
     return await ctx.db.patch(args.id, {
       status: "accepted",
     });
@@ -35,7 +35,7 @@ export const rejectConnection = mutation({
     id: v.id("connections"),
   },
   handler: async (ctx, args) => {
-    await getAuthenticatedProfile(ctx)
+    await getAuthenticatedProfile(ctx);
     return await ctx.db.delete(args.id);
   },
 });

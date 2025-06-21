@@ -1,14 +1,23 @@
-import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger, DrawerDescription } from "@/components/ui/drawer"
-import { Button } from "@/components/ui/button"
-import { HiBell } from "react-icons/hi"
-import { Skeleton } from "@/components/ui/skeleton"
-import ProfileTube from "./ProfileTube"
-import { useQuery } from "convex/react"
-import { api } from "../../../../convex/_generated/api"
-import type { Doc } from "../../../../convex/_generated/dataModel"
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+  DrawerDescription,
+} from "@/components/ui/drawer";
+import { Button } from "@/components/ui/button";
+import { HiBell } from "react-icons/hi";
+import { Skeleton } from "@/components/ui/skeleton";
+import ProfileTube from "./ProfileTube";
+import { useQuery } from "convex/react";
+import { api } from "../../../../convex/_generated/api";
+import type { Doc } from "../../../../convex/_generated/dataModel";
 
 export default function ReqDrawer() {
-  const pendingConnections = useQuery(api.connections.queries.getMyPendingConnections);
+  const pendingConnections = useQuery(
+    api.connections.queries.getMyPendingConnections,
+  );
 
   return (
     <Drawer>
@@ -44,16 +53,17 @@ export default function ReqDrawer() {
             <div className="space-y-4">
               {pendingConnections.map((connection: Doc<"connections">) => {
                 return (
-                <ProfileTube
-                  key={connection._id}
-                  connectionId={connection._id}
-                  profileId={connection.senderid}
-                />
-              )})}
+                  <ProfileTube
+                    key={connection._id}
+                    connectionId={connection._id}
+                    profileId={connection.senderid}
+                  />
+                );
+              })}
             </div>
           )}
-        </div>   
+        </div>
       </DrawerContent>
     </Drawer>
-  )
-} 
+  );
+}

@@ -14,7 +14,6 @@ import { startupDescriptionSchema } from "@/features/platform/create-startup/val
 import { useStartupCreation } from "../context/StartupCreateContext";
 import type { StartupInsert } from "@/types/supa-types";
 
-
 export default function StartupDescription() {
   const { startupCreationData, nextStep, previousStep } = useStartupCreation();
   const form = useForm({
@@ -40,17 +39,20 @@ export default function StartupDescription() {
           <FaInfoCircle className="text-primary w-5 h-5" />
           Describe your startup
         </h3>
-        
+
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="space-y-4"
+          >
             <FormField
               control={form.control}
               name="description"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input 
-                      placeholder="Tell us about your startup..." 
+                    <Input
+                      placeholder="Tell us about your startup..."
                       {...field}
                       className="h-32 text-lg rounded-xl resize-none"
                       autoFocus
@@ -65,15 +67,15 @@ export default function StartupDescription() {
       </div>
 
       <div className="w-full p-4 flex justify-between gap-4 mt-4">
-        <Button 
-          type="button" 
-          variant="outline" 
+        <Button
+          type="button"
+          variant="outline"
           onClick={previousStep}
           className="flex-1 h-12 text-lg font-medium hover:bg-muted/50 transition-colors"
         >
           Previous
         </Button>
-        <Button 
+        <Button
           type="submit"
           onClick={form.handleSubmit(handleSubmit)}
           className="flex-1 h-12 text-lg font-medium transition-all hover:scale-[1.02]"
@@ -83,4 +85,4 @@ export default function StartupDescription() {
       </div>
     </div>
   );
-} 
+}

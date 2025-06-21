@@ -1,11 +1,20 @@
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import type { Profile } from "@/types/supa-types";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import type { Doc } from "@/../convex/_generated/dataModel";
 
-export function ProfileSkills({ profile }:{
-  profile: Profile;
-}) {
+export function ProfileSkills({ profile }: { profile: Doc<"profiles"> }) {
   return (
     <div className="space-y-6">
       <Card>
@@ -19,7 +28,10 @@ export function ProfileSkills({ profile }:{
               <TooltipProvider key={index}>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Badge variant="outline" className="text-sm px-3 py-1 bg-blue-50 text-blue-700 hover:bg-blue-100">
+                    <Badge
+                      variant="outline"
+                      className="text-sm px-3 py-1 bg-blue-50 text-blue-700 hover:bg-blue-100"
+                    >
                       {interest}
                     </Badge>
                   </TooltipTrigger>
@@ -59,4 +71,4 @@ export function ProfileSkills({ profile }:{
       </Card>
     </div>
   );
-} 
+}

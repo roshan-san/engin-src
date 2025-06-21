@@ -1,6 +1,6 @@
-import { Input } from '@/components/ui/input';
-import StartupCard from './StartupCard';
-import { useStartupSearch } from './useStartupSearch';
+import { Input } from "@/components/ui/input";
+import StartupCard from "./StartupCard";
+import { useStartupSearch } from "./useStartupSearch";
 
 export default function SearchStartups() {
   const {
@@ -26,23 +26,32 @@ export default function SearchStartups() {
         />
       </div>
 
-      {status === 'pending' ? (
-        <div className="flex items-center justify-center h-32 text-gray-500">Loading...</div>
-      ) : status === 'error' ? (
-        <div className="flex items-center justify-center h-32 text-red-500">Error loading startups</div>
+      {status === "pending" ? (
+        <div className="flex items-center justify-center h-32 text-gray-500">
+          Loading...
+        </div>
+      ) : status === "error" ? (
+        <div className="flex items-center justify-center h-32 text-red-500">
+          Error loading startups
+        </div>
       ) : data ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {data.pages.map((page) => (
+          {data.pages.map((page) =>
             page.map((startup) => (
               <StartupCard key={startup.id} startup={startup} />
-            ))
-          ))}
-          
-          <div ref={ref} className="col-span-full h-16 flex items-center justify-center text-gray-500">
+            )),
+          )}
+
+          <div
+            ref={ref}
+            className="col-span-full h-16 flex items-center justify-center text-gray-500"
+          >
             {isFetchingNextPage ? (
               <div className="animate-pulse">Loading more...</div>
             ) : hasNextPage ? (
-              <div className="cursor-pointer hover:text-blue-500 transition-colors">Load more</div>
+              <div className="cursor-pointer hover:text-blue-500 transition-colors">
+                Load more
+              </div>
             ) : (
               <div>No more startups to load</div>
             )}

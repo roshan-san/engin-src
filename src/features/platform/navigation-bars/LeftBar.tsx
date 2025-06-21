@@ -1,5 +1,10 @@
 import { Laptop, Search, Users, MessageCircle } from "lucide-react";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import SignOutButton from "./SignOut";
 import { Link } from "@tanstack/react-router";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
@@ -25,10 +30,12 @@ export function LeftBar() {
                 <Link
                   to={item.href}
                   activeProps={{
-                    className: "bg-primary text-primary-foreground shadow-sm p-2.5 rounded-lg transition-all duration-200"
+                    className:
+                      "bg-primary text-primary-foreground shadow-sm p-2.5 rounded-lg transition-all duration-200",
                   }}
                   inactiveProps={{
-                    className: "text-muted-foreground hover:bg-primary/10 hover:text-foreground p-2.5 rounded-lg transition-all duration-200"
+                    className:
+                      "text-muted-foreground hover:bg-primary/10 hover:text-foreground p-2.5 rounded-lg transition-all duration-200",
                   }}
                 >
                   <item.icon className="h-5 w-5" />

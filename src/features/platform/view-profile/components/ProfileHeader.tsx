@@ -2,12 +2,17 @@ import { MapPin, Briefcase, MessageSquare, Users } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { Link } from "@tanstack/react-router";
-import type { Profile } from "@/types/supa-types";
+import type { Doc } from "@/../convex/_generated/dataModel";
 
 interface ProfileHeaderProps {
-  profile: Profile;
+  profile: Doc<"profiles">;
 }
 
 export function ProfileHeader({ profile }: ProfileHeaderProps) {
@@ -16,29 +21,38 @@ export function ProfileHeader({ profile }: ProfileHeaderProps) {
       <CardContent>
         <div className="flex items-center justify-around gap-6 ring">
           <Avatar className="w-24 h-24 shadow-lg">
-            <AvatarImage src={profile.avatar_url} alt={profile.full_name} />
-            <AvatarFallback className="text-2xl">{profile.full_name?.charAt(0)}</AvatarFallback>
+            <AvatarImage src={profile.avatar_url} alt={profile.name} />
+            <AvatarFallback className="text-2xl">
+              {profile.name?.charAt(0)}
+            </AvatarFallback>
           </Avatar>
 
           <div className="flex-1 ring">
             <div className="flex flex-col md:flex-row md:items-center jusity-between gap-4">
               <div>
-                <h1 className="text-xl md:text-3xl font-bold tracking-tight">{profile.full_name}</h1>
-                <p className="text-lg md:text-xl text-muted-foreground">@{profile.username}</p>
+                <h1 className="text-xl md:text-3xl font-bold tracking-tight">
+                  {profile.name}
+                </h1>
+                <p className="text-lg md:text-xl text-muted-foreground">
+                  @{profile.username}
+                </p>
               </div>
               <div className="flex gap-2 ring">
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <Button variant="outline" size="sm" asChild>
-                        <Link to="/message/$username" params={{ username: profile.username }}>
+                        <Link
+                          to="/message/$username"
+                          params={{ username: profile.username }}
+                        >
                           <MessageSquare className="w-4 h-4 mr-2" />
                           Message
                         </Link>
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent>
-                      <p>Send a message to {profile.full_name}</p>
+                      <p>Send a message to {profile.name}</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -93,4 +107,4 @@ export function ProfileHeader({ profile }: ProfileHeaderProps) {
       </CardContent>
     </Card>
   );
-} 
+}

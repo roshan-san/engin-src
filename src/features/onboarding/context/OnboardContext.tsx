@@ -1,6 +1,6 @@
 import { useMutation } from "convex/react";
 import { createContext, useContext, useState } from "react";
-import {api} from "@/../convex/_generated/api"
+import { api } from "@/../convex/_generated/api";
 import { useConvexAuth } from "convex/react";
 
 type OnboardingContextType = {
@@ -12,9 +12,9 @@ type OnboardingContextType = {
 
 const OnboardingContext = createContext<OnboardingContextType | null>(null);
 
-export const OnboardingProvider = ({ 
+export const OnboardingProvider = ({
   children,
-}: { 
+}: {
   children: React.ReactNode;
 }) => {
   const [onboardingData, setOnboardingData] = useState<Record<string, any>>({});
@@ -23,7 +23,7 @@ export const OnboardingProvider = ({
 
   const updateData = (newData: Record<string, any>) =>
     setOnboardingData((prev) => ({ ...prev, ...newData }));
-  const createProfile = useMutation(api.profile.createProfile)
+  const createProfile = useMutation(api.profile.createProfile);
   const nextStep = (data?: Record<string, any>) => {
     if (data) {
       updateData(data);
@@ -52,12 +52,14 @@ export const OnboardingProvider = ({
   };
 
   return (
-    <OnboardingContext.Provider value={{ 
-      onboardingData,  
-      step, 
-      nextStep, 
-      previousStep,
-    }}>
+    <OnboardingContext.Provider
+      value={{
+        onboardingData,
+        step,
+        nextStep,
+        previousStep,
+      }}
+    >
       {children}
     </OnboardingContext.Provider>
   );
@@ -65,6 +67,7 @@ export const OnboardingProvider = ({
 
 export const useOnboarding = () => {
   const context = useContext(OnboardingContext);
-  if (!context) throw new Error("useOnboarding must be used within OnboardingProvider");
+  if (!context)
+    throw new Error("useOnboarding must be used within OnboardingProvider");
   return context;
 };

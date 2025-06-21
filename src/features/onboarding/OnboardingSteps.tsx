@@ -12,11 +12,11 @@ export default function OnboardingSteps() {
 
   return (
     <div className="h-screen p-2">
-      <Progress hidden={step==0} value={(step/7)*100}/>
+      <Progress hidden={step == 0} value={(step / 7) * 100} />
       {step === 1 && <UserName />}
       {step === 2 && <UserType />}
       {step === 3 && <WorkType />}
-      {step === 4 && <Location />}    
+      {step === 4 && <Location />}
       {step === 5 && <Skills />}
       {step === 6 && <Interests />}
       {step === 7 && <Contact />}

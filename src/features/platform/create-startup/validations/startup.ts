@@ -13,11 +13,15 @@ export const startupLocationSchema = z.object({
 });
 
 export const startupProblemSchema = z.object({
-  problem: z.string().min(10, "Problem description must be at least 10 characters"),
+  problem: z
+    .string()
+    .min(10, "Problem description must be at least 10 characters"),
 });
 
 export const startupSolutionSchema = z.object({
-  solution: z.string().min(10, "Solution description must be at least 10 characters"),
+  solution: z
+    .string()
+    .min(10, "Solution description must be at least 10 characters"),
 });
 
 export const startupTeamSchema = z.object({

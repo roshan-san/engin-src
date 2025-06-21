@@ -14,7 +14,6 @@ import { startupProblemSchema } from "@/features/platform/create-startup/validat
 import { useStartupCreation } from "../context/StartupCreateContext";
 import type { StartupInsert } from "@/types/supa-types";
 
-
 export default function StartupProblem() {
   const { startupCreationData, nextStep, previousStep } = useStartupCreation();
   const form = useForm({
@@ -24,7 +23,7 @@ export default function StartupProblem() {
     },
   });
 
-  const handleSubmit = async (data:StartupInsert) => {
+  const handleSubmit = async (data: StartupInsert) => {
     const isValid = await form.trigger();
     if (isValid) {
       nextStep({
@@ -40,17 +39,20 @@ export default function StartupProblem() {
           <FaExclamationTriangle className="text-primary w-5 h-5" />
           What problem are you solving?
         </h3>
-        
+
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="space-y-4"
+          >
             <FormField
               control={form.control}
               name="problem"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input 
-                      placeholder="Describe the problem your startup is solving..." 
+                    <Input
+                      placeholder="Describe the problem your startup is solving..."
                       {...field}
                       className="h-32 text-lg rounded-xl resize-none"
                       autoFocus
@@ -65,15 +67,15 @@ export default function StartupProblem() {
       </div>
 
       <div className="w-full p-4 flex justify-between gap-4 mt-4">
-        <Button 
-          type="button" 
-          variant="outline" 
+        <Button
+          type="button"
+          variant="outline"
           onClick={previousStep}
           className="flex-1 h-12 text-lg font-medium hover:bg-muted/50 transition-colors"
         >
           Previous
         </Button>
-        <Button 
+        <Button
           type="submit"
           onClick={form.handleSubmit(handleSubmit)}
           className="flex-1 h-12 text-lg font-medium transition-all hover:scale-[1.02]"
@@ -83,4 +85,4 @@ export default function StartupProblem() {
       </div>
     </div>
   );
-} 
+}

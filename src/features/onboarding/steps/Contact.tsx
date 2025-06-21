@@ -4,11 +4,12 @@ import { Input } from "@/components/ui/input";
 import { FaGithub, FaLinkedinIn } from "react-icons/fa";
 import { useOnboarding } from "../context/OnboardContext";
 
-
 export default function Contact() {
   const { nextStep, previousStep, onboardingData } = useOnboarding();
   const [githubUrl, setGithubUrl] = useState(onboardingData.github_url || "");
-  const [linkedinUrl, setLinkedinUrl] = useState(onboardingData.linkedin_url || "");
+  const [linkedinUrl, setLinkedinUrl] = useState(
+    onboardingData.linkedin_url || "",
+  );
 
   const handleSubmit = () => {
     nextStep({ github_url: githubUrl, linkedin_url: linkedinUrl });
@@ -33,7 +34,7 @@ export default function Contact() {
             <Input
               placeholder="GitHub URL"
               value={githubUrl}
-              onChange={e => setGithubUrl(e.target.value)}
+              onChange={(e) => setGithubUrl(e.target.value)}
               onKeyDown={handleKeyDown}
               className="h-14 text-lg rounded-xl"
               autoFocus
@@ -44,7 +45,7 @@ export default function Contact() {
             <Input
               placeholder="LinkedIn URL"
               value={linkedinUrl}
-              onChange={e => setLinkedinUrl(e.target.value)}
+              onChange={(e) => setLinkedinUrl(e.target.value)}
               onKeyDown={handleKeyDown}
               className="h-14 text-lg rounded-xl"
             />

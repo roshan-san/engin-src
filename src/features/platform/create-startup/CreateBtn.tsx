@@ -1,5 +1,12 @@
 import { Button } from "@/components/ui/button";
-import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription, DrawerTrigger } from "@/components/ui/drawer";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerDescription,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
 import { FaPlus } from "react-icons/fa";
 import StartupCreationSteps from "./StartupCreationSteps";
 import { StartupCreateProvider } from "./context/StartupCreateContext";
@@ -19,7 +26,7 @@ export default function CreateBtn() {
               <DrawerDescription></DrawerDescription>
             </DrawerHeader>
             <StartupCreateProvider>
-            <StartupCreationSteps />
+              <StartupCreationSteps />
             </StartupCreateProvider>
           </DrawerContent>
         </Drawer>

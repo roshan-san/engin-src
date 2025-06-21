@@ -10,9 +10,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { FaLightbulb } from "react-icons/fa";
-import { startupSolutionSchema, type StartupSolutionFormValues } from "@/features/platform/create-startup/validations/startup";
+import {
+  startupSolutionSchema,
+  type StartupSolutionFormValues,
+} from "@/features/platform/create-startup/validations/startup";
 import { useStartupCreation } from "../context/StartupCreateContext";
-
 
 export default function StartupSolution() {
   const { startupCreationData, nextStep, previousStep } = useStartupCreation();
@@ -39,17 +41,20 @@ export default function StartupSolution() {
           <FaLightbulb className="text-primary w-5 h-5" />
           What&apos;s your solution?
         </h3>
-        
+
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="space-y-4"
+          >
             <FormField
               control={form.control}
               name="solution"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input 
-                      placeholder="Describe your solution to the problem..." 
+                    <Input
+                      placeholder="Describe your solution to the problem..."
                       {...field}
                       className="h-32 text-lg rounded-xl resize-none"
                       autoFocus
@@ -64,15 +69,15 @@ export default function StartupSolution() {
       </div>
 
       <div className="w-full p-4 flex justify-between gap-4 mt-4">
-        <Button 
-          type="button" 
-          variant="outline" 
+        <Button
+          type="button"
+          variant="outline"
           onClick={previousStep}
           className="flex-1 h-12 text-lg font-medium hover:bg-muted/50 transition-colors"
         >
           Previous
         </Button>
-        <Button 
+        <Button
           type="submit"
           onClick={form.handleSubmit(handleSubmit)}
           className="flex-1 h-12 text-lg font-medium transition-all hover:scale-[1.02]"
@@ -82,4 +87,4 @@ export default function StartupSolution() {
       </div>
     </div>
   );
-} 
+}

@@ -4,7 +4,6 @@ import { Input } from "@/components/ui/input";
 import { FaTools, FaPlus, FaTimes } from "react-icons/fa";
 import { useOnboarding } from "../context/OnboardContext";
 
-
 export default function Skills() {
   const { nextStep, previousStep, onboardingData } = useOnboarding();
   const [skills, setSkills] = useState<string[]>(onboardingData.skills || []);
@@ -45,8 +44,8 @@ export default function Skills() {
               <Input
                 placeholder="Add a skill"
                 value={newSkill}
-                onChange={e => setNewSkill(e.target.value)}
-                onKeyDown={e => {
+                onChange={(e) => setNewSkill(e.target.value)}
+                onKeyDown={(e) => {
                   if (e.key === "Enter") {
                     e.preventDefault();
                     if (newSkill.trim()) {
@@ -69,7 +68,9 @@ export default function Skills() {
             </div>
             <div className="flex flex-wrap gap-3">
               {skills.length === 0 ? (
-                <p className="text-muted-foreground">No skills added yet. Add some to get started!</p>
+                <p className="text-muted-foreground">
+                  No skills added yet. Add some to get started!
+                </p>
               ) : (
                 skills.map((skill, index) => (
                   <div

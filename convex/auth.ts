@@ -1,6 +1,6 @@
 import GitHub from "@auth/core/providers/github";
 import Google from "@auth/core/providers/google";
-import { convexAuth} from "@convex-dev/auth/server";
+import { convexAuth } from "@convex-dev/auth/server";
 import { query } from "./_generated/server";
 import { getAuthenticatedUser } from "./helper";
 
@@ -29,10 +29,10 @@ export const getUser = query({
 
       return {
         user,
-        profile: profile || null
+        profile: profile || null,
       };
     } catch (error) {
-      return null
+      return null;
     }
-  }
-});  
+  },
+});

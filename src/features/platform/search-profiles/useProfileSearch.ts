@@ -14,7 +14,7 @@ export const useProfileSearch = () => {
   } = usePaginatedQuery(
     api.profile.profileSearch.getProfiles,
     { searchQuery },
-    { initialNumItems: 9 }
+    { initialNumItems: 9 },
   );
 
   const { ref } = useInView({

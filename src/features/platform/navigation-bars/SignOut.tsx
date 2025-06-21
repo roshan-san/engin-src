@@ -1,9 +1,9 @@
-import { Button } from '@/components/ui/button'
-import { useAuthActions } from '@convex-dev/auth/react'
-import { LogOut } from 'lucide-react'
+import { Button } from "@/components/ui/button";
+import { useAuthActions } from "@convex-dev/auth/react";
+import { LogOut } from "lucide-react";
 
 export default function SignOutButton() {
-  const {signOut}= useAuthActions()
+  const { signOut } = useAuthActions();
   return (
     <Button
       variant="ghost"
@@ -13,5 +13,5 @@ export default function SignOutButton() {
     >
       <LogOut className="h-5 w-5" />
     </Button>
-  )
+  );
 }

@@ -16,10 +16,10 @@ export default function ProfileTube({
     profileId,
   });
   const acceptConnection = useMutation(
-    api.connections.mutations.acceptConnection
+    api.connections.mutations.acceptConnection,
   );
   const rejectConnection = useMutation(
-    api.connections.mutations.rejectConnection
+    api.connections.mutations.rejectConnection,
   );
 
   const handleAccept = () => {
@@ -35,14 +35,20 @@ export default function ProfileTube({
   return (
     <div className="flex items-center justify-between p-2 rounded-lg transition-colors hover:bg-accent">
       <div className="flex items-center gap-3">
-        <Link to="/profile/$username" params={{ username: profile.username ?? ''}}>
+        <Link
+          to="/profile/$username"
+          params={{ username: profile.username ?? "" }}
+        >
           <Avatar>
             <AvatarImage src={profile.avatar_url} />
             <AvatarFallback>{profile.name?.charAt(0)}</AvatarFallback>
           </Avatar>
         </Link>
         <div className="flex flex-col">
-          <Link to="/profile/$username" params={{ username: profile.username ?? '' }}>
+          <Link
+            to="/profile/$username"
+            params={{ username: profile.username ?? "" }}
+          >
             <span className="font-semibold">{profile.name}</span>
           </Link>
           <span className="text-sm text-muted-foreground">
@@ -60,4 +66,4 @@ export default function ProfileTube({
       </div>
     </div>
   );
-} 
+}

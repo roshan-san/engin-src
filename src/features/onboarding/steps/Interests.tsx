@@ -6,7 +6,9 @@ import { useOnboarding } from "../context/OnboardContext";
 
 export default function Interests() {
   const { nextStep, previousStep, onboardingData } = useOnboarding();
-  const [interests, setInterests] = useState<string[]>(onboardingData.interests || []);
+  const [interests, setInterests] = useState<string[]>(
+    onboardingData.interests || [],
+  );
   const [newInterest, setNewInterest] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -50,8 +52,8 @@ export default function Interests() {
               <Input
                 placeholder="Add an interest"
                 value={newInterest}
-                onChange={e => setNewInterest(e.target.value)}
-                onKeyDown={e => {
+                onChange={(e) => setNewInterest(e.target.value)}
+                onKeyDown={(e) => {
                   if (e.key === "Enter") {
                     e.preventDefault();
                     if (newInterest.trim()) {
@@ -74,7 +76,9 @@ export default function Interests() {
             </div>
             <div className="flex flex-wrap gap-3">
               {interests.length === 0 ? (
-                <p className="text-muted-foreground">No interests added yet. Add some to get started!</p>
+                <p className="text-muted-foreground">
+                  No interests added yet. Add some to get started!
+                </p>
               ) : (
                 interests.map((interest, index) => (
                   <div

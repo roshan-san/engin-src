@@ -1,6 +1,9 @@
 import { Id } from "../_generated/dataModel";
-import { QueryCtx, MutationCtx ,} from "../_generated/server";
+import { QueryCtx, MutationCtx } from "../_generated/server";
 
-export async function getProfileByIdfn(ctx: QueryCtx | MutationCtx,id:Id<"profiles">) {
-    return await ctx.db.get(id);
+export async function getProfileByIdfn(
+  ctx: QueryCtx | MutationCtx,
+  id: Id<"profiles">,
+) {
+  return await ctx.db.get(id);
 }

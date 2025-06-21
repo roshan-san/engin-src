@@ -1,5 +1,5 @@
-import type { StartupInsert } from "@/types/supa-types";
 import { createContext, useContext, useState } from "react";
+import type { StartupInsert } from "@/types/supa-types";
 
 
 type StartupCreationContextType = {

@@ -1,11 +1,17 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import type { Profile } from "@/types/supa-types";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
+import type { Doc } from "@/../convex/_generated/dataModel";
 import { Github, Linkedin, ExternalLink } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
 interface ProfileAboutProps {
-  profile: Profile;
+  profile: Doc<"profiles">;
 }
 
 interface SocialLink {
@@ -16,10 +22,15 @@ interface SocialLink {
 
 function SocialLinkButton({ icon: Icon, label, url }: SocialLink) {
   if (!url) return null;
-  
+
   return (
     <Button variant="outline" className="w-full justify-start group" asChild>
-      <a href={url} target="_blank" rel="noopener noreferrer" className="flex items-center">
+      <a
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="flex items-center"
+      >
         <Icon className="w-4 h-4 mr-2" />
         <span className="flex-1">{label}</span>
         <ExternalLink className="w-4 h-4 ml-2 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -38,16 +49,6 @@ export function ProfileAbout({ profile }: ProfileAboutProps) {
     <div className="space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle>About</CardTitle>
-          <CardDescription>Professional summary</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <p className="text-muted-foreground leading-relaxed">{profile.bio || "No bio available"}</p>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
           <CardTitle>Social Links</CardTitle>
           <CardDescription>Connect on professional networks</CardDescription>
         </CardHeader>
@@ -61,4 +62,4 @@ export function ProfileAbout({ profile }: ProfileAboutProps) {
       </Card>
     </div>
   );
-} 
+}
