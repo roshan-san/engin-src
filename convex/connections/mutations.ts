@@ -1,20 +1,13 @@
 import { mutation } from "../_generated/server";
 import { v } from "convex/values";
-import { getAuthenticatedUser } from "../helper";
+import { getAuthenticatedProfile, } from "../helper";
 
 export const createConnection = mutation({
   args: {
     receiverId: v.id("profiles"),
   },
   handler: async (ctx, args) => {
-    const user = await getAuthenticatedUser(ctx)
-    const sender = await ctx.db
-      .query("profiles")
-      .withIndex("email", (q) => q.eq("email", user.email))
-      .first();
-    if (!sender) {
-      throw new Error("Sender profile not found");
-    }
+    const sender = await getAuthenticatedProfile(ctx)
 
     const request = await ctx.db.insert("connections", {
       senderid: sender._id,
@@ -30,10 +23,7 @@ export const acceptConnection = mutation({
     id: v.id("connections"),
   },
   handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity();
-    if (!identity) {
-      throw new Error("Not authenticated");
-    }
+    await getAuthenticatedProfile(ctx)
     return await ctx.db.patch(args.id, {
       status: "accepted",
     });
@@ -45,10 +35,7 @@ export const rejectConnection = mutation({
     id: v.id("connections"),
   },
   handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity();
-    if (!identity) {
-      throw new Error("Not authenticated");
-    }
+    await getAuthenticatedProfile(ctx)
     return await ctx.db.delete(args.id);
   },
 });

@@ -2,10 +2,6 @@ import { query } from "../_generated/server";
 import { v } from "convex/values";
 import { getAuthenticatedProfile, getAuthenticatedUser } from "../helper";
 import { getProfileByIdfn } from "./functions";
-import { Id } from "../_generated/dataModel";
-
-
-
 
 
 export const getMyAcceptedConnections = query({
@@ -25,6 +21,7 @@ export const getMyAcceptedConnections = query({
         return [...connections, ...connections2];
     },
 });
+
 export const getAcceptedConnectionsById = query({
     args:{
         profileId:v.id("profiles")
@@ -57,41 +54,5 @@ export const getMyPendingConnections = query({
             .filter((q) => q.eq(q.field("status"), "pending"))
             .collect();
         return connections;
-    },
-});
-
-export const getConnection = query({
-    args: {
-        receiverId: v.id("profiles"),
-    },
-    handler: async (ctx, args) => {
-        const identity = await ctx.auth.getUserIdentity();
-        if (!identity) {
-            return null;
-        }
-        const user = await ctx.db
-            .query("profiles")
-            .withIndex("email", (q) => q.eq("email", identity.email!))
-            .first();
-        if (!user) {
-            return null;
-        }
-        const connection = await ctx.db
-            .query("connections")
-            .withIndex("by_sender", (q) =>
-                q.eq("senderid", user._id)
-            )
-            .filter((q) => q.eq(q.field("receiverid"), args.receiverId))
-            .first();
-        if (connection) {
-            return connection;
-        }
-        return await ctx.db
-            .query("connections")
-            .withIndex("by_receiver", (q) =>
-                q.eq("receiverid", user._id)
-            )
-            .filter((q) => q.eq(q.field("senderid"), args.receiverId))
-            .first();
     },
 });
