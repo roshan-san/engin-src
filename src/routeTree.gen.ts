@@ -15,14 +15,12 @@ import { Route as ProtectedImport } from './routes/_protected'
 import { Route as IndexImport } from './routes/index'
 import { Route as ProtectedTestImport } from './routes/_protected/test'
 import { Route as ProtectedStartupsImport } from './routes/_protected/startups'
-import { Route as ProtectedMessagesImport } from './routes/_protected/messages'
 import { Route as ProtectedMessageImport } from './routes/_protected/message'
 import { Route as ProtectedDashboardImport } from './routes/_protected/dashboard'
 import { Route as ProtectedConnectImport } from './routes/_protected/connect'
 import { Route as ProtectedStartupsStartupidImport } from './routes/_protected/startups.$startupid'
 import { Route as ProtectedProfileUsernameImport } from './routes/_protected/profile.$username'
 import { Route as ProtectedMessageUsernameImport } from './routes/_protected/message.$username'
-import { Route as ProtectedMessageChatIdImport } from './routes/_protected/message.$chatId'
 
 // Create/Update Routes
 
@@ -46,12 +44,6 @@ const ProtectedTestRoute = ProtectedTestImport.update({
 const ProtectedStartupsRoute = ProtectedStartupsImport.update({
   id: '/startups',
   path: '/startups',
-  getParentRoute: () => ProtectedRoute,
-} as any)
-
-const ProtectedMessagesRoute = ProtectedMessagesImport.update({
-  id: '/messages',
-  path: '/messages',
   getParentRoute: () => ProtectedRoute,
 } as any)
 
@@ -90,12 +82,6 @@ const ProtectedProfileUsernameRoute = ProtectedProfileUsernameImport.update({
 const ProtectedMessageUsernameRoute = ProtectedMessageUsernameImport.update({
   id: '/$username',
   path: '/$username',
-  getParentRoute: () => ProtectedMessageRoute,
-} as any)
-
-const ProtectedMessageChatIdRoute = ProtectedMessageChatIdImport.update({
-  id: '/$chatId',
-  path: '/$chatId',
   getParentRoute: () => ProtectedMessageRoute,
 } as any)
 
@@ -138,13 +124,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedMessageImport
       parentRoute: typeof ProtectedImport
     }
-    '/_protected/messages': {
-      id: '/_protected/messages'
-      path: '/messages'
-      fullPath: '/messages'
-      preLoaderRoute: typeof ProtectedMessagesImport
-      parentRoute: typeof ProtectedImport
-    }
     '/_protected/startups': {
       id: '/_protected/startups'
       path: '/startups'
@@ -158,13 +137,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/test'
       preLoaderRoute: typeof ProtectedTestImport
       parentRoute: typeof ProtectedImport
-    }
-    '/_protected/message/$chatId': {
-      id: '/_protected/message/$chatId'
-      path: '/$chatId'
-      fullPath: '/message/$chatId'
-      preLoaderRoute: typeof ProtectedMessageChatIdImport
-      parentRoute: typeof ProtectedMessageImport
     }
     '/_protected/message/$username': {
       id: '/_protected/message/$username'
@@ -193,12 +165,10 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 interface ProtectedMessageRouteChildren {
-  ProtectedMessageChatIdRoute: typeof ProtectedMessageChatIdRoute
   ProtectedMessageUsernameRoute: typeof ProtectedMessageUsernameRoute
 }
 
 const ProtectedMessageRouteChildren: ProtectedMessageRouteChildren = {
-  ProtectedMessageChatIdRoute: ProtectedMessageChatIdRoute,
   ProtectedMessageUsernameRoute: ProtectedMessageUsernameRoute,
 }
 
@@ -220,7 +190,6 @@ interface ProtectedRouteChildren {
   ProtectedConnectRoute: typeof ProtectedConnectRoute
   ProtectedDashboardRoute: typeof ProtectedDashboardRoute
   ProtectedMessageRoute: typeof ProtectedMessageRouteWithChildren
-  ProtectedMessagesRoute: typeof ProtectedMessagesRoute
   ProtectedStartupsRoute: typeof ProtectedStartupsRouteWithChildren
   ProtectedTestRoute: typeof ProtectedTestRoute
   ProtectedProfileUsernameRoute: typeof ProtectedProfileUsernameRoute
@@ -230,7 +199,6 @@ const ProtectedRouteChildren: ProtectedRouteChildren = {
   ProtectedConnectRoute: ProtectedConnectRoute,
   ProtectedDashboardRoute: ProtectedDashboardRoute,
   ProtectedMessageRoute: ProtectedMessageRouteWithChildren,
-  ProtectedMessagesRoute: ProtectedMessagesRoute,
   ProtectedStartupsRoute: ProtectedStartupsRouteWithChildren,
   ProtectedTestRoute: ProtectedTestRoute,
   ProtectedProfileUsernameRoute: ProtectedProfileUsernameRoute,
@@ -246,10 +214,8 @@ export interface FileRoutesByFullPath {
   '/connect': typeof ProtectedConnectRoute
   '/dashboard': typeof ProtectedDashboardRoute
   '/message': typeof ProtectedMessageRouteWithChildren
-  '/messages': typeof ProtectedMessagesRoute
   '/startups': typeof ProtectedStartupsRouteWithChildren
   '/test': typeof ProtectedTestRoute
-  '/message/$chatId': typeof ProtectedMessageChatIdRoute
   '/message/$username': typeof ProtectedMessageUsernameRoute
   '/profile/$username': typeof ProtectedProfileUsernameRoute
   '/startups/$startupid': typeof ProtectedStartupsStartupidRoute
@@ -261,10 +227,8 @@ export interface FileRoutesByTo {
   '/connect': typeof ProtectedConnectRoute
   '/dashboard': typeof ProtectedDashboardRoute
   '/message': typeof ProtectedMessageRouteWithChildren
-  '/messages': typeof ProtectedMessagesRoute
   '/startups': typeof ProtectedStartupsRouteWithChildren
   '/test': typeof ProtectedTestRoute
-  '/message/$chatId': typeof ProtectedMessageChatIdRoute
   '/message/$username': typeof ProtectedMessageUsernameRoute
   '/profile/$username': typeof ProtectedProfileUsernameRoute
   '/startups/$startupid': typeof ProtectedStartupsStartupidRoute
@@ -277,10 +241,8 @@ export interface FileRoutesById {
   '/_protected/connect': typeof ProtectedConnectRoute
   '/_protected/dashboard': typeof ProtectedDashboardRoute
   '/_protected/message': typeof ProtectedMessageRouteWithChildren
-  '/_protected/messages': typeof ProtectedMessagesRoute
   '/_protected/startups': typeof ProtectedStartupsRouteWithChildren
   '/_protected/test': typeof ProtectedTestRoute
-  '/_protected/message/$chatId': typeof ProtectedMessageChatIdRoute
   '/_protected/message/$username': typeof ProtectedMessageUsernameRoute
   '/_protected/profile/$username': typeof ProtectedProfileUsernameRoute
   '/_protected/startups/$startupid': typeof ProtectedStartupsStartupidRoute
@@ -294,10 +256,8 @@ export interface FileRouteTypes {
     | '/connect'
     | '/dashboard'
     | '/message'
-    | '/messages'
     | '/startups'
     | '/test'
-    | '/message/$chatId'
     | '/message/$username'
     | '/profile/$username'
     | '/startups/$startupid'
@@ -308,10 +268,8 @@ export interface FileRouteTypes {
     | '/connect'
     | '/dashboard'
     | '/message'
-    | '/messages'
     | '/startups'
     | '/test'
-    | '/message/$chatId'
     | '/message/$username'
     | '/profile/$username'
     | '/startups/$startupid'
@@ -322,10 +280,8 @@ export interface FileRouteTypes {
     | '/_protected/connect'
     | '/_protected/dashboard'
     | '/_protected/message'
-    | '/_protected/messages'
     | '/_protected/startups'
     | '/_protected/test'
-    | '/_protected/message/$chatId'
     | '/_protected/message/$username'
     | '/_protected/profile/$username'
     | '/_protected/startups/$startupid'
@@ -365,7 +321,6 @@ export const routeTree = rootRoute
         "/_protected/connect",
         "/_protected/dashboard",
         "/_protected/message",
-        "/_protected/messages",
         "/_protected/startups",
         "/_protected/test",
         "/_protected/profile/$username"
@@ -383,13 +338,8 @@ export const routeTree = rootRoute
       "filePath": "_protected/message.tsx",
       "parent": "/_protected",
       "children": [
-        "/_protected/message/$chatId",
         "/_protected/message/$username"
       ]
-    },
-    "/_protected/messages": {
-      "filePath": "_protected/messages.tsx",
-      "parent": "/_protected"
     },
     "/_protected/startups": {
       "filePath": "_protected/startups.tsx",
@@ -401,10 +351,6 @@ export const routeTree = rootRoute
     "/_protected/test": {
       "filePath": "_protected/test.tsx",
       "parent": "/_protected"
-    },
-    "/_protected/message/$chatId": {
-      "filePath": "_protected/message.$chatId.tsx",
-      "parent": "/_protected/message"
     },
     "/_protected/message/$username": {
       "filePath": "_protected/message.$username.tsx",

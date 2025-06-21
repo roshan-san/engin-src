@@ -19,6 +19,8 @@ import type * as connections_mutations from "../connections/mutations.js";
 import type * as connections_queries from "../connections/queries.js";
 import type * as helper from "../helper.js";
 import type * as http from "../http.js";
+import type * as messages_mutations from "../messages/mutations.js";
+import type * as messages_queries from "../messages/queries.js";
 import type * as profile_mutations from "../profile/mutations.js";
 import type * as profile_profileSearch from "../profile/profileSearch.js";
 import type * as profile_queries from "../profile/queries.js";
@@ -40,6 +42,8 @@ declare const fullApi: ApiFromModules<{
   "connections/queries": typeof connections_queries;
   helper: typeof helper;
   http: typeof http;
+  "messages/mutations": typeof messages_mutations;
+  "messages/queries": typeof messages_queries;
   "profile/mutations": typeof profile_mutations;
   "profile/profileSearch": typeof profile_profileSearch;
   "profile/queries": typeof profile_queries;

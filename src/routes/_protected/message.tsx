@@ -1,3 +1,5 @@
+import Header from "@/features/platform/Header";
+import MessagingUi from "@/features/platform/message-users/MessagingUi";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_protected/message")({
@@ -6,13 +8,9 @@ export const Route = createFileRoute("/_protected/message")({
 
 function MessagesIndex() {
   return (
-    <div className="flex h-full items-center justify-center">
-      <div className="text-center">
-        <h2 className="text-2xl font-bold">Select a chat to start messaging</h2>
-        <p className="text-gray-500 dark:text-gray-400">
-          Your conversations will appear here.
-        </p>
-      </div>
-    </div>
+  <div className="h-full flex flex-col p-4">
+    <Header>Message</Header>
+    <MessagingUi />
+  </div>
   );
 } 

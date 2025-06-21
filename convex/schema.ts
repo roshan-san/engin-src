@@ -42,6 +42,13 @@ const schema = defineSchema({
     .index("by_receiver", ["receiverid", "status"])
     .index("by_sender_receiver", ["senderid", "receiverid"]),
 
+  messages: defineTable({
+    senderId: v.id("profiles"),
+    receiverId: v.id("profiles"),
+    content: v.string(),
+  })
+  .index("by_sender_receiver", ["senderId", "receiverId"]),
+
   startups: defineTable({
     name: v.string(),
     description: v.string(),
