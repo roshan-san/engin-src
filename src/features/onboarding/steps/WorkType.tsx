@@ -3,8 +3,6 @@ import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { FaBriefcase, FaClock, FaFileContract } from "react-icons/fa";
 import { useOnboarding } from "../context/OnboardContext";
-import { useMutation } from "convex/react";
-import { api } from "@/../convex/_generated/api";
 
 const workTypes = [
   {
@@ -30,13 +28,11 @@ const workTypes = [
 export default function WorkType() {
   const { nextStep, previousStep, onboardingData } = useOnboarding();
   const [selectedWorkType, setSelectedWorkType] = useState(onboardingData.work_type || "");
-  const createProfile = useMutation(api.onboarding.createProfile);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async () => {
     setIsLoading(true);
     try {
-      await createProfile({ ...onboardingData, work_type: selectedWorkType });
       nextStep({ work_type: selectedWorkType });
     } finally {
       setIsLoading(false);
@@ -101,7 +97,7 @@ export default function WorkType() {
           onClick={handleSubmit}
           className="flex-1 h-12 text-lg font-medium transition-all hover:scale-[1.02]"
         >
-          {isLoading ? "Saving..." : "Finish"}
+          {isLoading ? "Saving..." : "Next"}
         </Button>
       </div>
     </div>

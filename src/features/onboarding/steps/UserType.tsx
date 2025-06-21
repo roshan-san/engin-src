@@ -3,8 +3,6 @@ import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { FaBriefcase, FaUserCog, FaUserGraduate, FaUserTie } from "react-icons/fa";
 import { useOnboarding } from "../context/OnboardContext";
-import { useMutation } from "convex/react";
-import { api } from "@/../convex/_generated/api";
 
 const roles = [
   {
@@ -30,13 +28,11 @@ const roles = [
 export default function UserType() {
   const { nextStep, previousStep, onboardingData } = useOnboarding();
   const [selectedUserType, setSelectedUserType] = useState(onboardingData.user_type || "");
-  const createProfile = useMutation(api.onboarding.createProfile);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async () => {
     setIsLoading(true);
     try {
-      await createProfile({ ...onboardingData, user_type: selectedUserType });
       nextStep({ user_type: selectedUserType });
     } finally {
       setIsLoading(false);

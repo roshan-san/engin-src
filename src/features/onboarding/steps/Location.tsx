@@ -2,19 +2,16 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useOnboarding } from "../context/OnboardContext";
-import { useMutation } from "convex/react";
-import { api } from "@/../convex/_generated/api";
+
 
 export default function Location() {
   const { nextStep, previousStep, onboardingData } = useOnboarding();
   const [location, setLocation] = useState(onboardingData.location || "");
-  const createProfile = useMutation(api.onboarding.createProfile);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async () => {
     setIsLoading(true);
     try {
-      await createProfile({ ...onboardingData, location });
       nextStep({ location });
     } finally {
       setIsLoading(false);
@@ -51,7 +48,7 @@ export default function Location() {
           onClick={handleSubmit}
           className="flex-1 h-12 text-lg font-medium transition-all hover:scale-[1.02]"
         >
-          {isLoading ? "Saving..." : "Finish"}
+          {isLoading ? "Saving..." : "Next"}
         </Button>
       </div>
     </div>

@@ -23,7 +23,10 @@ export const OnboardingProvider = ({
   const nextStep = (data?: Record<string, any>) => {
     if (data) {
       updateData(data);
-    console.log(onboardingData)
+      console.log(onboardingData)
+      if (step==7){
+        console.log("final dat", onboardingData)
+      }
     }
     setStep(Math.min(7, step + 1));
   };

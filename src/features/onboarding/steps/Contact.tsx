@@ -3,27 +3,17 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { FaGithub, FaLinkedinIn } from "react-icons/fa";
 import { useOnboarding } from "../context/OnboardContext";
-import { useMutation } from "convex/react";
-import { api } from "@/../convex/_generated/api";
+
 
 export default function Contact() {
   const { nextStep, previousStep, onboardingData } = useOnboarding();
   const [githubUrl, setGithubUrl] = useState(onboardingData.github_url || "");
   const [linkedinUrl, setLinkedinUrl] = useState(onboardingData.linkedin_url || "");
-  const createProfile = useMutation(api.onboarding.createProfile);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async () => {
     setIsLoading(true);
     try {
-      const convexData = {
-        ...onboardingData,
-        github_url: githubUrl,
-        linkedin_url: linkedinUrl,
-        interests: onboardingData.interests ?? undefined,
-        skills: onboardingData.skills ?? undefined,
-      };
-      await createProfile(convexData);
       nextStep({ github_url: githubUrl, linkedin_url: linkedinUrl });
     } finally {
       setIsLoading(false);

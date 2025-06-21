@@ -3,14 +3,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { FaTools, FaPlus, FaTimes } from "react-icons/fa";
 import { useOnboarding } from "../context/OnboardContext";
-import { useMutation } from "convex/react";
-import { api } from "@/../convex/_generated/api";
+
 
 export default function Skills() {
   const { nextStep, previousStep, onboardingData } = useOnboarding();
   const [skills, setSkills] = useState<string[]>(onboardingData.skills || []);
   const [newSkill, setNewSkill] = useState("");
-  const createProfile = useMutation(api.onboarding.createProfile);
   const [isLoading, setIsLoading] = useState(false);
 
   const addSkill = () => {
@@ -28,7 +26,6 @@ export default function Skills() {
   const handleSubmit = async () => {
     setIsLoading(true);
     try {
-      await createProfile({ ...onboardingData, skills });
       nextStep({ skills });
     } finally {
       setIsLoading(false);
@@ -104,7 +101,7 @@ export default function Skills() {
           onClick={handleSubmit}
           className="flex-1 h-12 text-lg font-medium transition-all hover:scale-[1.02]"
         >
-          {isLoading ? "Saving..." : "Finish"}
+          {isLoading ? "Saving..." : "Next"}
         </Button>
       </div>
     </div>

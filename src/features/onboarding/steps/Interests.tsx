@@ -3,14 +3,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { FaPlus, FaTimes, FaHeart } from "react-icons/fa";
 import { useOnboarding } from "../context/OnboardContext";
-import { useMutation } from "convex/react";
-import { api } from "@/../convex/_generated/api";
 
 export default function Interests() {
   const { nextStep, previousStep, onboardingData } = useOnboarding();
   const [interests, setInterests] = useState<string[]>(onboardingData.interests || []);
   const [newInterest, setNewInterest] = useState("");
-  const createProfile = useMutation(api.onboarding.createProfile);
   const [isLoading, setIsLoading] = useState(false);
 
   const addInterest = () => {
@@ -28,7 +25,6 @@ export default function Interests() {
   const handleSubmit = async () => {
     setIsLoading(true);
     try {
-      await createProfile({ ...onboardingData, interests });
       nextStep({ interests });
     } finally {
       setIsLoading(false);
