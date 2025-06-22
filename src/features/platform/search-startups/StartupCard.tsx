@@ -1,13 +1,13 @@
 import { Card } from "@/components/ui/card";
 import { Users, DollarSign, Calendar, Building2, MapPin } from "lucide-react";
 import { Link } from "@tanstack/react-router";
-import type { Startup } from "@/types/supa-types";
-export default function StartupCard({ startup }: { startup: Startup }) {
+import type { Doc } from "@/../convex/_generated/dataModel";
+export default function StartupCard({ startup }: { startup: Doc<"startups"> }) {
   return (
     <Link
-      key={startup.id}
+      key={startup._id}
       to={"/startups/$startupid"}
-      params={{ startupid: startup.id }}
+      params={{ startupid: startup._id }}
     >
       <Card className="w-full p-6 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
         <div className="space-y-4">
@@ -40,7 +40,7 @@ export default function StartupCard({ startup }: { startup: Startup }) {
             </div>
             <div className="flex items-center gap-2 text-muted-foreground">
               <Calendar className="w-4 h-4" />
-              <span>{new Date(startup.created_at).toLocaleDateString()}</span>
+              <span>{new Date(startup._creationTime).toLocaleDateString()}</span>
             </div>
           </div>
         </div>

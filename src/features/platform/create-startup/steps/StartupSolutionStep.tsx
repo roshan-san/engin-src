@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import { FaLightbulb } from "react-icons/fa";
 import { useCreateStartup } from "../context/CreateStartupContext";
+import { Input } from "@/components/ui/input";
 
 export const StartupSolutionStep = () => {
   const { startupData, handleChange, nextStep, previousStep } =
@@ -14,7 +14,7 @@ export const StartupSolutionStep = () => {
           <FaLightbulb className="text-primary w-5 h-5" />
           What's your solution?
         </h3>
-        <Textarea
+        <Input
           name="solution"
           placeholder="Describe your solution to the problem..."
           value={startupData.solution || ""}

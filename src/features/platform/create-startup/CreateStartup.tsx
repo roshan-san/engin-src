@@ -31,7 +31,7 @@ const CreateStartupForm = () => {
       case 7:
         return <StartupFundingStep />;
       default:
-        return <div>Success!</div>;
+        return <div></div>;
     }
   };
 

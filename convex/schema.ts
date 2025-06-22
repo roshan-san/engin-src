@@ -60,6 +60,9 @@ const schema = defineSchema({
     ownerId: v.id("profiles"),
   })
     .index("by_owner", ["ownerId"])
+    .searchIndex("by_ownerId",{
+      searchField:"ownerId"
+    })
     .searchIndex("by_name", {
       searchField: "name",
     }),

@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import { FaInfoCircle } from "react-icons/fa";
 import { useCreateStartup } from "../context/CreateStartupContext";
+import { Input } from "@/components/ui/input";
 
 export const StartupDescriptionStep = () => {
   const { startupData, handleChange, nextStep, previousStep } =
@@ -14,7 +14,7 @@ export const StartupDescriptionStep = () => {
           <FaInfoCircle className="text-primary w-5 h-5" />
           Describe your startup
         </h3>
-        <Textarea
+        <Input
           name="description"
           placeholder="Tell us about your startup..."
           value={startupData.description || ""}

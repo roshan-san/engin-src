@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import { FaExclamationTriangle } from "react-icons/fa";
 import { useCreateStartup } from "../context/CreateStartupContext";
+import { Input } from "@/components/ui/input";
 
 export const StartupProblemStep = () => {
   const { startupData, handleChange, nextStep, previousStep } =
@@ -14,7 +14,7 @@ export const StartupProblemStep = () => {
           <FaExclamationTriangle className="text-primary w-5 h-5" />
           What problem are you solving?
         </h3>
-        <Textarea
+        <Input
           name="problem"
           placeholder="Describe the problem your startup is solving..."
           value={startupData.problem || ""}
