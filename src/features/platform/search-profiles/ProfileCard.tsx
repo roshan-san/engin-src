@@ -71,130 +71,138 @@ export default function ProfileCard({ profile }: { profile: Doc<"profiles"> }) {
   const buttonContent = getButtonContent();
 
   return (
-    <Card className="transition-colors duration-200 hover:bg-accent">
-      <CardContent className="p-4">
-        <div className="flex items-start gap-4">
-          <Link
-            to="/profile/$username"
-            params={{ username: profile.username ?? "" }}
-          >
-            <Avatar className="h-16 w-16 border transition-colors duration-300 hover:border-primary/20">
-              <AvatarImage src={profile.avatar_url} />
-              <AvatarFallback className="text-2xl">
-                {profile.name?.charAt(0)}
-              </AvatarFallback>
-            </Avatar>
-          </Link>
-          <div className="flex-1 min-w-0">
-            <div className="flex items-start justify-between gap-3">
-              <div className="flex flex-col gap-0.5">
-                <Link
-                  to="/profile/$username"
-                  params={{ username: profile.username ?? "" }}
-                >
-                  <h3 className="font-semibold text-xl transition-colors hover:text-primary mb-1 break-words leading-tight">
-                    {profile.name}
-                  </h3>
-                </Link>
-                <div className="flex items-center gap-2 mt-1 mb-1 flex-wrap">
-                  {profile.user_type && (
-                    <Badge variant="default" className="gap-1.5 text-xs font-semibold bg-primary/10 text-primary border border-primary/30 shadow-sm">
-                      <FaUser className="h-3 w-3" />
-                      {profile.user_type}
-                    </Badge>
+    <div className="group bg-background hover:bg-accent/40 rounded-xl p-4 transition-all duration-200 border border-border/40">
+      <div className="flex items-center gap-4">
+        <Link
+          to="/profile/$username"
+          params={{ username: profile.username ?? "" }}
+          className="shrink-0"
+        >
+          <Avatar className="h-14 w-14 border-2 border-primary/20 transition-all duration-300 group-hover:border-primary/40 bg-background">
+            <AvatarImage src={profile.avatar_url} />
+            <AvatarFallback className="text-xl">
+              {profile.name?.charAt(0)}
+            </AvatarFallback>
+          </Avatar>
+        </Link>
+        
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center justify-between gap-2">
+            <div className="min-w-0">
+              <Link
+                to="/profile/$username"
+                params={{ username: profile.username ?? "" }}
+              >
+                <h3 className="font-semibold text-base transition-colors group-hover:text-primary truncate">
+                  {profile.name}
+                </h3>
+              </Link>
+              <p className="text-sm text-muted-foreground truncate">
+                @{profile.username}
+              </p>
+            </div>
+            
+            <div className="flex items-center gap-2 shrink-0">
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      className="h-8 w-8 rounded-full hover:bg-primary/10 hover:text-primary"
+                      asChild
+                    >
+                      <Link
+                        to="/message/$username"
+                        params={{ username: profile.username ?? "" }}
+                      >
+                        <FaEnvelope className="h-4 w-4" />
+                      </Link>
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Message</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      size="icon"
+                      variant={!connection ? "default" : "ghost"}
+                      className="h-8 w-8 rounded-full"
+                      onClick={handleConnectionAction}
+                    >
+                      {buttonContent.icon}
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>{buttonContent.text}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+
+              {(profile.github_url || profile.linkedin_url) && (
+                <div className="flex items-center gap-2 border-l border-border/60 pl-2">
+                  {profile.github_url && (
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Link
+                            to={profile.github_url}
+                            target="_blank"
+                            className="text-muted-foreground hover:text-foreground transition-all duration-200 hover:scale-110"
+                          >
+                            <FaGithub className="h-4 w-4" />
+                          </Link>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>View GitHub Profile</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
                   )}
-                  {profile.location && (
-                    <Badge variant="outline" className="gap-1.5 text-xs border-muted-foreground/30">
-                      <FaMapMarkerAlt className="h-3 w-3" />
-                      {profile.location}
-                    </Badge>
+                  {profile.linkedin_url && (
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Link
+                            to={profile.linkedin_url}
+                            target="_blank"
+                            className="text-muted-foreground hover:text-foreground transition-all duration-200 hover:scale-110"
+                          >
+                            <FaLinkedin className="h-4 w-4" />
+                          </Link>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>View LinkedIn Profile</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
                   )}
                 </div>
-                <p className="text-sm text-muted-foreground">
-                  @{profile.username}
-                </p>
-              </div>
-              <div className="flex items-center shrink-0 gap-3">
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button
-                        size="icon"
-                        variant="outline"
-                        className="h-8 w-8"
-                        asChild
-                      >
-                        <Link
-                          to="/message/$username"
-                          params={{ username: profile.username ?? "" }}
-                        >
-                          <FaEnvelope className="h-4 w-4" />
-                        </Link>
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Message</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button
-                        size="icon"
-                        className="h-8 w-8"
-                        onClick={handleConnectionAction}
-                      >
-                        {buttonContent.icon}
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>{buttonContent.text}</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-
-                {profile.github_url && (
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Link
-                          to={profile.github_url}
-                          target="_blank"
-                          className="text-muted-foreground hover:text-foreground"
-                        >
-                          <FaGithub className="h-4 w-4" />
-                        </Link>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>View GitHub Profile</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                )}
-                {profile.linkedin_url && (
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Link
-                          to={profile.linkedin_url}
-                          target="_blank"
-                          className="text-muted-foreground hover:text-foreground"
-                        >
-                          <FaLinkedin className="h-4 w-4" />
-                        </Link>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>View LinkedIn Profile</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                )}
-              </div>
+              )}
             </div>
           </div>
+
+          <div className="flex items-center gap-2 mt-2 flex-wrap">
+            {profile.user_type && (
+              <Badge variant="default" className="gap-1 text-xs font-medium bg-primary/10 text-primary border-none rounded-full px-2 py-0.5">
+                <FaUser className="h-2.5 w-2.5" />
+                {profile.user_type}
+              </Badge>
+            )}
+            {profile.location && (
+              <Badge variant="secondary" className="gap-1 text-xs font-medium rounded-full px-2 py-0.5">
+                <FaMapMarkerAlt className="h-2.5 w-2.5" />
+                {profile.location}
+              </Badge>
+            )}
+          </div>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }

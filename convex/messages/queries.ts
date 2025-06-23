@@ -82,3 +82,36 @@ export const getMessages = query({
         return allMessagesWithSender.sort((a, b) => a._creationTime - b._creationTime);
     }
 });
+
+export const getConnectedProfilesById = query({
+    args: {
+        profileId: v.id("profiles"),
+    },
+    handler: async (ctx, args) => {
+        const profile = await ctx.db.get(args.profileId);
+        if (!profile) return [];
+
+        const senderConnections = await ctx.db
+            .query("connections")
+            .withIndex("by_sender", (q) => q.eq("senderid", profile._id))
+            .filter((q) => q.eq(q.field("status"), "accepted"))
+            .collect();
+
+        const receiverConnections = await ctx.db
+            .query("connections")
+            .withIndex("by_receiver", (q) => q.eq("receiverid", profile._id))
+            .filter((q) => q.eq(q.field("status"), "accepted"))
+            .collect();
+
+        const connectedProfileIds = [
+            ...senderConnections.map((c) => c.receiverid),
+            ...receiverConnections.map((c) => c.senderid),
+        ];
+
+        const profiles = await Promise.all(
+            connectedProfileIds.map((profileId) => ctx.db.get(profileId)),
+        );
+
+        return profiles.filter(Boolean);
+    }
+});

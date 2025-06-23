@@ -10,6 +10,8 @@ import {
 } from "@/components/ui/tooltip";
 import { Link } from "@tanstack/react-router";
 import type { Doc } from "@/../convex/_generated/dataModel";
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import ProfileConnections from "./ProfileConnections";
 
 interface ProfileHeaderProps {
   profile: Doc<"profiles">;
@@ -107,6 +109,20 @@ export function ProfileHeader({ profile }: ProfileHeaderProps) {
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="outline" size="sm" className="hover:bg-muted/60 border-muted">
+                  <Users className="w-4 h-4 mr-2 text-muted-foreground" />
+                  Connections
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-2xl">
+                <DialogHeader>
+                  <DialogTitle>{profile.name}'s Connections</DialogTitle>
+                </DialogHeader>
+                <ProfileConnections profile={profile} />
+              </DialogContent>
+            </Dialog>
           </div>
         </div>
       </CardContent>
