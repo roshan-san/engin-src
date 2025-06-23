@@ -17,7 +17,7 @@ interface ProfileHeaderProps {
 
 export function ProfileHeader({ profile }: ProfileHeaderProps) {
   return (
-    <Card className="w-full flex border border-muted bg-white shadow-sm rounded-xl">
+    <Card className="w-full flex border border-muted bg-background shadow-sm rounded-xl">
       <CardContent className="w-full p-6">
         <div className="flex flex-col md:flex-row items-center justify-between gap-8 w-full">
           <div className="flex flex-col items-center gap-4 md:items-start md:flex-row md:gap-8">
@@ -40,7 +40,7 @@ export function ProfileHeader({ profile }: ProfileHeaderProps) {
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <div className="flex items-center gap-1">
-                          <MapPin className="w-4 h-4 mr-1" />
+                          <MapPin className="w-4 h-4 mr-1 text-muted-foreground" />
                           <span>{profile.location}</span>
                         </div>
                       </TooltipTrigger>
@@ -54,7 +54,7 @@ export function ProfileHeader({ profile }: ProfileHeaderProps) {
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <div className="flex items-center gap-1">
-                        <Briefcase className="w-4 h-4 mr-1" />
+                        <Briefcase className="w-4 h-4 mr-1 text-muted-foreground" />
                         <span>{profile.work_type}</span>
                       </div>
                     </TooltipTrigger>
@@ -80,7 +80,7 @@ export function ProfileHeader({ profile }: ProfileHeaderProps) {
                       to="/message/$username"
                       params={{ username: profile.username || "" }}
                     >
-                      <MessageSquare className="w-4 h-4 mr-2" />
+                      <MessageSquare className="w-4 h-4 mr-2 text-muted-foreground" />
                       Message
                     </Link>
                   </Button>
@@ -98,7 +98,7 @@ export function ProfileHeader({ profile }: ProfileHeaderProps) {
                     size="sm"
                     className="hover:bg-muted/60 border-muted"
                   >
-                    <Users className="w-4 h-4 mr-2" />
+                    <Users className="w-4 h-4 mr-2 text-muted-foreground" />
                     Connect
                   </Button>
                 </TooltipTrigger>
