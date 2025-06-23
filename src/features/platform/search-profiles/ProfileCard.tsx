@@ -50,25 +50,21 @@ export default function ProfileCard({ profile }: { profile: Doc<"profiles"> }) {
   const getButtonContent = () => {
     if (!connection) {
       return {
-        icon: <FaUserPlus className="h-4 w-4" />,
-        text: "Connect",
+        icon: <FaUserPlus className="h-4 w-4" />, text: "Connect",
       };
     }
     if (connection.status === "accepted") {
       return {
-        icon: <FaUserMinus className="h-4 w-4" />,
-        text: "Remove Friend",
+        icon: <FaUserMinus className="h-4 w-4" />, text: "Remove Friend",
       };
     }
     if (connection.status === "pending") {
       return {
-        icon: <FaTimes className="h-4 w-4" />,
-        text: "Cancel Request",
+        icon: <FaTimes className="h-4 w-4" />, text: "Cancel Request",
       };
     }
     return {
-      icon: <FaUserPlus className="h-4 w-4" />,
-      text: "Connect",
+      icon: <FaUserPlus className="h-4 w-4" />, text: "Connect",
     };
   };
 
@@ -96,10 +92,24 @@ export default function ProfileCard({ profile }: { profile: Doc<"profiles"> }) {
                   to="/profile/$username"
                   params={{ username: profile.username ?? "" }}
                 >
-                  <h3 className="font-semibold text-lg transition-colors hover:text-primary truncate">
+                  <h3 className="font-semibold text-xl transition-colors hover:text-primary mb-1 break-words leading-tight">
                     {profile.name}
                   </h3>
                 </Link>
+                <div className="flex items-center gap-2 mt-1 mb-1 flex-wrap">
+                  {profile.user_type && (
+                    <Badge variant="default" className="gap-1.5 text-xs font-semibold bg-primary/10 text-primary border border-primary/30 shadow-sm">
+                      <FaUser className="h-3 w-3" />
+                      {profile.user_type}
+                    </Badge>
+                  )}
+                  {profile.location && (
+                    <Badge variant="outline" className="gap-1.5 text-xs border-muted-foreground/30">
+                      <FaMapMarkerAlt className="h-3 w-3" />
+                      {profile.location}
+                    </Badge>
+                  )}
+                </div>
                 <p className="text-sm text-muted-foreground">
                   @{profile.username}
                 </p>
@@ -181,19 +191,6 @@ export default function ProfileCard({ profile }: { profile: Doc<"profiles"> }) {
                   </TooltipProvider>
                 )}
               </div>
-            </div>
-
-            <div className="flex items-center gap-2 mt-3 flex-wrap">
-              <Badge variant="secondary" className="gap-1.5 text-xs">
-                <FaUser className="h-3 w-3" />
-                {profile.user_type}
-              </Badge>
-              {profile.location && (
-                <Badge variant="outline" className="gap-1.5 text-xs">
-                  <FaMapMarkerAlt className="h-3 w-3" />
-                  {profile.location}
-                </Badge>
-              )}
             </div>
           </div>
         </div>

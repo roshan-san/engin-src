@@ -5,15 +5,18 @@ import CreateStartup from "./CreateStartup";
 
 export function CreateBtn() {
     return (
-      <div className=" fixed bottom-25 right-5 z-50">
+      <div className="fixed bottom-15 right-5 z-50">
         <Drawer>
           <DrawerTrigger asChild>
-            <Button className="w-15 h-15 rounded-full p-0 sm:w-auto sm:rounded-md sm:px-4 sm:py-2">
-              <FaPlus className="h-4 w-4 sm:hidden" />
+            <Button
+              className="shadow-lg transition-all duration-200 w-14 h-14 rounded-full p-0 bg-primary text-white hover:bg-primary/90 focus:ring-2 focus:ring-primary/50 sm:w-auto sm:h-auto sm:rounded-full sm:px-6 sm:py-3 sm:gap-2 sm:text-base sm:font-semibold"
+              aria-label="Create startup"
+            >
+              <FaPlus className="h-6 w-6 m-auto sm:mr-2 sm:h-5 sm:w-5" />
               <span className="hidden sm:inline">Create startup</span>
             </Button>
           </DrawerTrigger>
-          <DrawerContent className=" w-full">
+          <DrawerContent className="w-full">
             <DrawerHeader>
               <DrawerTitle>Create your startup</DrawerTitle>
               <DrawerDescription></DrawerDescription>
