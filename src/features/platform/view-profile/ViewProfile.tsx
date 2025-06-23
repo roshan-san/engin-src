@@ -22,8 +22,8 @@ export default function PublicProfileView({
         <div className="space-y-6 md:col-span-2">
           <Tabs defaultValue="skills">
             <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="skills">Skills & Interests</TabsTrigger>
               <TabsTrigger value="startups">Startups</TabsTrigger>
+              <TabsTrigger value="skills">Skills & Interests</TabsTrigger>
             </TabsList>
             <TabsContent value="skills">
               <ProfileSkills profile={profile} />

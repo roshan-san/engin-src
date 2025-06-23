@@ -16,8 +16,8 @@ export const getStartups = query({
           )
       : ctx.db.query("startups");
 
-    const profiles = await query.paginate(args.paginationOpts);
+    const startups = await query.paginate(args.paginationOpts);
 
-    return profiles;
+    return startups;
   },
 });

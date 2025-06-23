@@ -12,13 +12,14 @@ export const getMyProfile = query({
 
 export const getProfileByUsername = query({
   args: {
-    username: v.optional(v.string()),
+    username: v.string(),
   },
   handler: async function (ctx, args) {
     await getAuthUserId(ctx);
     const profile = ctx.db
       .query("profiles")
-      .filter((q) => q.eq(q.field("username"), args.username));
+      .withSearchIndex("by_username",(q)=>q.search("username",args.username))
+      .first()
     return profile;
   },
 });

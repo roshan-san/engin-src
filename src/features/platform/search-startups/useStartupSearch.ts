@@ -7,7 +7,7 @@ export const useStartupSearch = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const {
-    results: profiles,
+    results: startups,
     status,
     loadMore,
     isLoading,
@@ -29,7 +29,7 @@ export const useStartupSearch = () => {
   return {
     searchQuery,
     setSearchQuery,
-    profiles,
+    startups,
     status,
     loadMore,
     isLoading,

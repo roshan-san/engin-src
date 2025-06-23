@@ -5,5 +5,8 @@ export const Route = createFileRoute("/_protected/startups/$startupid")({
 });
 
 function RouteComponent() {
-  return <div>Hello "/_protected/startups/$startupid"!</div>;
+  const {startupid}= Route.useParams()
+  return <div>
+    hello you {startupid} will build later 
+  </div>;
 }

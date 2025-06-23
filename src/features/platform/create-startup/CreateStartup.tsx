@@ -36,7 +36,7 @@ const CreateStartupForm = () => {
   };
 
   return (
-    <div className="p-4 max-w-2xl mx-auto">
+    <div className="h-full">
       <Progress hidden={step >= 7} value={(step / 7) * 100} className="mb-4" />
       {renderStep()}
     </div>

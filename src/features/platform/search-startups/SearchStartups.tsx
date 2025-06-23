@@ -3,15 +3,8 @@ import StartupCard from "./StartupCard";
 import { useStartupSearch } from "./useStartupSearch";
 
 export default function SearchStartups() {
-  const {
-    searchQuery,
-    setSearchQuery,
-    data,
-    status,
-    isFetchingNextPage,
-    hasNextPage,
-    ref,
-  } = useStartupSearch();
+  const { searchQuery, setSearchQuery, startups, status, loadMore, ref } =
+    useStartupSearch();
 
   return (
     <div className="h-full flex flex-col gap-6 p-4">
@@ -26,38 +19,39 @@ export default function SearchStartups() {
         />
       </div>
 
-      {status === "pending" ? (
+      {status === "LoadingFirstPage" ? (
         <div className="flex items-center justify-center h-32 text-gray-500">
           Loading...
         </div>
-      ) : status === "error" ? (
-        <div className="flex items-center justify-center h-32 text-red-500">
-          Error loading startups
-        </div>
-      ) : data ? (
+      ) : startups && startups.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {data.pages.map((page) =>
-            page.map((startup) => (
-              <StartupCard key={startup.id} startup={startup} />
-            )),
-          )}
+          {startups.map((startup) => (
+            <StartupCard key={startup._id} startup={startup} />
+          ))}
 
           <div
             ref={ref}
             className="col-span-full h-16 flex items-center justify-center text-gray-500"
           >
-            {isFetchingNextPage ? (
+            {status === "LoadingMore" ? (
               <div className="animate-pulse">Loading more...</div>
-            ) : hasNextPage ? (
-              <div className="cursor-pointer hover:text-blue-500 transition-colors">
+            ) : status === "CanLoadMore" ? (
+              <button
+                onClick={() => loadMore(9)}
+                className="cursor-pointer hover:text-blue-500 transition-colors"
+              >
                 Load more
-              </div>
+              </button>
             ) : (
               <div>No more startups to load</div>
             )}
           </div>
         </div>
-      ) : null}
+      ) : (
+        <div className="flex items-center justify-center h-32 text-gray-500">
+          No startups found.
+        </div>
+      )}
     </div>
   );
 }
