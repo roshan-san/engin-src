@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, type ReactNode } from "react";
 import { useMutation } from "convex/react";
 import { api } from "@/../convex/_generated/api";
+import { useNavigate } from "@tanstack/react-router";
 
 interface StartupData {
   name: string;
@@ -48,6 +49,7 @@ export const CreateStartupProvider = ({
 
   const nextStep = () => setStep((prev) => Math.min(7, prev + 1));
   const previousStep = () => setStep((prev) => Math.max(1, prev - 1));
+  const navigate= useNavigate()
 
   const handleCreate = async () => {
     setIsCreating(true);
@@ -57,8 +59,9 @@ export const CreateStartupProvider = ({
         funding: Number(startupData.funding) || 0,
         team_size: Number(startupData.team_size) || 0,
       };
-      await createStartup(numericData);
-      setStep(8); // Or a success step
+      const startup= await createStartup(numericData);
+      navigate({to:"/startups/$startupid", params:{startupid: startup}});
+      setStep(8)
     } catch (error) {
       console.error("Failed to create startup", error);
     } finally {

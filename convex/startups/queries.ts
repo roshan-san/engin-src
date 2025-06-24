@@ -15,3 +15,10 @@ export const getMyStartups = query({
       .collect();
   },
 });
+
+export const getStartup = query({
+  args: { startupId: v.id("startups") },
+  handler: async (ctx, args) => {
+    return await ctx.db.get(args.startupId);
+  },
+});

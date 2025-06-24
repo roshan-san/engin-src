@@ -6,7 +6,11 @@ import { Input } from "@/components/ui/input";
 export const StartupSolutionStep = () => {
   const { startupData, handleChange, nextStep, previousStep } =
     useCreateStartup();
-
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      nextStep();
+    }
+  };
   return (
     <div className="w-full flex justify-center items-center gap-6 flex-col h-full p-4">
       <div className="flex flex-col gap-6 w-full">
@@ -19,6 +23,7 @@ export const StartupSolutionStep = () => {
           placeholder="Describe your solution to the problem..."
           value={startupData.solution || ""}
           onChange={handleChange}
+          onKeyDown={handleKeyDown}
           className="h-32 text-lg rounded-xl resize-none"
           autoFocus
         />

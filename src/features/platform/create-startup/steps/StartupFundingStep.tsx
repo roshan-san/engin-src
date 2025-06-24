@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { FaMoneyBillWave } from "react-icons/fa";
 import { useCreateStartup } from "../context/CreateStartupContext";
+import { useNavigate } from "@tanstack/react-router";
 
 export const StartupFundingStep = () => {
   const {
