@@ -1,24 +1,48 @@
-import { createContext, useContext, useState, type ReactNode, } from "react";
+import { createContext, useContext, useState, type ReactNode } from "react";
 import { useMutation } from "convex/react";
 import { api } from "@/../convex/_generated/api";
 
+interface StartupData {
+  name: string;
+  description: string;
+  problem: string;
+  solution: string;
+  location: string;
+  funding: string;
+  team_size: string;
+}
+
 interface CreateStartupContextType {
   step: number;
-  startupData: any;
+  startupData: StartupData;
   isCreating: boolean;
   nextStep: () => void;
   previousStep: () => void;
   handleCreate: () => Promise<void>;
-  handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  handleChange: (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => void;
 }
 
-const CreateStartupContext = createContext<CreateStartupContextType | undefined>(
-  undefined
-);
+const CreateStartupContext = createContext<
+  CreateStartupContextType | undefined
+>(undefined);
 
-export const CreateStartupProvider = ({ children }: { children: ReactNode }) => {
+export const CreateStartupProvider = ({
+  children,
+}: {
+  children: ReactNode;
+}) => {
   const [step, setStep] = useState(1);
-  const [startupData, setStartupData] = useState<any>({});
+  const [startupData, setStartupData] = useState<StartupData>({
+    name: "",
+    description: "",
+    problem: "",
+    solution: "",
+    location: "",
+    funding: "",
+    team_size: "",
+  });
   const [isCreating, setIsCreating] = useState(false);
   const createStartup = useMutation(api.startups.mutations.createStartup);
 
@@ -44,7 +68,7 @@ export const CreateStartupProvider = ({ children }: { children: ReactNode }) => 
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setStartupData((prev: any) => ({ ...prev, [name]: value }));
+    setStartupData((prev) => ({ ...prev, [name]: value }));
   };
 
   const value = {

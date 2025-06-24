@@ -3,7 +3,7 @@ import { useQuery } from "convex/react";
 import { api } from "@/../convex/_generated/api";
 import type { Doc } from "@/../convex/_generated/dataModel";
 import { FullScreenLoader } from "@/components/FullScreenLoader";
-import { Navigate } from "@tanstack/react-router";
+import { Navigate } from "@tanstack/react-router"; 
 
 type UserContextType = {
   profile: Doc<"profiles">;

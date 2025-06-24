@@ -46,68 +46,84 @@ export function ChatWindow({ username }: { username: string }) {
   }, [messages]);
 
   return (
-    <div className="flex flex-1 flex-col h-full min-h-0">
-      <div className="flex items-center p-4 border-b min-h-[64px]">
-        <Avatar className="w-10 h-10 mr-4">
+    <div className="flex flex-1 flex-col h-full min-h-0 bg-background">
+      {/* Sticky header */}
+      <div className="sticky top-0 z-10 flex items-center gap-4 p-4 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <Avatar className="w-12 h-12">
           <AvatarImage src={chatPartner?.avatar_url || undefined} alt={chatPartner?.name || "?"} />
           <AvatarFallback>{chatPartner?.name?.charAt(0) || "?"}</AvatarFallback>
         </Avatar>
-        <h2 className="text-xl font-bold">{chatPartner?.name || "Unknown User"}</h2>
-        <p className="ml-2 text-sm text-gray-500">(Chat ID: {username})</p>
+        <div className="flex flex-col">
+          <h2 className="text-lg font-bold leading-tight">{chatPartner?.name || "Unknown User"}</h2>
+          <span className="text-xs text-muted-foreground">@{username}</span>
+        </div>
       </div>
-      <div className="flex-1 min-h-0 p-4 overflow-y-auto">
+      {/* Messages */}
+      <div className="flex-1 min-h-0 p-4 sm:p-6 overflow-y-auto bg-background" style={{scrollbarGutter: 'stable'}}>
         <div className="flex flex-col gap-4">
           {Array.isArray(messages) && messages.length > 0 ? (
-            messages.map((msg) => (
-              <div
-                key={msg._id}
-                className={`flex items-end gap-2 ${
-                  msg.sender?._id === myProfile?._id ? "justify-end" : ""
-                }`}
-              >
-                {msg.sender?._id !== myProfile?._id && (
-                  <Avatar className="w-8 h-8">
-                    <AvatarImage
-                      src={chatPartner?.avatar_url || undefined}
-                      alt={chatPartner?.name || "?"}
-                    />
-                    <AvatarFallback>{chatPartner?.name?.charAt(0) || "?"}</AvatarFallback>
-                  </Avatar>
-                )}
+            messages.map((msg) => {
+              const isMe = msg.sender?._id === myProfile?._id;
+              return (
                 <div
-                  className={`rounded-lg p-3 max-w-xs lg:max-w-md ${
-                    msg.sender?._id === myProfile?._id
-                      ? "bg-blue-500 text-white"
-                      : "bg-gray-200 dark:bg-gray-700"
-                  }`}
+                  key={msg._id}
+                  className={`flex items-end gap-2 ${isMe ? "justify-end" : ""}`}
                 >
-                  <p>{msg.content}</p>
+                  {!isMe && (
+                    <Avatar className="w-8 h-8 shrink-0">
+                      <AvatarImage
+                        src={chatPartner?.avatar_url || undefined}
+                        alt={msg.sender?.name || "?"}
+                      />
+                      <AvatarFallback>{msg.sender?.name?.charAt(0) || "?"}</AvatarFallback>
+                    </Avatar>
+                  )}
+                  <div
+                    className={`rounded-2xl px-4 py-2 max-w-xs lg:max-w-md shadow-sm text-sm flex flex-col ${
+                      isMe
+                        ? "bg-primary text-primary-foreground items-end ml-auto"
+                        : "bg-muted text-foreground items-start"
+                    }`}
+                  >
+                    <p className="break-words whitespace-pre-line">{msg.content}</p>
+                    <span className="block mt-1 text-[10px] text-muted-foreground text-right">
+                      {new Date(msg._creationTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </span>
+                  </div>
+                  {isMe && (
+                    <Avatar className="w-8 h-8 shrink-0 ml-2">
+                      <AvatarImage
+                        src={myProfile?.avatar_url}
+                        alt={myProfile?.name || "?"}
+                      />
+                      <AvatarFallback>{myProfile?.name?.charAt(0) || "?"}</AvatarFallback>
+                    </Avatar>
+                  )}
                 </div>
-              </div>
-            ))
+              );
+            })
           ) : (
             <div className="text-center text-gray-400">No messages yet.</div>
           )}
           <div ref={messagesEndRef} />
         </div>
       </div>
-      <div className="p-4 border-t">
-        <form onSubmit={handleSendMessage} className="relative">
+      {/* Input */}
+      <div className="p-6 pt-4 border-t bg-background">
+        <form onSubmit={handleSendMessage} className="relative flex gap-2 items-center">
           <Input
             placeholder="Type a message..."
             value={message}
             onChange={(e) => setMessage(e.target.value)}
-            className="pr-20"
+            className="pr-20 rounded-full bg-muted/60 border-none focus:ring-2 focus:ring-primary"
             disabled={!chatPartner}
           />
-          <div className="absolute top-1/2 right-2 -translate-y-1/2 flex items-center">
-            <Button variant="ghost" size="icon" type="button">
-              <PaperclipIcon className="w-5 h-5" />
-            </Button>
-            <Button variant="ghost" size="icon" type="submit" disabled={!chatPartner}>
-              <SendIcon className="w-5 h-5" />
-            </Button>
-          </div>
+          <Button variant="ghost" size="icon" type="button" className="rounded-full">
+            <PaperclipIcon className="w-5 h-5" />
+          </Button>
+          <Button variant="default" size="icon" type="submit" disabled={!chatPartner} className="rounded-full">
+            <SendIcon className="w-5 h-5" />
+          </Button>
         </form>
       </div>
     </div>

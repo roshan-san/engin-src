@@ -8,9 +8,9 @@ export const Route = createFileRoute("/_protected/message")({
 
 function MessagesIndex() {
   return (
-  <div className="h-full flex flex-col p-4">
-    <Header>Message</Header>
-    <MessagingUi />
-  </div>
+    <div className="flex-1 flex flex-col h-full min-h-0">
+      <Header>Message</Header>
+      <MessagingUi />
+    </div>
   );
 } 
