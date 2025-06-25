@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useMutation, useQuery } from "convex/react";
-import { api } from "../../../convex/_generated/api";
-import type { Id } from "../../../convex/_generated/dataModel";
+import { api } from "@/../convex/_generated/api";
+import type { Id } from "@/../convex/_generated/dataModel";
 import {
   Dialog,
   DialogContent,
@@ -9,10 +9,10 @@ import {
   DialogTitle,
   DialogFooter,
   DialogTrigger,
-} from "../ui/dialog";
-import { Textarea } from "../ui/textarea";
-import { Button } from "../ui/button";
-import { Badge } from "../ui/badge";
+} from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Send, Clock, CheckCircle, XCircle } from "lucide-react";
 
 interface ApplyToPositionProps {

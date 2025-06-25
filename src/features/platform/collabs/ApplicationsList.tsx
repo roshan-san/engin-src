@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import { useQuery, useMutation } from "convex/react";
-import { api } from "../../../convex/_generated/api";
-import type { Id, Doc } from "../../../convex/_generated/dataModel";
+import { api } from "@/../convex/_generated/api";
+import type { Id, Doc } from "@/../convex/_generated/dataModel";
 import {
   Card,
   CardHeader,
   CardContent,
   CardDescription,
-} from "../ui/card";
-import { Badge } from "../ui/badge";
-import { Button } from "../ui/button";
+} from "../../../components/ui/card";
+import { Badge } from "../../../components/ui/badge";
+import { Button } from "../../../components/ui/button";
 import { Link } from "@tanstack/react-router";
 import { Users, MessageCircle, CheckCircle, XCircle, Clock } from "lucide-react";
 

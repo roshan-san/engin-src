@@ -1,30 +1,27 @@
 import React from "react";
 import { useQuery, useMutation } from "convex/react";
-import { api } from "../../../convex/_generated/api";
-import type { Id, Doc } from "../../../convex/_generated/dataModel";
-import { Badge } from "../ui/badge";
-import { Button } from "../ui/button";
 import { Users, UserMinus, Crown } from "lucide-react";
+import { api } from "@/../convex/_generated/api";
+import type { Id, Doc } from "@/../convex/_generated/dataModel";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 interface CollaboratorsListProps {
   startupId: Id<"startups">;
   isOwner: boolean;
 }
 
-export const CollaboratorsList: React.FC<CollaboratorsListProps> = ({ startupId, isOwner }) => {
-  // Fetch the startup to get the collaborators array
+export const CollaboratorsList: React.FC<CollaboratorsListProps> = ({ startupId }) => {
   const startup = useQuery(api.startups.queries.getStartup, { startupId });
   const removeCollaborator = useMutation(api.startups.mutations.removeCollaborator);
   const collaborators = startup?.collaborators || [];
   
-  // Fetch all collaborator profiles
   const profiles = useQuery(api.profile.queries.getProfilesByIds, { ids: collaborators });
   
-  // Fetch all accepted applications to get roles
   const acceptedApplications = useQuery(api.startups.queries.getAcceptedApplications, { startupId });
 
   function getProfile(profileId: Id<"profiles">) {
-    return profiles?.find((p: Doc<"profiles">) => p._id === profileId);
+    return profiles?.find((p): p is Doc<"profiles"> => !!p && p._id === profileId);
   }
 
   function getRole(profileId: Id<"profiles">) {
@@ -49,7 +46,6 @@ export const CollaboratorsList: React.FC<CollaboratorsListProps> = ({ startupId,
         </Badge>
       </div>
       
-      {/* Team Members List */}
       <div className="space-y-3">
         {collaborators.length === 0 ? (
           <div className="text-center py-8 sm:py-12">
@@ -113,7 +109,7 @@ export const CollaboratorsList: React.FC<CollaboratorsListProps> = ({ startupId,
                       </div>
                     </div>
                     
-                    {isOwner && !isOwner && (
+                    {isOwner && (
                       <Button
                         size="sm"
                         variant="outline"

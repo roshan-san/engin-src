@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import { useQuery } from "convex/react";
-import { api } from "../../../convex/_generated/api";
-import type { Id, Doc } from "../../../convex/_generated/dataModel";
+import { api } from "@/../convex/_generated/api";
+import type { Id, Doc } from "@/../convex/_generated/dataModel";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Briefcase, Plus, Users, Eye } from "lucide-react";
-import { PositionForm } from "./PositionForm";
-import { ApplicationsList } from "./ApplicationsList";
+import { ApplicationsList } from "../collabs/ApplicationsList";
 import { ApplyToPosition } from "./ApplyToPosition";
-import { useUser } from "../../features/authentication/UserContext";
+import { useUser } from "../../authentication/UserContext";
+import { PositionForm } from "./PositionForm";
 
 interface PositionsListProps {
   startupId: Id<"startups">;
@@ -68,8 +68,6 @@ export const PositionsList: React.FC<PositionsListProps> = ({ startupId, isOwner
                   </DialogDescription>
                 </DialogHeader>
                 <PositionForm 
-                  open={isCreateDialogOpen}
-                  onOpenChange={setIsCreateDialogOpen}
                   startupId={startupId} 
                   onSuccess={() => setIsCreateDialogOpen(false)} 
                 />
