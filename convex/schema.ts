@@ -24,6 +24,7 @@ const schema = defineSchema({
     location: v.optional(v.string()),
     skills: v.optional(v.array(v.string())),
     interests: v.optional(v.array(v.string())),
+    bio: v.optional(v.string()),
     github_url: v.optional(v.string()),
     linkedin_url: v.optional(v.string()),
   })
@@ -62,6 +63,7 @@ const schema = defineSchema({
     collaborators: v.optional(v.array(v.id("profiles"))),
   })
     .index("by_owner", ["ownerId"])
+    .index("by_collaborators", ["collaborators"])
     .searchIndex("by_ownerId",{
       searchField:"ownerId"
     })

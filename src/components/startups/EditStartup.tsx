@@ -6,6 +6,7 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
+  CardDescription,
 } from "../../components/ui/card";
 import { Badge } from "../../components/ui/badge";
 import { Button } from "../../components/ui/button";
@@ -179,96 +180,133 @@ export function EditStartup({ startup }: EditStartupProps) {
   }
 
   return (
-    <Card className="shadow-lg border-0 bg-background/80 backdrop-blur-md p-2 md:p-6">
-      <CardHeader>
-        <CardTitle className="text-2xl font-bold mb-2">Startup Info</CardTitle>
-        <div className="flex items-center gap-3">
-          <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary">
-            <Lightbulb className="h-6 w-6" />
-          </span>
-          <div>
-            <EditableField
-              label="Name"
-              value={name}
-              field="name"
-              icon={null}
-              valueClass="text-lg font-semibold text-foreground"
-            />
-            <EditableField
-              label="Description"
-              value={description}
-              field="description"
-              icon={null}
-              multiline
-              valueClass="text-base text-muted-foreground"
-            />
+    <Card className="shadow-2xl border-0 bg-gradient-to-br from-background to-muted/30 backdrop-blur-md rounded-2xl overflow-hidden">
+      <CardHeader className="pb-6 bg-gradient-to-r from-primary/5 to-primary/10 border-b border-primary/10">
+        <div className="flex items-center gap-4 mb-4">
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center shadow-lg">
+            <Lightbulb className="h-6 w-6 text-primary-foreground" />
           </div>
+          <div>
+            <CardTitle className="text-2xl lg:text-3xl font-bold">Startup Information</CardTitle>
+            <CardDescription className="text-base">Edit your startup details and manage your team</CardDescription>
+          </div>
+        </div>
+        
+        <div className="space-y-4">
+          <EditableField
+            label="Name"
+            value={name}
+            field="name"
+            icon={null}
+            valueClass="text-xl lg:text-2xl font-bold text-foreground break-words"
+          />
+          <EditableField
+            label="Description"
+            value={description}
+            field="description"
+            icon={null}
+            multiline
+            valueClass="text-base text-muted-foreground break-words leading-relaxed"
+          />
         </div>
       </CardHeader>
-      <CardContent className="space-y-6">
-        <div className="border-t border-muted my-2" />
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="flex flex-col gap-2">
-            <div className="flex items-center gap-2 text-amber-600 font-semibold text-base">
-              <AlertTriangle className="h-5 w-5" />
-              <span>Problem</span>
+      
+      <CardContent className="p-6 lg:p-8 space-y-8">
+        {/* Problem & Solution Section */}
+        <div className="space-y-6">
+          <h3 className="text-lg font-semibold text-foreground border-b border-muted/50 pb-2">Problem & Solution</h3>
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 lg:gap-8">
+            <div className="space-y-4">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-amber-100 dark:bg-amber-900/20">
+                  <AlertTriangle className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+                </div>
+                <h4 className="text-lg font-semibold text-amber-700 dark:text-amber-300">The Problem</h4>
+              </div>
+              <EditableField
+                label="Problem"
+                value={problem}
+                field="problem"
+                icon={null}
+                multiline
+                valueClass="text-muted-foreground break-words leading-relaxed pl-12"
+              />
             </div>
-            <EditableField
-              label="Problem"
-              value={problem}
-              field="problem"
-              icon={null}
-              multiline
-              valueClass="text-base text-muted-foreground pl-7"
-            />
-          </div>
-          <div className="flex flex-col gap-2">
-            <div className="flex items-center gap-2 text-green-600 font-semibold text-base">
-              <Lightbulb className="h-5 w-5" />
-              <span>Solution</span>
+            
+            <div className="space-y-4">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-green-100 dark:bg-green-900/20">
+                  <Lightbulb className="h-5 w-5 text-green-600 dark:text-green-400" />
+                </div>
+                <h4 className="text-lg font-semibold text-green-700 dark:text-green-300">Our Solution</h4>
+              </div>
+              <EditableField
+                label="Solution"
+                value={solution}
+                field="solution"
+                icon={null}
+                multiline
+                valueClass="text-muted-foreground break-words leading-relaxed pl-12"
+              />
             </div>
-            <EditableField
-              label="Solution"
-              value={solution}
-              field="solution"
-              icon={null}
-              multiline
-              valueClass="text-base text-muted-foreground pl-7"
-            />
           </div>
         </div>
-        <div className="border-t border-muted my-2" />
-        <div className="flex flex-wrap gap-4 mt-2">
-          <EditableField
-            label="Location"
-            value={location}
-            field="location"
-            icon={<MapPin className="h-4 w-4 text-blue-500" />}
-            badge
-            badgeClass="bg-blue-100 text-blue-800 text-sm font-semibold"
-            valueClass="text-sm font-semibold"
-          />
-          <EditableField
-            label="Funding"
-            value={funding}
-            field="funding"
-            icon={<DollarSign className="h-4 w-4 text-green-500" />}
-            type="number"
-            badge
-            prefix="$"
-            badgeClass="bg-green-100 text-green-800 text-sm font-semibold"
-            valueClass="text-sm font-semibold"
-          />
-          <EditableField
-            label="Team Size"
-            value={teamSize}
-            field="team_size"
-            icon={<Users className="h-4 w-4 text-purple-500" />}
-            type="number"
-            badge
-            badgeClass="bg-purple-100 text-purple-800 text-sm font-semibold"
-            valueClass="text-sm font-semibold"
-          />
+
+        {/* Stats Section */}
+        <div className="space-y-6">
+          <h3 className="text-lg font-semibold text-foreground border-b border-muted/50 pb-2">Key Metrics</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="group p-4 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 border border-blue-200 dark:border-blue-800/50 hover:shadow-lg transition-all duration-300">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="p-2 rounded-lg bg-blue-500/10">
+                  <MapPin className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                </div>
+                <span className="text-xs font-medium text-blue-600 dark:text-blue-400 uppercase tracking-wide">Location</span>
+              </div>
+              <EditableField
+                label="Location"
+                value={location}
+                field="location"
+                icon={null}
+                valueClass="font-semibold text-blue-900 dark:text-blue-100 truncate"
+              />
+            </div>
+            
+            <div className="group p-4 rounded-xl bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 border border-green-200 dark:border-green-800/50 hover:shadow-lg transition-all duration-300">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="p-2 rounded-lg bg-green-500/10">
+                  <DollarSign className="h-4 w-4 text-green-600 dark:text-green-400" />
+                </div>
+                <span className="text-xs font-medium text-green-600 dark:text-green-400 uppercase tracking-wide">Funding</span>
+              </div>
+              <EditableField
+                label="Funding"
+                value={funding}
+                field="funding"
+                icon={null}
+                type="number"
+                prefix="$"
+                valueClass="font-semibold text-green-900 dark:text-green-100"
+              />
+            </div>
+            
+            <div className="group p-4 rounded-xl bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 border border-purple-200 dark:border-purple-800/50 hover:shadow-lg transition-all duration-300">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="p-2 rounded-lg bg-purple-500/10">
+                  <Users className="h-4 w-4 text-purple-600 dark:text-purple-400" />
+                </div>
+                <span className="text-xs font-medium text-purple-600 dark:text-purple-400 uppercase tracking-wide">Team Size</span>
+              </div>
+              <EditableField
+                label="Team Size"
+                value={teamSize}
+                field="team_size"
+                icon={null}
+                type="number"
+                valueClass="font-semibold text-purple-900 dark:text-purple-100"
+              />
+            </div>
+          </div>
         </div>
       </CardContent>
     </Card>

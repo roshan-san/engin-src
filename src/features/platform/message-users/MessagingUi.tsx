@@ -1,8 +1,11 @@
-import { Outlet, useParams } from "@tanstack/react-router";
+import { Outlet, useMatchRoute } from "@tanstack/react-router";
 import { ChatList } from "./ChatList";
 
 export default function MessagingUi() {
-  const { username } = useParams({ from: "/_protected/message/$username" });
+  const { username } = useMatchRoute({
+    from: "/_protected/message/$username",
+    select: (match) => ({ username: match.params.username }),
+  }) || { username: undefined };
   return (
     <div className="flex flex-1 h-full w-full bg-background rounded-xl shadow-lg overflow-hidden border border-border">
       <aside

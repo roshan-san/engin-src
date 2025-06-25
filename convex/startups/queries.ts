@@ -16,6 +16,29 @@ export const getMyStartups = query({
   },
 });
 
+export const getStartupsByUser = query({
+  args: { userId: v.id("profiles") },
+  handler: async (ctx, args) => {
+    // Get startups owned by the user
+    const ownedStartups = await ctx.db
+      .query("startups")
+      .withIndex("by_owner", (q) => q.eq("ownerId", args.userId))
+      .collect();
+    
+    // Get startups where user is a collaborator
+    const collaboratedStartups = await ctx.db
+      .query("startups")
+      .withIndex("by_collaborators", (q) => q.eq("collaborators", args.userId as any))
+      .collect();
+    
+    return {
+      owned: ownedStartups,
+      collaborated: collaboratedStartups,
+      all: [...ownedStartups, ...collaboratedStartups]
+    };
+  },
+});
+
 export const getStartup = query({
   args: { startupId: v.id("startups") },
   handler: async (ctx, args) => {
