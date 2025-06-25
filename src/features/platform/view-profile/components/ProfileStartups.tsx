@@ -2,7 +2,7 @@ import { useQuery } from "convex/react";
 import type { Doc } from "@/../convex/_generated/dataModel";
 import { api } from "@/../convex/_generated/api";
 import { useUser } from "@/features/authentication/UserContext";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Building2, Users, MapPin, DollarSign, ExternalLink, Crown } from "lucide-react";

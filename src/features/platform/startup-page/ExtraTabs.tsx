@@ -4,7 +4,7 @@ import { Tabs, TabsContent, TabsTrigger, TabsList } from "@/components/ui/tabs";
 import { PositionsList } from "../positions/PositionsList";
 import { CollaboratorsList } from "../collabs/CollaboratorsList";
 import { Briefcase, Users } from "lucide-react";
-import { type Doc } from "@/../convex/_generated/dataModel";
+import type { Doc } from "@/../convex/_generated/dataModel.d.ts";
 
 export function ExtraTabs({ startup, isOwner }: { startup: Doc<"startups">, isOwner: boolean }) {
     return (

@@ -1,6 +1,5 @@
 import { Link } from "@tanstack/react-router";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Separator } from "@/components/ui/separator";
 import { useQuery } from "convex/react";
 import { api } from "@/../convex/_generated/api";
 import { Input } from "@/components/ui/input";
@@ -23,7 +22,7 @@ export function ChatList() {
       <div className="flex-1 overflow-y-auto">
         {filtered && filtered.length > 0 ? (
           <div className="flex flex-col gap-1">
-            {filtered.map((profile, index) => (
+            {filtered.map((profile) => (
               <Link key={profile?._id} to="/message/$username" params={{ username: profile?.username! }}>
                 <div className="flex items-center gap-3 p-3 rounded-lg hover:bg-accent transition-colors cursor-pointer group">
                   <Avatar className="w-10 h-10">

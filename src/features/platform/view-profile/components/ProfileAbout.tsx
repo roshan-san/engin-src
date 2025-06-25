@@ -5,9 +5,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import type { Doc } from "@/../convex/_generated/dataModel";
-import { Github, Linkedin, ExternalLink, User, MapPin, Briefcase, Mail, Calendar } from "lucide-react";
+import { Github, Linkedin, ExternalLink, User, MapPin, Briefcase, Mail } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
 interface ProfileAboutProps {
@@ -41,8 +40,8 @@ function SocialLinkButton({ icon: Icon, label, url }: SocialLink) {
 
 export function ProfileAbout({ profile }: ProfileAboutProps) {
   const socialLinks: SocialLink[] = [
-    { icon: Github, label: "GitHub", url: profile.github_url },
-    { icon: Linkedin, label: "LinkedIn", url: profile.linkedin_url },
+    { icon: Github, label: "GitHub", url: profile.github_url ?? null },
+    { icon: Linkedin, label: "LinkedIn", url: profile.linkedin_url ?? null },
   ];
 
   const hasSocialLinks = socialLinks.some(link => link.url);

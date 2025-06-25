@@ -12,7 +12,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import type { Doc } from "@/../convex/_generated/dataModel";
-import { Sparkles, Target, Code, Lightbulb } from "lucide-react";
+import { Target, Code, Lightbulb } from "lucide-react";
 
 export function ProfileSkills({ profile }: { profile: Doc<"profiles"> }) {
   const hasInterests = profile.interests && profile.interests.length > 0;

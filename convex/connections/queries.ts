@@ -1,6 +1,6 @@
 import { query } from "../_generated/server";
 import { v } from "convex/values";
-import { getAuthenticatedProfile, getAuthenticatedUser } from "../helper";
+import { getAuthenticatedProfile } from "../helper";
 import { getProfileByIdfn } from "./functions";
 
 export const getMyAcceptedConnections = query({

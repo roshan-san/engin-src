@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
-import { type Id } from "../../../convex/_generated/dataModel";
+import type { Id } from "../../../convex/_generated/dataModel.d.ts";
 import { useUser } from "../../features/authentication/UserContext";
 import { FullScreenLoader } from "@/components/FullScreenLoader";
 import { StartupBox } from "@/features/platform/startup-page/StartupBox";
@@ -26,10 +26,8 @@ function RouteComponent() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="container px-4 py-6 space-y-6">
-        <div className="bg-card rounded-2xl border shadow-sm">
-            <StartupBox startup={startup} />
-        </div>
+      <div className="gap-4 flex flex-col">
+      <StartupBox startup={startup} isOwner={isOwner} />
         <ExtraTabs startup={startup} isOwner={isOwner} />
       </div>
     </div>
