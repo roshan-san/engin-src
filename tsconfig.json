@@ -7,7 +7,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "types": [
-      "vite-plugin-pwa/client"
+      "vite-plugin-pwa/client","node"
     ],
     "paths": {
       "@/*": ["./src/*"]
