@@ -1,4 +1,4 @@
-import { Doc } from "../../../convex/_generated/dataModel";
+import type { Doc } from "../../../convex/_generated/dataModel";
 import {
   Card,
   CardContent,
@@ -7,28 +7,51 @@ import {
   CardTitle,
 } from "../../components/ui/card";
 import { Badge } from "../../components/ui/badge";
+import { Button } from "../../components/ui/button";
 import { MapPin, DollarSign, Users, AlertTriangle, Lightbulb } from "lucide-react";
+import { useQuery } from "convex/react";
+import { api } from "../../../convex/_generated/api";
+import { Link } from "@tanstack/react-router";
 
 interface StartupInfoProps {
   startup: Doc<"startups">;
 }
 
 export function StartupInfo({ startup }: StartupInfoProps) {
+  const ownerProfile = useQuery(api.profile.queries.getProfileById, { profileId: startup.ownerId });
+
   return (
-    <Card className="shadow-lg border-0 bg-background/80 backdrop-blur-md">
+    <Card className="shadow-lg border-0 bg-background/80 backdrop-blur-md min-h-[340px] p-2 md:p-6 relative">
       <CardHeader>
-        <div className="flex items-center gap-3">
-          <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary">
-            <Lightbulb className="h-6 w-6" />
-          </span>
-          <div>
-            <CardTitle className="text-2xl font-semibold leading-tight">
-              {startup.name}
-            </CardTitle>
-            <CardDescription className="mt-1 text-base text-muted-foreground">
-              {startup.description}
-            </CardDescription>
+        <div className="flex items-center gap-3 justify-between">
+          <div className="flex items-center gap-3">
+            <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary">
+              <Lightbulb className="h-6 w-6" />
+            </span>
+            <div>
+              <CardTitle className="text-2xl font-semibold leading-tight">
+                {startup.name}
+              </CardTitle>
+              <CardDescription className="mt-1 text-base text-muted-foreground">
+                {startup.description}
+              </CardDescription>
+            </div>
           </div>
+          {ownerProfile && (
+            <div className="flex flex-col items-end gap-1 min-w-[120px]">
+              <div className="flex items-center gap-2">
+                {ownerProfile.avatar_url && (
+                  <img src={ownerProfile.avatar_url} alt="avatar" className="w-8 h-8 rounded-full" />
+                )}
+                <span className="font-medium text-sm">{ownerProfile.username || ownerProfile.name || "Owner"}</span>
+              </div>
+              {ownerProfile.username && (
+                <Link to="/message/$username" params={{ username: ownerProfile.username }}>
+                  <Button size="sm" variant="outline">Message Owner</Button>
+                </Link>
+              )}
+            </div>
+          )}
         </div>
       </CardHeader>
       <CardContent className="space-y-6">

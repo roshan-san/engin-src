@@ -58,6 +58,8 @@ const schema = defineSchema({
     funding: v.number(),
     team_size: v.number(),
     ownerId: v.id("profiles"),
+    // Simplified collaborators - just track who's on the team
+    collaborators: v.optional(v.array(v.id("profiles"))),
   })
     .index("by_owner", ["ownerId"])
     .searchIndex("by_ownerId",{
@@ -66,6 +68,33 @@ const schema = defineSchema({
     .searchIndex("by_name", {
       searchField: "name",
     }),
+
+  positions: defineTable({
+    startupId: v.id("startups"),
+    title: v.string(),
+    description: v.string(),
+    requirements: v.optional(v.string()),
+    status: v.union(v.literal("open"), v.literal("closed")),
+    createdAt: v.number(),
+  })
+    .index("by_startup", ["startupId", "status"]),
+
+  applications: defineTable({
+    positionId: v.id("positions"),
+    applicantId: v.id("profiles"),
+    message: v.optional(v.string()),
+    status: v.union(
+      v.literal("pending"),
+      v.literal("accepted"),
+      v.literal("rejected")
+    ),
+    createdAt: v.number(),
+    // When accepted, this becomes the role in the startup
+    acceptedRole: v.optional(v.string()),
+  })
+    .index("by_position", ["positionId", "status"])
+    .index("by_applicant", ["applicantId", "status"])
+    .index("by_startup_applicant", ["positionId", "applicantId"]),
 });
 
 export default schema;

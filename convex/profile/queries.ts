@@ -32,3 +32,16 @@ export const getProfileById = query({
     return await getProfileByIdfn(ctx, args.profileId);
   },
 });
+
+export const getProfilesByIds = query({
+  args: {
+    ids: v.array(v.id("profiles")),
+  },
+  handler: async (ctx, args) => {
+    if (args.ids.length === 0) return [];
+    const profiles = await Promise.all(
+      args.ids.map(id => ctx.db.get(id))
+    );
+    return profiles.filter(Boolean);
+  },
+});
