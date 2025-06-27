@@ -8,14 +8,30 @@ export function MessageBubble({ msg, isMe, myProfile, receiverProfile, formatMes
   receiverProfile: any,
   formatMessageTime: (n: number) => string
 }) {
+  // Debug logging
+  console.log('MessageBubble Debug:', {
+    isMe,
+    myProfileAvatar: myProfile?.avatar_url,
+    receiverProfileAvatar: receiverProfile?.avatar_url,
+    myProfile: myProfile,
+    receiverProfile: receiverProfile
+  });
+
+  // Helper function to check if avatar URL is valid
+  const isValidAvatarUrl = (url: string | null | undefined) => {
+    return url && url.trim() !== '' && url !== 'null' && url !== 'undefined';
+  };
+
   return (
     <div className={`flex items-end gap-3 ${isMe ? "justify-end" : "justify-start"}`}>
       {!isMe && (
         <Avatar className="w-8 h-8 shrink-0 ring-1 ring-border">
-          <AvatarImage
-            src={receiverProfile?.avatar_url || undefined}
-            alt={receiverProfile?.name || receiverProfile?.username || "?"}
-          />
+          {isValidAvatarUrl(receiverProfile?.avatar_url) ? (
+            <AvatarImage
+              src={receiverProfile.avatar_url}
+              alt={receiverProfile?.name || receiverProfile?.username || "?"}
+            />
+          ) : null}
           <AvatarFallback className="text-xs bg-primary/10 text-primary">
             {receiverProfile?.name?.charAt(0) || receiverProfile?.username?.charAt(0) || "?"}
           </AvatarFallback>
@@ -49,10 +65,12 @@ export function MessageBubble({ msg, isMe, myProfile, receiverProfile, formatMes
       </div>
       {isMe && (
         <Avatar className="w-8 h-8 shrink-0 ring-1 ring-border">
-          <AvatarImage
-            src={myProfile?.avatar_url}
-            alt={myProfile?.name || myProfile?.username || "?"}
-          />
+          {isValidAvatarUrl(myProfile?.avatar_url) ? (
+            <AvatarImage
+              src={myProfile.avatar_url}
+              alt={myProfile?.name || myProfile?.username || "?"}
+            />
+          ) : null}
           <AvatarFallback className="text-xs bg-primary/10 text-primary">
             {myProfile?.name?.charAt(0) || myProfile?.username?.charAt(0) || "?"}
           </AvatarFallback>

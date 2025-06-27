@@ -1,6 +1,4 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { MoreVertical } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"; 
 
 export function ChatHeader({ chatPartner, onlineStatus, formatLastSeen }: {
   chatPartner: any,
@@ -39,9 +37,6 @@ export function ChatHeader({ chatPartner, onlineStatus, formatLastSeen }: {
           </span>
         </div>
       </div>
-      <Button variant="ghost" size="icon" className="h-8 w-8">
-        <MoreVertical className="h-4 w-4" />
-      </Button>
     </div>
   );
 } 

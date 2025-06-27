@@ -20,6 +20,20 @@ export const createProfile = mutation({
       throw new Error("Failed to find user in database");
     }
 
+    // Debug logging
+    console.log('Creating profile with user data:', {
+      userImage: user.image,
+      userName: user.name,
+      userEmail: user.email
+    });
+
+    // Validate avatar URL
+    const isValidAvatarUrl = (url: string | null | undefined) => {
+      return url && url.trim() !== '' && url !== 'null' && url !== 'undefined';
+    };
+
+    const avatarUrl = isValidAvatarUrl(user.image) ? user.image : undefined;
+
     const profile = await ctx.db.insert("profiles", {
       username: args.username,
       user_type: args.user_type,
@@ -29,10 +43,12 @@ export const createProfile = mutation({
       interests: args.interests,
       github_url: args.github_url,
       linkedin_url: args.linkedin_url,
-      avatar_url: user.image,
+      avatar_url: avatarUrl,
       name: user.name,
       email: user.email,
     });
+
+    console.log('Profile created with avatar_url:', avatarUrl);
 
     return profile;
   },
@@ -94,6 +110,39 @@ export const updateProfile = mutation({
       ...(args.name && { name: args.name }),
       ...(args.bio && { bio: args.bio }),
     });
+
+    return updatedProfile;
+  },
+});
+
+export const updateAvatarUrl = mutation({
+  args: {
+    profileId: v.id("profiles"),
+    avatar_url: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const user = await getAuthenticatedUser(ctx);
+    if (!user) {
+      throw new Error("Not authenticated");
+    }
+
+    // Get the profile to check ownership
+    const profile = await ctx.db.get(args.profileId);
+    if (!profile) {
+      throw new Error("Profile not found");
+    }
+
+    // Check if user owns this profile
+    if (profile.email !== user.email) {
+      throw new Error("Not authorized to edit this profile");
+    }
+
+    // Update the avatar URL
+    const updatedProfile = await ctx.db.patch(args.profileId, {
+      avatar_url: args.avatar_url,
+    });
+
+    console.log('Avatar URL updated:', args.avatar_url);
 
     return updatedProfile;
   },

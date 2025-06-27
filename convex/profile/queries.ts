@@ -45,3 +45,22 @@ export const getProfilesByIds = query({
     return profiles.filter(Boolean);
   },
 });
+
+export const getProfileWithAvatarDebug = query({
+  args: {
+    profileId: v.id("profiles"),
+  },
+  handler: async (ctx, args) => {
+    const profile = await ctx.db.get(args.profileId);
+    if (!profile) return null;
+    
+    console.log('Profile avatar debug:', {
+      profileId: args.profileId,
+      avatar_url: profile.avatar_url,
+      name: profile.name,
+      username: profile.username
+    });
+    
+    return profile;
+  },
+});
