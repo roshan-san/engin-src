@@ -67,7 +67,6 @@ export const getMessages = query({
             .withIndex("by_sender_receiver", (q) => q.eq("senderId", otherUserId).eq("receiverId", myId))
             .collect();
 
-        // No need to fetch sender profile, info is in the message
         return [...messages1, ...messages2].sort((a, b) => a._creationTime - b._creationTime);
     }
 });
@@ -110,7 +109,6 @@ export const getUnreadMessagesCount = query({
         const myProfile = await getAuthenticatedProfile(ctx);
         const myId = myProfile._id;
 
-        // Get all unread messages where the current user is the receiver
         const unreadMessages = await ctx.db
             .query("messages")
             .withIndex("by_receiver", (q) => q.eq("receiverId", myId))
@@ -135,7 +133,6 @@ export const getOnlineStatus = query({
             return { isOnline: false, lastSeen: Date.now() };
         }
 
-        // Consider user offline if they haven't been seen in the last 5 minutes
         const fiveMinutesAgo = Date.now() - 5 * 60 * 1000;
         const isCurrentlyOnline = status.isOnline && status.lastSeen > fiveMinutesAgo;
 
@@ -167,13 +164,11 @@ export const getChatSummaries = query({
       ...receiverConnections.map((c) => c.senderid),
     ];
 
-    // For each profile, get last message and unread status
     const summaries = await Promise.all(
       connectedProfileIds.map(async (profileId) => {
         const profile = await ctx.db.get(profileId);
         if (!profile) return null;
 
-        // Get last message between me and this profile
         const sent = await ctx.db
           .query("messages")
           .withIndex("by_sender_receiver", (q) => q.eq("senderId", myId).eq("receiverId", profileId))
@@ -209,7 +204,6 @@ export const getChatSummaries = query({
       })
     );
 
-    // Remove nulls and sort by last message time (descending)
     const nonNullSummaries = summaries.filter((s) => s !== null);
     return nonNullSummaries.sort((a, b) => {
       if (!a.lastMessage && !b.lastMessage) return 0;

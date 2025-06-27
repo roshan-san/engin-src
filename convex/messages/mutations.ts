@@ -9,7 +9,6 @@ export const sendMessage = mutation({
     },
     handler: async (ctx, args) => {
         const myProfile = await getAuthenticatedProfile(ctx);
-        const start = Date.now();
         await ctx.db.insert("messages", {
             senderId: myProfile._id,
             receiverId: args.receiverId,
@@ -19,7 +18,6 @@ export const sendMessage = mutation({
             senderAvatar: myProfile.avatar_url,
             senderUsername: myProfile.username,
         });
-        const end = Date.now();
     }
 });
 
