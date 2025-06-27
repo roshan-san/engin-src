@@ -1,8 +1,9 @@
 import { MessageBubble } from "./MessageBubble";
 
-export function MessageList({ messages, myProfile, formatMessageTime }: {
+export function MessageList({ messages, myProfile, receiverProfile, formatMessageTime }: {
   messages: any[],
   myProfile: any,
+  receiverProfile: any,
   formatMessageTime: (n: number) => string
 }) {
   return (
@@ -30,6 +31,7 @@ export function MessageList({ messages, myProfile, formatMessageTime }: {
               msg={msg}
               isMe={isMe}
               myProfile={myProfile}
+              receiverProfile={receiverProfile}
               formatMessageTime={formatMessageTime}
             />
           </div>

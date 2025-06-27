@@ -101,6 +101,7 @@ export function ChatWindow({ username }: { username: string }) {
           <MessageList
             messages={messages}
             myProfile={myProfile}
+            receiverProfile={chatPartner}
             formatMessageTime={formatMessageTime}
           />
         ) : (

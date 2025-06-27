@@ -43,7 +43,6 @@ export function LeftBar() {
                   }}
                 >
                   <item.icon className="h-5 w-5" />
-                  {/* Show notification dot for Messages tab */}
                   {item.href === "/message" && unread > 0 && (
                     <span className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-red-500 text-xs text-white flex items-center justify-center font-medium">
                       {unread > 9 ? "9+" : unread}

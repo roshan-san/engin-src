@@ -1,10 +1,11 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Check, CheckCheck } from "lucide-react";
 
-export function MessageBubble({ msg, isMe, myProfile, formatMessageTime }: {
+export function MessageBubble({ msg, isMe, myProfile, receiverProfile, formatMessageTime }: {
   msg: any,
   isMe: boolean,
   myProfile: any,
+  receiverProfile: any,
   formatMessageTime: (n: number) => string
 }) {
   return (
@@ -12,11 +13,11 @@ export function MessageBubble({ msg, isMe, myProfile, formatMessageTime }: {
       {!isMe && (
         <Avatar className="w-8 h-8 shrink-0 ring-1 ring-border">
           <AvatarImage
-            src={msg.senderAvatar || undefined}
-            alt={msg.senderName || msg.senderUsername || "?"}
+            src={receiverProfile?.avatar_url || undefined}
+            alt={receiverProfile?.name || receiverProfile?.username || "?"}
           />
           <AvatarFallback className="text-xs bg-primary/10 text-primary">
-            {msg.senderName?.charAt(0) || msg.senderUsername?.charAt(0) || "?"}
+            {receiverProfile?.name?.charAt(0) || receiverProfile?.username?.charAt(0) || "?"}
           </AvatarFallback>
         </Avatar>
       )}
@@ -43,7 +44,7 @@ export function MessageBubble({ msg, isMe, myProfile, formatMessageTime }: {
           )}
         </div>
         {!isMe && (
-          <span className="text-xs text-muted-foreground mt-1">{msg.senderName || msg.senderUsername}</span>
+          <span className="text-xs text-muted-foreground mt-1">{receiverProfile?.name || receiverProfile?.username}</span>
         )}
       </div>
       {isMe && (
