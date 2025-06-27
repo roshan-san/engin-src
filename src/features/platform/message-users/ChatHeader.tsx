@@ -10,7 +10,7 @@ export function ChatHeader({ chatPartner, onlineStatus, formatLastSeen }: {
   return (
     <div className="sticky top-0 z-10 flex items-center justify-between p-4 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="flex items-center gap-4">
-        <div className="relative">
+        <div className="relative">    
           <Avatar className="w-12 h-12 ring-2 ring-primary/10">
             <AvatarImage src={chatPartner?.avatar_url || undefined} alt={chatPartner?.name || chatPartner?.username || "?"} />
             <AvatarFallback className="bg-primary/10 text-primary font-semibold">
