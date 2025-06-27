@@ -9,6 +9,8 @@ import SignOutButton from "./SignOut";
 import { Link } from "@tanstack/react-router";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { useUser } from "@/features/authentication/UserContext";
+import { useQuery } from "convex/react";
+import { api } from "@/../convex/_generated/api";
 
 const mainNavigationItems = [
   { href: "/dashboard", icon: Laptop, label: "Dashboard" },
@@ -19,6 +21,7 @@ const mainNavigationItems = [
 
 export function LeftBar() {
   const { profile } = useUser();
+  const unreadCount = useQuery(api.messages.queries.getUnreadMessagesCount);
 
   return (
     <div className="flex h-full flex-col items-center">
@@ -31,14 +34,20 @@ export function LeftBar() {
                   to={item.href}
                   activeProps={{
                     className:
-                      "bg-primary text-primary-foreground shadow-sm p-2.5 rounded-lg transition-all duration-200",
+                      "bg-primary text-primary-foreground shadow-sm p-2.5 rounded-lg transition-all duration-200 relative",
                   }}
                   inactiveProps={{
                     className:
-                      "text-muted-foreground hover:bg-primary/10 hover:text-foreground p-2.5 rounded-lg transition-all duration-200",
+                      "text-muted-foreground hover:bg-primary/10 hover:text-foreground p-2.5 rounded-lg transition-all duration-200 relative",
                   }}
                 >
                   <item.icon className="h-5 w-5" />
+                  {/* Show notification dot for Messages tab */}
+                  {item.href === "/message" && unreadCount > 0 && (
+                    <span className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-red-500 text-xs text-white flex items-center justify-center font-medium">
+                      {unreadCount > 9 ? "9+" : unreadCount}
+                    </span>
+                  )}
                 </Link>
               </TooltipTrigger>
               <TooltipContent side="right" className="font-medium">

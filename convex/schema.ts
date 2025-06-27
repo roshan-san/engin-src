@@ -47,8 +47,14 @@ const schema = defineSchema({
     senderId: v.id("profiles"),
     receiverId: v.id("profiles"),
     content: v.string(),
+    read: v.optional(v.boolean()),
+    readAt: v.optional(v.number()),
+    senderName: v.optional(v.string()),
+    senderAvatar: v.optional(v.string()),
+    senderUsername: v.optional(v.string()),
   })
-  .index("by_sender_receiver", ["senderId", "receiverId"]),
+  .index("by_sender_receiver", ["senderId", "receiverId"])
+  .index("by_receiver", ["receiverId"]),
 
   startups: defineTable({
     name: v.string(),
@@ -97,6 +103,14 @@ const schema = defineSchema({
     .index("by_position", ["positionId", "status"])
     .index("by_applicant", ["applicantId", "status"])
     .index("by_startup_applicant", ["positionId", "applicantId"]),
+
+  // Track online status
+  onlineStatus: defineTable({
+    userId: v.id("profiles"),
+    isOnline: v.boolean(),
+    lastSeen: v.number(),
+  })
+  .index("by_user", ["userId"]),
 });
 
 export default schema;

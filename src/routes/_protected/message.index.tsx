@@ -2,7 +2,7 @@ import Header from "@/features/platform/Header";
 import MessagingUi from "@/features/platform/message-users/MessagingUi";
 import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/_protected/message")({
+export const Route = createFileRoute("/_protected/message/")({
   component: MessagesIndex,
 });
 

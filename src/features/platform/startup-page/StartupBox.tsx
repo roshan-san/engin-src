@@ -15,7 +15,7 @@ import { api } from "../../../../convex/_generated/api";
 import { Link } from "@tanstack/react-router";
 import { Card, CardContent, } from "../../../components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "../../../components/ui/avatar";
-import { StartupEditPopover } from "./StartupEditPopover";
+import { StartupEditDrawer } from "./StartupEditDrawer";
 
 interface StartupBoxProps {
 	startup: Doc<"startups">;
@@ -159,7 +159,7 @@ export function StartupBox({ startup, isOwner }: StartupBoxProps) {
 			</CardContent>
 			{isOwner && (
 				<div className="fixed bottom-15 right-5 z-50">
-					<StartupEditPopover
+					<StartupEditDrawer
 						startup={startup}
 						renderTrigger={({ open, setOpen }) => (
 							<button
