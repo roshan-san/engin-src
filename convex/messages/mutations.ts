@@ -9,7 +9,6 @@ export const sendMessage = mutation({
     },
     handler: async (ctx, args) => {
         const myProfile = await getAuthenticatedProfile(ctx);
-        console.log("[DEBUG] Backend: Inserting message from", myProfile._id, "to", args.receiverId, "at", new Date().toISOString());
         const start = Date.now();
         await ctx.db.insert("messages", {
             senderId: myProfile._id,
@@ -21,7 +20,6 @@ export const sendMessage = mutation({
             senderUsername: myProfile.username,
         });
         const end = Date.now();
-        console.log("[DEBUG] Backend: Message inserted at", new Date().toISOString(), "Duration:", end - start, "ms");
     }
 });
 
