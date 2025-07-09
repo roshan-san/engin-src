@@ -1,0 +1,38 @@
+import { useState } from "react";
+import { usePaginatedQuery } from "convex/react";
+import { useInView } from "react-intersection-observer";
+import { api } from "@/../convex/_generated/api";
+
+export const useProfileSearch = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const {
+    results: profiles,
+    status,
+    loadMore,
+    isLoading,
+  } = usePaginatedQuery(
+    api.profile.profileSearch.getProfiles,
+    { searchQuery },
+    { initialNumItems: 9 },
+  );
+
+  const { ref } = useInView({
+    threshold: 0.5,
+    onChange: (inView: boolean) => {
+      if (inView && status === "CanLoadMore") {
+        loadMore(9);
+      }
+    },
+  });
+
+  return {
+    searchQuery,
+    setSearchQuery,
+    profiles,
+    status,
+    loadMore,
+    isLoading,
+    ref,
+  };
+};
