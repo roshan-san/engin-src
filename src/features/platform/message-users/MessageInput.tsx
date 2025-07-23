@@ -14,13 +14,13 @@ export function MessageInput({
   disabled: boolean
 }) {
   return (
-    <form onSubmit={onSend} className="relative flex gap-3 items-end max-w-4xl mx-auto">
+    <form onSubmit={onSend} className="flex items-end gap-3 p-4 border-t bg-background">
       <div className="flex-1 relative">
         <Input
           placeholder="Type a message..."
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          className="pr-12 rounded-full bg-muted/60 border-none focus:ring-2 focus:ring-primary focus:bg-background transition-all duration-200 resize-none"
+          className="pr-12 rounded-full bg-muted/60 border-none focus:ring-2 focus:ring-primary focus:bg-background transition-all duration-200"
           disabled={disabled}
           onKeyDown={(e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
@@ -30,6 +30,7 @@ export function MessageInput({
           }}
         />
       </div>
+      
       <Button
         variant="default"
         size="icon"

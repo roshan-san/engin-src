@@ -6,6 +6,10 @@ export function MessageList({ messages, myProfile, receiverProfile, formatMessag
   receiverProfile: any,
   formatMessageTime: (n: number) => string
 }) {
+  if (!messages || messages.length === 0) {
+    return null;
+  }
+
   return (
     <div className="flex flex-col gap-4 max-w-4xl mx-auto">
       {messages.map((msg, index) => {
@@ -13,10 +17,11 @@ export function MessageList({ messages, myProfile, receiverProfile, formatMessag
         const showDate = index === 0 ||
           new Date(msg._creationTime).toDateString() !==
           new Date(messages[index - 1]._creationTime).toDateString();
+
         return (
           <div key={msg._id}>
             {showDate && (
-              <div className="flex justify-center my-4">
+              <div className="flex justify-center my-6 ">
                 <span className="text-xs text-muted-foreground bg-muted px-3 py-1 rounded-full">
                   {new Date(msg._creationTime).toLocaleDateString([], {
                     weekday: 'long',

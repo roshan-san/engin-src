@@ -1,25 +1,26 @@
 import { Outlet, useLocation } from "@tanstack/react-router";
 import { ChatList } from "./ChatList";
-import { MessageCircle } from "lucide-react";
+import { MessageCircle, } from "lucide-react";
 
-export default function MessagingUi() {
+export default function MessagesLayout() {
   const location = useLocation();
-  
-  // Check if we're on a specific chat route
-  const hasActiveMessageRoute = location.pathname.includes('/message/') && 
+  const hasActiveChat = location.pathname.includes('/message') && 
     location.pathname !== '/message/' && 
     location.pathname !== '/message';
 
   return (
-    <div className="flex flex-1 h-full w-full bg-background rounded-xl shadow-lg overflow-hidden border border-border">
-      <aside className="flex-col h-full bg-muted/30 border-r border-border sm:w-80">
+    <div className="flex h-full bg-background rounded-lg border overflow-hidden">
+      {/* Sidebar */}
+      <aside className="w-80 border-r bg-muted/20">
         <ChatList />
       </aside>
-      <main className="flex-1 flex-col h-full">
-        {hasActiveMessageRoute ? (
+
+      {/* Main Chat Area */}
+      <main className="flex-1 flex flex-col">
+        {hasActiveChat ? (
           <Outlet />
         ) : (
-          <div className="flex flex-col items-center justify-center h-full text-muted-foreground">
+          <div className="flex-1 flex flex-col items-center justify-center text-muted-foreground p-8">
             <div className="w-20 h-20 rounded-full bg-muted/50 flex items-center justify-center mb-6">
               <MessageCircle className="w-10 h-10" />
             </div>

@@ -8,24 +8,14 @@ export function MessageBubble({ msg, isMe, myProfile, receiverProfile, formatMes
   receiverProfile: any,
   formatMessageTime: (n: number) => string
 }) {
-  // Debug logging
-  console.log('MessageBubble Debug:', {
-    isMe,
-    myProfileAvatar: myProfile?.avatar_url,
-    receiverProfileAvatar: receiverProfile?.avatar_url,
-    myProfile: myProfile,
-    receiverProfile: receiverProfile
-  });
-
-  // Helper function to check if avatar URL is valid
   const isValidAvatarUrl = (url: string | null | undefined) => {
     return url && url.trim() !== '' && url !== 'null' && url !== 'undefined';
   };
 
   return (
-    <div className={`flex items-end gap-3 ${isMe ? "justify-end" : "justify-start"}`}>
+    <div className={`flex items-end gap-2 ${isMe ? "justify-end" : "justify-start"}`}>
       {!isMe && (
-        <Avatar className="w-8 h-8 shrink-0 ring-1 ring-border">
+        <Avatar className="w-8 h-8 shrink-0">
           {isValidAvatarUrl(receiverProfile?.avatar_url) ? (
             <AvatarImage
               src={receiverProfile.avatar_url}
@@ -37,14 +27,17 @@ export function MessageBubble({ msg, isMe, myProfile, receiverProfile, formatMes
           </AvatarFallback>
         </Avatar>
       )}
+      
       <div
-        className={`rounded-2xl px-4 py-2 max-w-xs lg:max-w-md shadow-sm text-sm flex flex-col ${
+        className={`max-w-xs lg:max-w-md px-4 py-2 rounded-2xl ${
           isMe
-            ? "bg-primary text-primary-foreground items-end ml-auto"
-            : "bg-muted text-foreground items-start"
+            ? "bg-primary text-primary-foreground"
+            : "bg-muted text-foreground"
         }`}
       >
-        <p className="break-words whitespace-pre-line leading-relaxed">{msg.content}</p>
+        <p className="text-sm break-words whitespace-pre-line leading-relaxed">
+          {msg.content}
+        </p>
         <div className="flex items-center gap-1 mt-1">
           <span className="text-[10px] opacity-70">
             {formatMessageTime(msg._creationTime)}
@@ -59,12 +52,10 @@ export function MessageBubble({ msg, isMe, myProfile, receiverProfile, formatMes
             </div>
           )}
         </div>
-        {!isMe && (
-          <span className="text-xs text-muted-foreground mt-1">{receiverProfile?.name || receiverProfile?.username}</span>
-        )}
       </div>
+      
       {isMe && (
-        <Avatar className="w-8 h-8 shrink-0 ring-1 ring-border">
+        <Avatar className="w-8 h-8 shrink-0">
           {isValidAvatarUrl(myProfile?.avatar_url) ? (
             <AvatarImage
               src={myProfile.avatar_url}

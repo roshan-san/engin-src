@@ -1,44 +1,40 @@
 import { useMutation, useQuery } from "convex/react";
-import { api } from "@/../convex/_generated/api";
-import { useState, useRef, useEffect } from "react";
-import { useConvexAuth } from "convex/react";
-import { MessageCircle } from "lucide-react";
+import { useRef, useEffect, useState } from "react";
 import { ChatHeader } from "./ChatHeader";
 import { MessageList } from "./MessageList";
 import { MessageInput } from "./MessageInput";
+import { MessageCircle } from "lucide-react";
+import { api } from "@/../convex/_generated/api";
+import { useUser } from "@/features/authentication/UserContext";
 
-export function ChatWindow({ username }: { username: string }) {
+interface ChatWindowProps {
+  username: string;
+}
+
+export function ChatWindow({ username }: ChatWindowProps) {
   const [message, setMessage] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const { isAuthenticated } = useConvexAuth();
-
-  const myProfile = useQuery(
-    api.profile.queries.getMyProfile,
-    isAuthenticated ? undefined : "skip",
-  );
-
-  const chatPartner = useQuery(api.messages.queries.getProfileByUsername, {
-    username,
+  const { profile: myProfile } = useUser();
+  
+  // Queries
+  const chatPartner = useQuery(api.profile.queries.getProfileByUsername, { username });
+  const messages = useQuery(api.messages.queries.getMessages, { 
+    otherUserId: chatPartner?._id 
   });
-
-  const messages = useQuery(api.messages.queries.getMessages, {
-    otherUserId: chatPartner?._id,
+  const chatPartnerOnlineStatus = useQuery(api.messages.queries.getOnlineStatus, {
+    userId: chatPartner?._id || "placeholder" as any
   });
-
-  const chatPartnerOnlineStatus = useQuery(
-    api.messages.queries.getOnlineStatus,
-    chatPartner?._id ? { userId: chatPartner._id } : "skip"
-  );
-
+  
+  // Mutations
   const sendMessage = useMutation(api.messages.mutations.sendMessage);
   const markMessagesAsRead = useMutation(api.messages.mutations.markMessagesAsRead);
 
+  // Mark messages as read when they are loaded
   useEffect(() => {
     if (chatPartner?._id && messages && messages.length > 0) {
       const hasUnreadMessages = messages.some(
         (msg) => !msg.read && msg.senderId === chatPartner._id
       );
-      
       if (hasUnreadMessages) {
         markMessagesAsRead({ senderId: chatPartner._id });
       }
@@ -55,11 +51,11 @@ export function ChatWindow({ username }: { username: string }) {
       });
       setMessage("");
     } catch (error) {
+      console.error("Failed to send message:", error);
     }
   };
 
-  useEffect(() => {}, [messages]);
-
+  // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
@@ -70,7 +66,6 @@ export function ChatWindow({ username }: { username: string }) {
     const minutes = Math.floor(diff / (1000 * 60));
     const hours = Math.floor(diff / (1000 * 60 * 60));
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-
     if (minutes < 1) return "just now";
     if (minutes < 60) return `${minutes}m ago`;
     if (hours < 24) return `${hours}h ago`;
@@ -81,13 +76,47 @@ export function ChatWindow({ username }: { username: string }) {
     const now = new Date();
     const messageDate = new Date(timestamp);
     const isToday = now.toDateString() === messageDate.toDateString();
-    
     if (isToday) {
       return messageDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     } else {
       return messageDate.toLocaleDateString([], { month: 'short', day: 'numeric' });
     }
   };
+
+  // Loading state
+  if (!myProfile) {
+    return (
+      <div className="flex flex-1 flex-col h-full min-h-0 bg-background">
+        <div className="flex items-center justify-center h-full">
+          <div className="text-center">
+            <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4 mx-auto">
+              <MessageCircle className="w-8 h-8" />
+            </div>
+            <p className="text-lg font-medium mb-2">Loading conversation...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // User not found state
+  if (!chatPartner) {
+    return (
+      <div className="flex flex-1 flex-col h-full min-h-0 bg-background">
+        <div className="flex items-center justify-center h-full">
+          <div className="text-center">
+            <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4 mx-auto">
+              <MessageCircle className="w-8 h-8" />
+            </div>
+            <p className="text-lg font-medium mb-2">User not found</p>
+            <p className="text-sm text-muted-foreground">
+              The user "{username}" could not be found.
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-1 flex-col h-full min-h-0 bg-background">
@@ -110,7 +139,9 @@ export function ChatWindow({ username }: { username: string }) {
               <MessageCircle className="w-8 h-8" />
             </div>
             <p className="text-lg font-medium mb-2">No messages yet</p>
-            <p className="text-sm text-center">Start a conversation with {chatPartner?.name || chatPartner?.username || "this user"}</p>
+            <p className="text-sm text-center">
+              Start a conversation with {chatPartner.name || chatPartner.username || "this user"}
+            </p>
           </div>
         )}
         <div ref={messagesEndRef} />

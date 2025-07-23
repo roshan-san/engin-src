@@ -15,10 +15,11 @@ import { Route as ProtectedImport } from './routes/_protected'
 import { Route as IndexImport } from './routes/index'
 import { Route as ProtectedVoteArenaImport } from './routes/_protected/vote-arena'
 import { Route as ProtectedStartupsImport } from './routes/_protected/startups'
+import { Route as ProtectedNetworkImport } from './routes/_protected/network'
 import { Route as ProtectedMessageImport } from './routes/_protected/message'
 import { Route as ProtectedHomeImport } from './routes/_protected/home'
 import { Route as ProtectedCrowdfundingImport } from './routes/_protected/crowdfunding'
-import { Route as ProtectedConnectImport } from './routes/_protected/connect'
+import { Route as ProtectedMessageIndexImport } from './routes/_protected/message.index'
 import { Route as ProtectedStartupsStartupidImport } from './routes/_protected/startups.$startupid'
 import { Route as ProtectedProfileUsernameImport } from './routes/_protected/profile.$username'
 import { Route as ProtectedMessageUsernameImport } from './routes/_protected/message.$username'
@@ -48,6 +49,12 @@ const ProtectedStartupsRoute = ProtectedStartupsImport.update({
   getParentRoute: () => ProtectedRoute,
 } as any)
 
+const ProtectedNetworkRoute = ProtectedNetworkImport.update({
+  id: '/network',
+  path: '/network',
+  getParentRoute: () => ProtectedRoute,
+} as any)
+
 const ProtectedMessageRoute = ProtectedMessageImport.update({
   id: '/message',
   path: '/message',
@@ -66,10 +73,10 @@ const ProtectedCrowdfundingRoute = ProtectedCrowdfundingImport.update({
   getParentRoute: () => ProtectedRoute,
 } as any)
 
-const ProtectedConnectRoute = ProtectedConnectImport.update({
-  id: '/connect',
-  path: '/connect',
-  getParentRoute: () => ProtectedRoute,
+const ProtectedMessageIndexRoute = ProtectedMessageIndexImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ProtectedMessageRoute,
 } as any)
 
 const ProtectedStartupsStartupidRoute = ProtectedStartupsStartupidImport.update(
@@ -110,13 +117,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedImport
       parentRoute: typeof rootRoute
     }
-    '/_protected/connect': {
-      id: '/_protected/connect'
-      path: '/connect'
-      fullPath: '/connect'
-      preLoaderRoute: typeof ProtectedConnectImport
-      parentRoute: typeof ProtectedImport
-    }
     '/_protected/crowdfunding': {
       id: '/_protected/crowdfunding'
       path: '/crowdfunding'
@@ -136,6 +136,13 @@ declare module '@tanstack/react-router' {
       path: '/message'
       fullPath: '/message'
       preLoaderRoute: typeof ProtectedMessageImport
+      parentRoute: typeof ProtectedImport
+    }
+    '/_protected/network': {
+      id: '/_protected/network'
+      path: '/network'
+      fullPath: '/network'
+      preLoaderRoute: typeof ProtectedNetworkImport
       parentRoute: typeof ProtectedImport
     }
     '/_protected/startups': {
@@ -173,6 +180,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedStartupsStartupidImport
       parentRoute: typeof ProtectedStartupsImport
     }
+    '/_protected/message/': {
+      id: '/_protected/message/'
+      path: '/'
+      fullPath: '/message/'
+      preLoaderRoute: typeof ProtectedMessageIndexImport
+      parentRoute: typeof ProtectedMessageImport
+    }
   }
 }
 
@@ -180,10 +194,12 @@ declare module '@tanstack/react-router' {
 
 interface ProtectedMessageRouteChildren {
   ProtectedMessageUsernameRoute: typeof ProtectedMessageUsernameRoute
+  ProtectedMessageIndexRoute: typeof ProtectedMessageIndexRoute
 }
 
 const ProtectedMessageRouteChildren: ProtectedMessageRouteChildren = {
   ProtectedMessageUsernameRoute: ProtectedMessageUsernameRoute,
+  ProtectedMessageIndexRoute: ProtectedMessageIndexRoute,
 }
 
 const ProtectedMessageRouteWithChildren =
@@ -201,20 +217,20 @@ const ProtectedStartupsRouteWithChildren =
   ProtectedStartupsRoute._addFileChildren(ProtectedStartupsRouteChildren)
 
 interface ProtectedRouteChildren {
-  ProtectedConnectRoute: typeof ProtectedConnectRoute
   ProtectedCrowdfundingRoute: typeof ProtectedCrowdfundingRoute
   ProtectedHomeRoute: typeof ProtectedHomeRoute
   ProtectedMessageRoute: typeof ProtectedMessageRouteWithChildren
+  ProtectedNetworkRoute: typeof ProtectedNetworkRoute
   ProtectedStartupsRoute: typeof ProtectedStartupsRouteWithChildren
   ProtectedVoteArenaRoute: typeof ProtectedVoteArenaRoute
   ProtectedProfileUsernameRoute: typeof ProtectedProfileUsernameRoute
 }
 
 const ProtectedRouteChildren: ProtectedRouteChildren = {
-  ProtectedConnectRoute: ProtectedConnectRoute,
   ProtectedCrowdfundingRoute: ProtectedCrowdfundingRoute,
   ProtectedHomeRoute: ProtectedHomeRoute,
   ProtectedMessageRoute: ProtectedMessageRouteWithChildren,
+  ProtectedNetworkRoute: ProtectedNetworkRoute,
   ProtectedStartupsRoute: ProtectedStartupsRouteWithChildren,
   ProtectedVoteArenaRoute: ProtectedVoteArenaRoute,
   ProtectedProfileUsernameRoute: ProtectedProfileUsernameRoute,
@@ -227,44 +243,46 @@ const ProtectedRouteWithChildren = ProtectedRoute._addFileChildren(
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '': typeof ProtectedRouteWithChildren
-  '/connect': typeof ProtectedConnectRoute
   '/crowdfunding': typeof ProtectedCrowdfundingRoute
   '/home': typeof ProtectedHomeRoute
   '/message': typeof ProtectedMessageRouteWithChildren
+  '/network': typeof ProtectedNetworkRoute
   '/startups': typeof ProtectedStartupsRouteWithChildren
   '/vote-arena': typeof ProtectedVoteArenaRoute
   '/message/$username': typeof ProtectedMessageUsernameRoute
   '/profile/$username': typeof ProtectedProfileUsernameRoute
   '/startups/$startupid': typeof ProtectedStartupsStartupidRoute
+  '/message/': typeof ProtectedMessageIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '': typeof ProtectedRouteWithChildren
-  '/connect': typeof ProtectedConnectRoute
   '/crowdfunding': typeof ProtectedCrowdfundingRoute
   '/home': typeof ProtectedHomeRoute
-  '/message': typeof ProtectedMessageRouteWithChildren
+  '/network': typeof ProtectedNetworkRoute
   '/startups': typeof ProtectedStartupsRouteWithChildren
   '/vote-arena': typeof ProtectedVoteArenaRoute
   '/message/$username': typeof ProtectedMessageUsernameRoute
   '/profile/$username': typeof ProtectedProfileUsernameRoute
   '/startups/$startupid': typeof ProtectedStartupsStartupidRoute
+  '/message': typeof ProtectedMessageIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/_protected': typeof ProtectedRouteWithChildren
-  '/_protected/connect': typeof ProtectedConnectRoute
   '/_protected/crowdfunding': typeof ProtectedCrowdfundingRoute
   '/_protected/home': typeof ProtectedHomeRoute
   '/_protected/message': typeof ProtectedMessageRouteWithChildren
+  '/_protected/network': typeof ProtectedNetworkRoute
   '/_protected/startups': typeof ProtectedStartupsRouteWithChildren
   '/_protected/vote-arena': typeof ProtectedVoteArenaRoute
   '/_protected/message/$username': typeof ProtectedMessageUsernameRoute
   '/_protected/profile/$username': typeof ProtectedProfileUsernameRoute
   '/_protected/startups/$startupid': typeof ProtectedStartupsStartupidRoute
+  '/_protected/message/': typeof ProtectedMessageIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -272,41 +290,43 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | ''
-    | '/connect'
     | '/crowdfunding'
     | '/home'
     | '/message'
+    | '/network'
     | '/startups'
     | '/vote-arena'
     | '/message/$username'
     | '/profile/$username'
     | '/startups/$startupid'
+    | '/message/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | ''
-    | '/connect'
     | '/crowdfunding'
     | '/home'
-    | '/message'
+    | '/network'
     | '/startups'
     | '/vote-arena'
     | '/message/$username'
     | '/profile/$username'
     | '/startups/$startupid'
+    | '/message'
   id:
     | '__root__'
     | '/'
     | '/_protected'
-    | '/_protected/connect'
     | '/_protected/crowdfunding'
     | '/_protected/home'
     | '/_protected/message'
+    | '/_protected/network'
     | '/_protected/startups'
     | '/_protected/vote-arena'
     | '/_protected/message/$username'
     | '/_protected/profile/$username'
     | '/_protected/startups/$startupid'
+    | '/_protected/message/'
   fileRoutesById: FileRoutesById
 }
 
@@ -340,18 +360,14 @@ export const routeTree = rootRoute
     "/_protected": {
       "filePath": "_protected.tsx",
       "children": [
-        "/_protected/connect",
         "/_protected/crowdfunding",
         "/_protected/home",
         "/_protected/message",
+        "/_protected/network",
         "/_protected/startups",
         "/_protected/vote-arena",
         "/_protected/profile/$username"
       ]
-    },
-    "/_protected/connect": {
-      "filePath": "_protected/connect.tsx",
-      "parent": "/_protected"
     },
     "/_protected/crowdfunding": {
       "filePath": "_protected/crowdfunding.tsx",
@@ -365,8 +381,13 @@ export const routeTree = rootRoute
       "filePath": "_protected/message.tsx",
       "parent": "/_protected",
       "children": [
-        "/_protected/message/$username"
+        "/_protected/message/$username",
+        "/_protected/message/"
       ]
+    },
+    "/_protected/network": {
+      "filePath": "_protected/network.tsx",
+      "parent": "/_protected"
     },
     "/_protected/startups": {
       "filePath": "_protected/startups.tsx",
@@ -390,6 +411,10 @@ export const routeTree = rootRoute
     "/_protected/startups/$startupid": {
       "filePath": "_protected/startups.$startupid.tsx",
       "parent": "/_protected/startups"
+    },
+    "/_protected/message/": {
+      "filePath": "_protected/message.index.tsx",
+      "parent": "/_protected/message"
     }
   }
 }
