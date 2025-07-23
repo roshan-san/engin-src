@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useUser } from "@/features/authentication/UserContext";
 import ProfileDropdown from "./ProfileDropdown";
-import { TrendingUp, Laptop, Search, Users, MessageCircle } from "lucide-react";
+import { Laptop, Search, Users, MessageCircle } from "lucide-react";
 
 export function TopBar() {
   const { profile } = useUser();
@@ -13,9 +13,6 @@ export function TopBar() {
       <nav className="hidden md:flex items-center gap-6">
         <Link to="/home" className="text-base font-medium text-muted-foreground hover:text-primary transition-colors flex items-center gap-1">
           <Laptop className="h-5 w-5 mr-1" /> Home
-        </Link>
-        <Link to="/trending" className="text-base font-medium text-muted-foreground hover:text-primary transition-colors flex items-center gap-1">
-          <TrendingUp className="h-5 w-5 mr-1" /> Trending
         </Link>
         <Link to="/startups" className="text-base font-medium text-muted-foreground hover:text-primary transition-colors flex items-center gap-1">
           <Search className="h-5 w-5 mr-1" /> Explore Startups
