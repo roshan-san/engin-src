@@ -99,6 +99,7 @@ function StartupForm({ startup, setOpen }: { startup: Doc<"startups">, setOpen: 
     location: startup.location || "",
     funding: startup.funding || 0,
     team_size: startup.team_size || 1,
+    stage: startup.stage || "Growth",
   });
 
   const handleEditInput = (field: string, value: string | number) => {
@@ -114,6 +115,7 @@ function StartupForm({ startup, setOpen }: { startup: Doc<"startups">, setOpen: 
       await updateStartup({
         startupId: startup._id,
         ...formData,
+        stage: formData.stage || "Growth",
       });
       setFeedback({ type: 'success', message: 'Startup updated!' });
       setTimeout(() => setOpen(false), 1200);
@@ -159,6 +161,16 @@ function StartupForm({ startup, setOpen }: { startup: Doc<"startups">, setOpen: 
           <div>
             <Label htmlFor="solution" className="text-sm font-semibold mb-1">Solution</Label>
             <Textarea id="solution" value={formData.solution} onChange={e => handleEditInput("solution", e.target.value)} className="min-h-[40px] text-base resize-none" placeholder="How are you solving it?" />
+          </div>
+          <div>
+            <Label htmlFor="stage">Stage</Label>
+            <Input
+              id="stage"
+              name="stage"
+              value={formData.stage}
+              onChange={e => handleEditInput('stage', e.target.value)}
+              placeholder="e.g. Growth"
+            />
           </div>
         </div>
       </div>

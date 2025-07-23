@@ -26,12 +26,6 @@ export function EmergingSpotlight() {
           </Badge>
         ))}
       </div>
-      <button
-        className="text-xs text-primary hover:underline mt-2"
-        onClick={() => navigate({ to: '/trending' })}
-      >
-        See all trending →
-      </button>
     </Card>
   );
 } 

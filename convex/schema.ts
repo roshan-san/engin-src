@@ -68,6 +68,9 @@ const schema = defineSchema({
     // Simplified collaborators - just track who's on the team
     collaborators: v.optional(v.array(v.id("profiles"))),
     upvotes: v.optional(v.array(v.id("profiles"))), // Track upvotes by user
+    stage: v.optional(v.string()),
+    tags: v.optional(v.array(v.string())),
+    likes: v.optional(v.array(v.id("profiles"))),
   })
     .index("by_owner", ["ownerId"])
     .index("by_collaborators", ["collaborators"])
@@ -119,6 +122,7 @@ const schema = defineSchema({
     authorId: v.id("profiles"),
     createdAt: v.number(),
     tags: v.optional(v.array(v.string())),
+    imageUrl: v.optional(v.string()),
   }),
   post_votes: defineTable({
     postId: v.id("posts"),

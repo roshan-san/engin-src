@@ -1,11 +1,10 @@
-import { TrendingUp, Laptop, Search, Users, MessageCircle } from "lucide-react";
+import { Laptop, Search, Users, MessageCircle } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "convex/react";
 import { api } from "@/../convex/_generated/api";
 
 const navigationItems = [
   { href: "/home", icon: Laptop, label: "Home" },
-  { href: "/trending", icon: TrendingUp, label: "Trending" },
   { href: "/startups", icon: Search, label: "Explore" },
   { href: "/message", icon: MessageCircle, label: "Messages" },
   { href: "/connect", icon: Users, label: "Network" },

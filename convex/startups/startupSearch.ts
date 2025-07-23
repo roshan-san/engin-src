@@ -24,6 +24,7 @@ export const getStartups = query({
       page: startups.page.map((startup) => ({
         ...startup,
         upvotesCount: (startup.upvotes || []).length,
+        // stage, tags, likes are now part of the startup object
       })),
     };
   },

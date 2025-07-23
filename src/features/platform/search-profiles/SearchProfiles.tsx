@@ -1,12 +1,21 @@
 import { Input } from "@/components/ui/input";
 import { useProfileSearch } from "./useProfileSearch";
 import ProfileCard from "./ProfileCard";
-import ReqDrawer from "../make-connections/ReqDrawer";
 import { Skeleton } from "@/components/ui/skeleton";
 
-export default function SearchProfiles() {
+// Add userType prop
+interface SearchProfilesProps {
+  userType?: string;
+}
+
+export default function SearchProfiles({ userType }: SearchProfilesProps) {
   const { searchQuery, setSearchQuery, profiles, status, loadMore, ref } =
     useProfileSearch();
+
+  // Filter profiles by userType if provided
+  const filteredProfiles = userType
+    ? (profiles || []).filter((profile) => profile.user_type === userType)
+    : profiles;
 
   return (
     <div className="h-full flex flex-col gap-6 p-4">
@@ -21,7 +30,6 @@ export default function SearchProfiles() {
             className="w-full h-14 rounded-2xl"
           />
         </div>
-        <ReqDrawer />
       </div>
 
       {status === "LoadingFirstPage" ? (
@@ -30,9 +38,9 @@ export default function SearchProfiles() {
             <Skeleton key={i} className="h-48 w-full" />
           ))}
         </div>
-      ) : profiles && profiles.length > 0 ? (
+      ) : filteredProfiles && filteredProfiles.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-          {profiles.map((profile) => (
+          {filteredProfiles.map((profile) => (
             <ProfileCard key={profile._id} profile={profile} />
           ))}
           <div

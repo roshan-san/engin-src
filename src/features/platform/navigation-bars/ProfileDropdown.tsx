@@ -41,9 +41,6 @@ export default function ProfileDropdown({ profile }: { profile: Doc<"profiles"> 
         <DropdownMenuItem onClick={() => navigate({ to: "/startups" })}>
           <Building2 className="mr-2 h-4 w-4" /> My Startups
         </DropdownMenuItem>
-        {/* <DropdownMenuItem onClick={() => navigate({ to: "/saved-posts" })}>
-          <Bookmark className="mr-2 h-4 w-4" /> Saved Posts
-        </DropdownMenuItem> */}
         <DropdownMenuItem onClick={() => navigate({ to: "/crowdfunding" })}>
           <DollarSign className="mr-2 h-4 w-4" /> Crowdfunding
         </DropdownMenuItem>

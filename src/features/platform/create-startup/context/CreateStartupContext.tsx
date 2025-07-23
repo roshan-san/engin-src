@@ -11,6 +11,7 @@ interface StartupData {
   location: string;
   funding: string;
   team_size: string;
+  stage?: string;
 }
 
 interface CreateStartupContextType {
@@ -43,6 +44,7 @@ export const CreateStartupProvider = ({
     location: "",
     funding: "",
     team_size: "",
+    stage: "Growth",
   });
   const [isCreating, setIsCreating] = useState(false);
   const createStartup = useMutation(api.startups.mutations.createStartup);
@@ -58,6 +60,7 @@ export const CreateStartupProvider = ({
         ...startupData,
         funding: Number(startupData.funding) || 0,
         team_size: Number(startupData.team_size) || 0,
+        stage: startupData.stage || "Growth",
       };
       const startup= await createStartup(numericData);
       navigate({to:"/startups/$startupid", params:{startupid: startup}});

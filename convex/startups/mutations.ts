@@ -11,12 +11,16 @@ export const createStartup = mutation({
     location: v.string(),
     funding: v.number(),
     team_size: v.number(),
+    stage: v.optional(v.string()),
+    tags: v.optional(v.array(v.string())),
+    likes: v.optional(v.array(v.id("profiles"))),
   },
   handler: async (ctx, args) => {
     const profile = await getAuthenticatedProfile(ctx);
 
     const startup = {
       ...args,
+      stage: args.stage ?? "Growth",
       ownerId: profile._id,
       collaborators: [], // Initialize empty collaborators array
     };
@@ -37,6 +41,9 @@ export const updateStartup = mutation({
     location: v.optional(v.string()),
     funding: v.optional(v.number()),
     team_size: v.optional(v.number()),
+    stage: v.optional(v.string()),
+    tags: v.optional(v.array(v.string())),
+    likes: v.optional(v.array(v.id("profiles"))),
   },
   handler: async (ctx, args) => {
     const profile = await getAuthenticatedProfile(ctx);
@@ -51,6 +58,10 @@ export const updateStartup = mutation({
     }
 
     const { startupId, ...rest } = args;
+    // Always provide a stage value if missing
+    if (!rest.stage && !startup.stage) {
+      rest.stage = "Growth";
+    }
     await ctx.db.patch(startupId, rest);
   },
 });
