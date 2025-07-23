@@ -89,10 +89,11 @@ export function ChatWindow({ username }: ChatWindowProps) {
       <div className="flex flex-1 flex-col h-full min-h-0 bg-background">
         <div className="flex items-center justify-center h-full">
           <div className="text-center">
-            <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4 mx-auto">
-              <MessageCircle className="w-8 h-8" />
+            <div className="w-16 h-16 rounded-full bg-muted/50 flex items-center justify-center mb-4 mx-auto border border-border/30">
+              <MessageCircle className="w-8 h-8 text-muted-foreground" />
             </div>
-            <p className="text-lg font-medium mb-2">Loading conversation...</p>
+            <p className="text-lg font-medium mb-2 text-foreground">Loading conversation...</p>
+            <p className="text-sm text-muted-foreground">Please wait while we connect you</p>
           </div>
         </div>
       </div>
@@ -105,10 +106,10 @@ export function ChatWindow({ username }: ChatWindowProps) {
       <div className="flex flex-1 flex-col h-full min-h-0 bg-background">
         <div className="flex items-center justify-center h-full">
           <div className="text-center">
-            <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4 mx-auto">
-              <MessageCircle className="w-8 h-8" />
+            <div className="w-16 h-16 rounded-full bg-muted/50 flex items-center justify-center mb-4 mx-auto border border-border/30">
+              <MessageCircle className="w-8 h-8 text-muted-foreground" />
             </div>
-            <p className="text-lg font-medium mb-2">User not found</p>
+            <p className="text-lg font-medium mb-2 text-foreground">User not found</p>
             <p className="text-sm text-muted-foreground">
               The user "{username}" could not be found.
             </p>
@@ -125,7 +126,7 @@ export function ChatWindow({ username }: ChatWindowProps) {
         onlineStatus={chatPartnerOnlineStatus}
         formatLastSeen={formatLastSeen}
       />
-      <div className="flex-1 min-h-0 p-4 sm:p-6 overflow-y-auto bg-gradient-to-b from-background to-muted/20" style={{scrollbarGutter: 'stable'}}>
+      <div className="flex-1 min-h-0 p-6 overflow-y-auto bg-gradient-to-b from-background to-muted/10" style={{scrollbarGutter: 'stable'}}>
         {Array.isArray(messages) && messages.length > 0 ? (
           <MessageList
             messages={messages}
@@ -135,10 +136,10 @@ export function ChatWindow({ username }: ChatWindowProps) {
           />
         ) : (
           <div className="flex flex-col items-center justify-center h-full text-muted-foreground">
-            <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
+            <div className="w-16 h-16 rounded-full bg-muted/50 flex items-center justify-center mb-4 border border-border/30">
               <MessageCircle className="w-8 h-8" />
             </div>
-            <p className="text-lg font-medium mb-2">No messages yet</p>
+            <p className="text-lg font-medium mb-2 text-foreground">No messages yet</p>
             <p className="text-sm text-center">
               Start a conversation with {chatPartner.name || chatPartner.username || "this user"}
             </p>
@@ -146,7 +147,7 @@ export function ChatWindow({ username }: ChatWindowProps) {
         )}
         <div ref={messagesEndRef} />
       </div>
-      <div className="p-6 pt-4 border-t bg-background">
+      <div className="p-6 pt-4 border-t border-border/50 bg-background">
         <MessageInput
           message={message}
           setMessage={setMessage}

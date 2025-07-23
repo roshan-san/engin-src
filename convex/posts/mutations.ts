@@ -7,6 +7,7 @@ export const createPost = mutation({
     title: v.string(),
     content: v.string(),
     tags: v.optional(v.array(v.string())),
+    imageUrl: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const profile = await getAuthenticatedProfile(ctx);
@@ -16,7 +17,16 @@ export const createPost = mutation({
       authorId: profile._id,
       createdAt: Date.now(),
       tags: args.tags ?? [],
+      imageUrl: args.imageUrl,
     });
+  },
+});
+
+export const generateUploadUrl = mutation({
+  args: {},
+  handler: async (ctx) => {
+    await getAuthenticatedProfile(ctx);
+    return await ctx.storage.generateUploadUrl();
   },
 });
 

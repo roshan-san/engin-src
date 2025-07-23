@@ -41,6 +41,13 @@ export const getPostComments = query({
   },
 });
 
+export const getFileUrl = query({
+  args: { storageId: v.id("_storage") },
+  handler: async (ctx, args) => {
+    return await ctx.storage.getUrl(args.storageId);
+  },
+});
+
 export const getTrendingTags = query({
   handler: async (ctx) => {
     const posts = await ctx.db.query("posts").collect();

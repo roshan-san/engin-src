@@ -11,7 +11,7 @@ export function MessageList({ messages, myProfile, receiverProfile, formatMessag
   }
 
   return (
-    <div className="flex flex-col gap-4 max-w-4xl mx-auto">
+    <div className="flex flex-col gap-6 max-w-4xl mx-auto">
       {messages.map((msg, index) => {
         const isMe = msg.senderId === myProfile?._id;
         const showDate = index === 0 ||
@@ -21,8 +21,8 @@ export function MessageList({ messages, myProfile, receiverProfile, formatMessag
         return (
           <div key={msg._id}>
             {showDate && (
-              <div className="flex justify-center my-6 ">
-                <span className="text-xs text-muted-foreground bg-muted px-3 py-1 rounded-full">
+              <div className="flex justify-center my-8">
+                <span className="text-xs text-muted-foreground bg-muted/50 px-4 py-2 rounded-full border border-border/30">
                   {new Date(msg._creationTime).toLocaleDateString([], {
                     weekday: 'long',
                     year: 'numeric',

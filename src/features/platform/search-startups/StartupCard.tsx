@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { MapPin, ThumbsUp, Eye } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
+import { MapPin, ThumbsUp, Eye, Users, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import type { Doc, Id } from '@/../convex/_generated/dataModel';
 import { useQuery, useMutation } from 'convex/react';
 import { api } from '@/../convex/_generated/api';
@@ -19,7 +18,7 @@ const StartupCard: React.FC<StartupCardProps> = ({ startup }) => {
   const { profile } = useUser();
   const founderProfile = useQuery(api.profile.queries.getProfileById, { profileId: startup.ownerId });
   const [likeLoading, setLikeLoading] = useState(false);
-  const toggleLike = useMutation(api.startups.mutations.updateStartup); // You may want a dedicated like mutation
+  const toggleLike = useMutation(api.startups.mutations.updateStartup);
 
   // Likes logic
   const likesArr = startup.likes || [];
@@ -46,91 +45,96 @@ const StartupCard: React.FC<StartupCardProps> = ({ startup }) => {
     setLikeLoading(false);
   };
 
-  // Tag logic: show up to 3, then a '+N' badge
-  // Avatar logic
-
   return (
-    <Card className="w-full bg-white rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 font-sans">
-      <CardContent className="p-5">
-        {/* Header */}
-        <div className="flex items-start justify-between">
-          <div className="flex items-center space-x-4">
-            <Avatar className="w-12 h-12 rounded-lg bg-primary/90">
-              <AvatarFallback className="bg-primary/90 text-primary-foreground font-bold text-lg">
-                {founderProfile?.name?.charAt(0).toUpperCase() || '...'}
-              </AvatarFallback>
-            </Avatar>
-            <div>
-              <h3 className="text-primary text-lg font-bold leading-tight">{startup.name}</h3>
-              <p className="text-sm text-muted-foreground mt-0.5">{founderProfile?.name || '...'}</p>
-            </div>
+    <div className="bg-background border border-border rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-200">
+      {/* Header */}
+      <div className="flex items-start gap-3 mb-4">
+        <Avatar className="w-10 h-10">
+          <AvatarImage src={founderProfile?.avatar_url} />
+          <AvatarFallback className="bg-primary/10 text-primary font-semibold">
+            {founderProfile?.name?.charAt(0) || founderProfile?.username?.charAt(0) || '?'}
+          </AvatarFallback>
+        </Avatar>
+        
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 mb-1">
+            <h3 className="font-semibold text-base truncate">{startup.name}</h3>
+            <CheckCircle className="w-4 h-4 text-primary" />
+            {startup.stage && (
+              <Badge variant="secondary" className="text-xs">
+                {startup.stage}
+              </Badge>
+            )}
           </div>
-          <div className="flex flex-col items-end space-y-2">
-            <span className="text-xs text-muted-foreground font-semibold">{startup.stage}</span>
-          </div>
+          <p className="text-sm text-muted-foreground">
+            by {founderProfile?.name || founderProfile?.username || 'Unknown'}
+          </p>
         </div>
+      </div>
 
-        {/* Description */}
-        <p className="text-muted-foreground text-sm mt-3 mb-4 leading-relaxed line-clamp-2">
+      {/* Description */}
+      <div className="mb-4">
+        <p className="text-sm text-foreground/90 leading-relaxed line-clamp-2">
           {startup.description}
         </p>
+      </div>
 
-        {/* Stats Grid */}
-        <div className="bg-gray-50 rounded-xl border border-gray-100 grid grid-cols-3 text-center py-3 mb-4">
-          <div>
-            <div className="text-base font-bold text-primary">{startup.team_size}</div>
-            <div className="text-xs text-muted-foreground uppercase tracking-wide font-medium">Team</div>
-          </div>
+      {/* Stats */}
+      <div className="flex items-center gap-4 mb-4">
+        <div className="flex items-center gap-1 text-sm text-muted-foreground">
+          <Users className="w-4 h-4" />
+          <span>{startup.team_size} members</span>
         </div>
-
-        {/* Location and Likes */}
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center space-x-1 text-muted-foreground">
-            <MapPin size={14} />
-            <span className="text-sm">{startup.location}</span>
-          </div>
-          <div className="flex items-center space-x-1 text-muted-foreground">
-            <ThumbsUp size={14} />
-            <span className="text-sm">{likes}</span>
-          </div>
+        <div className="flex items-center gap-1 text-sm text-muted-foreground">
+          <MapPin className="w-4 h-4" />
+          <span>{startup.location}</span>
         </div>
+      </div>
 
-        {/* Tags */}
-        <div className="flex flex-wrap gap-2 mb-5">
-          {startup.tags?.map((tag, idx) => (
-            <Badge key={idx} className="bg-gray-100 text-muted-foreground px-3 py-1 text-xs font-medium rounded-full">
-              {tag}
+      {/* Tags */}
+      {startup.tags && startup.tags.length > 0 && (
+        <div className="flex flex-wrap gap-2 mb-4">
+          {startup.tags.slice(0, 3).map((tag, idx) => (
+            <Badge
+              key={idx}
+              variant="secondary"
+              className="cursor-pointer hover:bg-primary/10 text-primary border-primary/20"
+            >
+              {tag.startsWith('#') ? tag : `#${tag}`}
             </Badge>
           ))}
-          {startup.tags?.length && startup.tags?.length > 3 && (
-            <Badge className="bg-gray-100 text-muted-foreground px-3 py-1 text-xs font-medium rounded-full">
-              +{startup.tags?.length - 3}
+          {startup.tags.length > 3 && (
+            <Badge variant="secondary" className="text-xs">
+              +{startup.tags.length - 3}
             </Badge>
           )}
         </div>
+      )}
 
-        {/* Action Buttons */}
-        <div className="flex gap-3 border-t border-gray-100 pt-4">
-          <Button
-            variant={liked ? 'default' : 'outline'}
-            className={`flex-1 flex items-center justify-center space-x-2 border-gray-200 rounded-lg hover:bg-primary/10 font-medium text-sm ${liked ? 'bg-primary text-primary-foreground' : 'text-muted-foreground'}`}
+      {/* Actions */}
+      <div className="flex items-center justify-between pt-4 border-t border-border/50">
+        <div className="flex items-center gap-2">
+          <button
+            className="p-2 rounded-full hover:bg-primary/10 text-muted-foreground hover:text-primary transition-colors disabled:opacity-50"
             onClick={handleLike}
             disabled={likeLoading}
           >
-            <ThumbsUp size={16} />
-            <span>Upvote</span>
-          </Button>
-          <Button
-            variant="outline"
-            className="flex-1 flex items-center justify-center space-x-2 border-gray-200 rounded-lg hover:bg-primary/10 text-muted-foreground font-medium text-sm"
-            onClick={() => navigate({ to: '/startups/$startupid', params: { startupid: startup._id } })}
-          >
-            <Eye size={16} />
-            <span>View Details</span>
-          </Button>
+            <ThumbsUp className="h-5 w-5" />
+          </button>
+          <span className="text-sm font-medium">{likes}</span>
         </div>
-      </CardContent>
-    </Card>
+        
+        <Button
+          variant="outline"
+          size="sm"
+          className="hover:bg-primary/10 text-primary border-primary/20"
+          onClick={() => navigate({ to: '/startups/$startupid', params: { startupid: startup._id } })}
+        >
+          <Eye className="w-4 h-4 mr-2" />
+          View Details
+        </Button>
+      </div>
+    </div>
   );
 };
 

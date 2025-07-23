@@ -59,33 +59,32 @@ export const listPositions = query({
   },
 });
 
-export const listApplications = query({
-  args: { positionId: v.id("positions") },
-  handler: async (ctx, args) => {
-    return await ctx.db
-      .query("applications")
-      .withIndex("by_position", (q) =>
-        q.eq("positionId", args.positionId)
-      )
-      .order("desc")
-      .collect();
-  },
-});
-
-export const getApplicationByUser = query({
-  args: { 
-    positionId: v.id("positions"),
-    applicantId: v.id("profiles")
-  },
-  handler: async (ctx, args) => {
-    const applications = await ctx.db
-      .query("applications")
-      .withIndex("by_startup_applicant", (q) =>
-        q.eq("positionId", args.positionId).eq("applicantId", args.applicantId)
-      )
-      .collect();
+export const getMostLikedStartup = query({
+  handler: async (ctx) => {
+    const allStartups = await ctx.db.query("startups").collect();
     
-    return applications[0] || null; // Return the first (and should be only) application
+    // Find the startup with the most likes
+    let mostLikedStartup = null;
+    let maxLikes = 0;
+    
+    for (const startup of allStartups) {
+      const likesCount = startup.likes ? startup.likes.length : 0;
+      if (likesCount > maxLikes) {
+        maxLikes = likesCount;
+        mostLikedStartup = startup;
+      }
+    }
+    
+    if (!mostLikedStartup) return null;
+    
+    // Get the founder profile
+    const founder = await ctx.db.get(mostLikedStartup.ownerId);
+    
+    return {
+      startup: mostLikedStartup,
+      founder,
+      likesCount: maxLikes
+    };
   },
 });
 
@@ -125,5 +124,35 @@ export const getCollaborators = query({
       startup.collaborators.map((id: any) => ctx.db.get(id))
     );
     return profiles.filter(Boolean);
+  },
+});
+
+export const getApplicationByUser = query({
+  args: { 
+    positionId: v.id("positions"),
+    applicantId: v.id("profiles")
+  },
+  handler: async (ctx, args) => {
+    const application = await ctx.db
+      .query("applications")
+      .withIndex("by_startup_applicant", (q) =>
+        q.eq("positionId", args.positionId).eq("applicantId", args.applicantId)
+      )
+      .first();
+    
+    return application || null;
+  },
+});
+
+export const listApplications = query({
+  args: { positionId: v.id("positions") },
+  handler: async (ctx, args) => {
+    return await ctx.db
+      .query("applications")
+      .withIndex("by_position", (q) =>
+        q.eq("positionId", args.positionId)
+      )
+      .order("desc")
+      .collect();
   },
 });

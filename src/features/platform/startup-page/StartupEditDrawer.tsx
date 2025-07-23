@@ -100,6 +100,10 @@ function StartupForm({ startup, setOpen }: { startup: Doc<"startups">, setOpen: 
     funding: startup.funding || 0,
     team_size: startup.team_size || 1,
     stage: startup.stage || "Growth",
+    website: startup.website || "",
+    email: startup.email || "",
+    phone: startup.phone || "",
+    tags: startup.tags ? startup.tags.join(', ') : "",
   });
 
   const handleEditInput = (field: string, value: string | number) => {
@@ -116,6 +120,7 @@ function StartupForm({ startup, setOpen }: { startup: Doc<"startups">, setOpen: 
         startupId: startup._id,
         ...formData,
         stage: formData.stage || "Growth",
+        tags: formData.tags ? formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0) : [],
       });
       setFeedback({ type: 'success', message: 'Startup updated!' });
       setTimeout(() => setOpen(false), 1200);
@@ -170,6 +175,53 @@ function StartupForm({ startup, setOpen }: { startup: Doc<"startups">, setOpen: 
               value={formData.stage}
               onChange={e => handleEditInput('stage', e.target.value)}
               placeholder="e.g. Growth"
+            />
+          </div>
+          
+          <div>
+            <Label htmlFor="tags">Key Features/Tags (comma-separated)</Label>
+            <Input
+              id="tags"
+              name="tags"
+              value={formData.tags}
+              onChange={e => handleEditInput('tags', e.target.value)}
+              placeholder="e.g., AI-powered, Real-time monitoring, Cloud-based..."
+            />
+          </div>
+          
+          {/* Contact Information */}
+          <div>
+            <Label htmlFor="website">Website</Label>
+            <Input
+              id="website"
+              name="website"
+              value={formData.website}
+              onChange={e => handleEditInput('website', e.target.value)}
+              placeholder="https://example.com"
+            />
+          </div>
+          
+          <div>
+            <Label htmlFor="email">Email</Label>
+            <Input
+              id="email"
+              name="email"
+              type="email"
+              value={formData.email}
+              onChange={e => handleEditInput('email', e.target.value)}
+              placeholder="contact@example.com"
+            />
+          </div>
+          
+          <div>
+            <Label htmlFor="phone">Phone</Label>
+            <Input
+              id="phone"
+              name="phone"
+              type="tel"
+              value={formData.phone}
+              onChange={e => handleEditInput('phone', e.target.value)}
+              placeholder="+1 (555) 123-4567"
             />
           </div>
         </div>

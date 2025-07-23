@@ -13,7 +13,7 @@ export function MessageBubble({ msg, isMe, myProfile, receiverProfile, formatMes
   };
 
   return (
-    <div className={`flex items-end gap-2 ${isMe ? "justify-end" : "justify-start"}`}>
+    <div className={`flex items-end gap-3 ${isMe ? "justify-end" : "justify-start"}`}>
       {!isMe && (
         <Avatar className="w-8 h-8 shrink-0">
           {isValidAvatarUrl(receiverProfile?.avatar_url) ? (
@@ -29,16 +29,16 @@ export function MessageBubble({ msg, isMe, myProfile, receiverProfile, formatMes
       )}
       
       <div
-        className={`max-w-xs lg:max-w-md px-4 py-2 rounded-2xl ${
+        className={`max-w-xs lg:max-w-md px-4 py-3 rounded-2xl shadow-sm ${
           isMe
             ? "bg-primary text-primary-foreground"
-            : "bg-muted text-foreground"
+            : "bg-muted text-foreground border border-border/30"
         }`}
       >
         <p className="text-sm break-words whitespace-pre-line leading-relaxed">
           {msg.content}
         </p>
-        <div className="flex items-center gap-1 mt-1">
+        <div className="flex items-center gap-1 mt-2">
           <span className="text-[10px] opacity-70">
             {formatMessageTime(msg._creationTime)}
           </span>

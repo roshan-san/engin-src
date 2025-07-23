@@ -10,8 +10,6 @@ import ProfileStartups from "@/features/platform/view-profile/components/Profile
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
 import { User, Briefcase, Building2 } from "lucide-react";
-import { ProfileEditPopover } from "@/features/platform/view-profile/components/ProfileEditPopover";
-
 export const Route = createFileRoute("/_protected/profile/$username")({
   component: ProfilePage,
 });
@@ -47,27 +45,8 @@ function ProfilePage() {
   return (
     <div className="min-h-screen bg-background">
       <div className="w-full px-4 py-4 sm:px-6 sm:py-6 space-y-6">
-        <div className="flex items-center justify-between gap-3">
-          <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-primary/10">
-              <User className="h-5 w-5 text-primary" />
-            </div>
-            <div>
-              <h1 className="text-xl sm:text-2xl font-bold text-foreground">
-                Profile
-              </h1>
-              <p className="text-sm text-muted-foreground">
-                {isOwnProfile ? "Your profile" : `${profile.name}'s profile`}
-              </p>
-            </div>
-          </div>
-          
-          {isOwnProfile && (
-            <ProfileEditPopover profile={profile} />
-          )}
-        </div>
         <div>
-          <ProfileHeader profile={profile} />
+          <ProfileHeader profile={profile} isOwnProfile={isOwnProfile} />
         </div>
 
         <div className="space-y-6">

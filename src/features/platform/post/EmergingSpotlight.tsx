@@ -1,31 +1,97 @@
 import { useQuery } from 'convex/react';
 import { api } from '@/../convex/_generated/api';
 import { Badge } from '@/components/ui/badge';
-import { Card } from '@/components/ui/card';
 import { useNavigate } from '@tanstack/react-router';
+import { TrendingUp, Sparkles, Heart, MapPin, Users } from 'lucide-react';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 export function EmergingSpotlight() {
-  const trending = useQuery(api.posts.queries.getTrendingTags);
+  const mostLikedStartup = useQuery(api.startups.queries.getMostLikedStartup);
   const navigate = useNavigate();
 
   return (
-    <Card className="p-5 mb-6">
-      <div className="font-bold text-lg mb-1 text-green-700 flex items-center gap-2">
-        <span className="text-green-500">✦</span> Emerging Spotlight
+    <div className="bg-background border border-border rounded-xl p-6 shadow-sm h-fit">
+      <div className="flex items-center gap-3 mb-4">
+        <div className="p-2 rounded-full bg-primary/20 border border-primary/30">
+          <TrendingUp className="w-5 h-5 text-primary" />
+        </div>
+        <div>
+          <h3 className="font-semibold text-lg text-foreground">Emerging Spotlight</h3>
+          <p className="text-sm text-muted-foreground">Most loved startup this week</p>
+        </div>
       </div>
-      <div className="text-xs text-muted-foreground mb-4">Trending ideas, rising startups, and founders to watch</div>
-      <div className="flex flex-wrap gap-2 mb-3">
-        {trending?.slice(0, 5).map(t => (
-          <Badge
-            key={t.tag}
-            variant="secondary"
-            className="cursor-pointer text-sm px-2 py-1"
-            onClick={() => navigate({ to: `/trending/${encodeURIComponent(t.tag)}` })}
+      
+      {mostLikedStartup ? (
+        <div className="space-y-4">
+          {/* Startup Card */}
+          <div 
+            className="p-4 rounded-lg border border-border/30 bg-muted/20 cursor-pointer hover:bg-muted/30 transition-colors"
+            onClick={() => navigate({ to: '/startups/$startupid', params: { startupid: mostLikedStartup.startup._id } })}
           >
-            {t.tag.startsWith('#') ? t.tag : `#${t.tag}`}
-          </Badge>
-        ))}
-      </div>
-    </Card>
+            <div className="flex items-start gap-3 mb-3">
+              <Avatar className="w-10 h-10">
+                <AvatarImage src={mostLikedStartup.founder?.avatar_url} />
+                <AvatarFallback className="bg-primary/10 text-primary font-semibold">
+                  {mostLikedStartup.founder?.name?.[0] || mostLikedStartup.founder?.username?.[0] || '?'}
+                </AvatarFallback>
+              </Avatar>
+              <div className="flex-1 min-w-0">
+                <h4 className="font-semibold text-base truncate">
+                  {mostLikedStartup.startup.name}
+                </h4>
+                <p className="text-xs text-muted-foreground">
+                  by {mostLikedStartup.founder?.name || mostLikedStartup.founder?.username || 'Unknown'}
+                </p>
+              </div>
+              <div className="flex items-center gap-1 text-primary">
+                <Heart className="w-4 h-4" />
+                <span className="text-sm font-medium">{mostLikedStartup.likesCount}</span>
+              </div>
+            </div>
+            
+            <p className="text-sm text-foreground/80 line-clamp-2 mb-3">
+              {mostLikedStartup.startup.description}
+            </p>
+            
+            <div className="flex items-center gap-4 text-xs text-muted-foreground">
+              <div className="flex items-center gap-1">
+                <MapPin className="w-3 h-3" />
+                <span>{mostLikedStartup.startup.location}</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Users className="w-3 h-3" />
+                <span>{mostLikedStartup.startup.team_size} members</span>
+              </div>
+              {mostLikedStartup.startup.stage && (
+                <Badge variant="secondary" className="text-xs">
+                  {mostLikedStartup.startup.stage}
+                </Badge>
+              )}
+            </div>
+          </div>
+          
+          {/* Trending Tags */}
+          <div className="flex flex-wrap gap-2">
+            {mostLikedStartup.startup.tags?.slice(0, 4).map((tag: string) => (
+              <Badge
+                key={tag}
+                variant="secondary"
+                className="cursor-pointer hover:bg-primary/20 text-primary border-primary/30 transition-colors"
+                onClick={() => navigate({ to: `/trending/${encodeURIComponent(tag)}` })}
+              >
+                <Sparkles className="w-3 h-3 mr-1" />
+                {tag.startsWith('#') ? tag : `#${tag}`}
+              </Badge>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div className="text-center py-8 text-muted-foreground border-t border-border/30 mt-4">
+          <Sparkles className="w-8 h-8 mx-auto mb-2 opacity-50" />
+          <p className="text-sm">No startups yet</p>
+          <p className="text-xs opacity-70 mt-1">Be the first to create a startup!</p>
+        </div>
+      )}
+    </div>
   );
 } 

@@ -14,6 +14,9 @@ export const createStartup = mutation({
     stage: v.optional(v.string()),
     tags: v.optional(v.array(v.string())),
     likes: v.optional(v.array(v.id("profiles"))),
+    website: v.optional(v.string()),
+    email: v.optional(v.string()),
+    phone: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const profile = await getAuthenticatedProfile(ctx);
@@ -23,6 +26,7 @@ export const createStartup = mutation({
       stage: args.stage ?? "Growth",
       ownerId: profile._id,
       collaborators: [], // Initialize empty collaborators array
+      createdAt: Date.now(),
     };
 
     const startupId = await ctx.db.insert("startups", startup);
@@ -44,6 +48,9 @@ export const updateStartup = mutation({
     stage: v.optional(v.string()),
     tags: v.optional(v.array(v.string())),
     likes: v.optional(v.array(v.id("profiles"))),
+    website: v.optional(v.string()),
+    email: v.optional(v.string()),
+    phone: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const profile = await getAuthenticatedProfile(ctx);

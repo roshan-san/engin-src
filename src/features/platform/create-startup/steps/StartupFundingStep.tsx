@@ -6,13 +6,12 @@ export const StartupFundingStep = () => {
   const {
     startupData,
     handleChange,
-    handleCreate,
+    nextStep,
     previousStep,
-    isCreating,
   } = useCreateStartup();
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
-      handleCreate();
+      nextStep();
     }
   };
 
@@ -44,11 +43,10 @@ export const StartupFundingStep = () => {
           Previous
         </Button>
         <Button
-          onClick={handleCreate}
-          disabled={isCreating}
+          onClick={nextStep}
           className="flex-1 h-12 text-lg font-medium"
         >
-          {isCreating ? "Creating..." : "Create Startup"}
+          Next
         </Button>
       </div>
     </div>

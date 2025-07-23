@@ -2,15 +2,12 @@ import { Button } from "@/components/ui/button";
 import { FaInfoCircle } from "react-icons/fa";
 import { useCreateStartup } from "../context/CreateStartupContext";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 
 export const StartupDescriptionStep = () => {
   const { startupData, handleChange, nextStep, previousStep } =
     useCreateStartup();
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-      if (e.key === "Enter") {
-        nextStep();
-      }
-    };
 
   return (
     <div className="w-full flex justify-center items-center gap-6 flex-col h-full p-4">
@@ -19,15 +16,33 @@ export const StartupDescriptionStep = () => {
           <FaInfoCircle className="text-primary w-5 h-5" />
           Describe your startup
         </h3>
-        <Input
-          name="description"
-          placeholder="Tell us about your startup..."
-          value={startupData.description || ""}
-          onChange={handleChange}
-          onKeyDown={handleKeyDown}
-          className="h-32 text-lg rounded-xl resize-none"
-          autoFocus
-        />
+        <div className="space-y-4">
+          <div>
+            <Label htmlFor="description" className="text-sm font-medium mb-2 block">
+              Description
+            </Label>
+            <Textarea
+              name="description"
+              placeholder="Tell us about your startup..."
+              value={startupData.description || ""}
+              onChange={handleChange}
+              className="h-32 text-base resize-none"
+              autoFocus
+            />
+          </div>
+          <div>
+            <Label htmlFor="tags" className="text-sm font-medium mb-2 block">
+              Key Features/Tags (comma-separated)
+            </Label>
+            <Input
+              name="tags"
+              placeholder="e.g., AI-powered, Real-time monitoring, Cloud-based..."
+              value={startupData.tags || ""}
+              onChange={handleChange}
+              className="text-base"
+            />
+          </div>
+        </div>
       </div>
       <div className="w-full p-4 flex justify-between gap-4 mt-4">
         <Button

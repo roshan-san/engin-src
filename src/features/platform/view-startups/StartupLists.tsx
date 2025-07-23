@@ -2,7 +2,7 @@ import { api } from "@/../convex/_generated/api";
 import { useQuery } from "convex/react";
 import StartupCard from "../search-startups/StartupCard";
 import { StartupCardSkeleton } from "./StartupCardSkeleton";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Rocket } from "lucide-react";
 
 export function StartupLists() {
@@ -20,13 +20,19 @@ export function StartupLists() {
 
   if (myStartups.length === 0) {
     return (
-      <Alert>
-        <Rocket className="h-4 w-4" />
-        <AlertTitle>No Startups Yet!</AlertTitle>
-        <AlertDescription>
-          You haven't created any startups. Click the "Create Startup" button to get started.
-        </AlertDescription>
-      </Alert>
+      <Card className="border-dashed border-2 border-muted/50">
+        <CardHeader className="text-center">
+          <div className="flex justify-center mb-2">
+            <Rocket className="h-8 w-8 text-muted-foreground/50" />
+          </div>
+          <CardTitle className="text-lg">No Startups Yet!</CardTitle>
+        </CardHeader>
+        <CardContent className="text-center">
+          <p className="text-muted-foreground">
+            You haven't created any startups. Click the "Create Startup" button to get started.
+          </p>
+        </CardContent>
+      </Card>
     );
   }
 

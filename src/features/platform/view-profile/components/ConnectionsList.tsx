@@ -4,7 +4,7 @@ import { api } from "@/../convex/_generated/api";
 import { Card, CardContent } from "@/components/ui/card";
 import ProfileCard from "@/features/platform/search-profiles/ProfileCard";
 
-export default function ProfileConnections({ profile }: { profile: Doc<"profiles"> }) {
+export default function ConnectionsList({ profile }: { profile: Doc<"profiles"> }) {
   // Fetch connected profiles for the given profile
   const connectedProfiles = useQuery(api.messages.queries.getConnectedProfilesById, {
     profileId: profile._id,
@@ -26,4 +26,4 @@ export default function ProfileConnections({ profile }: { profile: Doc<"profiles
       </CardContent>
     </Card>
   );
-}
+} 

@@ -31,7 +31,7 @@ export default function NotificationsDrawer() {
           )}
         </Button>
       </DrawerTrigger>
-      <DrawerContent className="w-full max-w-full sm:max-w-sm h-full fixed right-0 top-0 z-50 p-0 md:rounded-none md:shadow-lg md:bg-white md:dark:bg-gray-900">
+      <DrawerContent className="w-full sm:max-w-sm h-full  p-0 md:rounded-none md:shadow-lg md:bg-white md:dark:bg-gray-900">
         <DrawerHeader>
           <DrawerTitle>Notifications</DrawerTitle>
           <DrawerDescription>
