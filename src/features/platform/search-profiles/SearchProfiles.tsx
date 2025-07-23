@@ -2,6 +2,7 @@ import { Input } from "@/components/ui/input";
 import { useProfileSearch } from "./useProfileSearch";
 import ProfileCard from "./ProfileCard";
 import ReqDrawer from "../make-connections/ReqDrawer";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function SearchProfiles() {
   const { searchQuery, setSearchQuery, profiles, status, loadMore, ref } =
@@ -24,8 +25,10 @@ export default function SearchProfiles() {
       </div>
 
       {status === "LoadingFirstPage" ? (
-        <div className="flex items-center justify-center h-32 text-gray-500">
-          Loading...
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          {Array.from({ length: 9 }).map((_, i) => (
+            <Skeleton key={i} className="h-48 w-full" />
+          ))}
         </div>
       ) : profiles && profiles.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
@@ -51,8 +54,11 @@ export default function SearchProfiles() {
           </div>
         </div>
       ) : (
-        <div className="flex items-center justify-center h-32 text-gray-500">
-          No profiles found.
+        <div className="flex flex-col items-center justify-center h-64 text-center">
+          <h3 className="text-2xl font-semibold">No Profiles Found</h3>
+          <p className="text-muted-foreground">
+            Try adjusting your search query.
+          </p>
         </div>
       )}
     </div>

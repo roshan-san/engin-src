@@ -20,7 +20,7 @@ function RouteComponent() {
         {data === undefined ? (
           <FullScreenLoader />
         ) : data?.profile ? (
-          <Navigate to="/dashboard" />
+          <Navigate to="/home" />
         ) : (
           <OnboardingProvider>
             <OnboardingSteps />

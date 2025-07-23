@@ -5,7 +5,6 @@ import "./index.css";
 // Import the generated route tree
 import { routeTree } from "./routeTree.gen";
 import { ThemeProvider } from "./components/ThemeProvider";
-import { PWAInstallPrompt } from "./components/PWAInstallPrompt";
 
 import { ConvexReactClient } from "convex/react";
 import { ConvexAuthProvider } from "@convex-dev/auth/react";
@@ -28,7 +27,6 @@ if (!rootElement.innerHTML) {
     <ThemeProvider>
       <ConvexAuthProvider client={convex}>
         <RouterProvider router={router} />
-        <PWAInstallPrompt />
       </ConvexAuthProvider>
     </ThemeProvider>,
   );
