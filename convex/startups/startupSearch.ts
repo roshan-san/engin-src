@@ -18,6 +18,13 @@ export const getStartups = query({
 
     const startups = await query.paginate(args.paginationOpts);
 
-    return startups;
+    // Map to include upvotesCount for each startup
+    return {
+      ...startups,
+      page: startups.page.map((startup) => ({
+        ...startup,
+        upvotesCount: (startup.upvotes || []).length,
+      })),
+    };
   },
 });

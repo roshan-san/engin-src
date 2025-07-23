@@ -1,10 +1,11 @@
-import { Laptop, Search, Users, MessageCircle, } from "lucide-react";
+import { TrendingUp, Laptop, Search, Users, MessageCircle } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "convex/react";
 import { api } from "@/../convex/_generated/api";
 
 const navigationItems = [
   { href: "/home", icon: Laptop, label: "Home" },
+  { href: "/trending", icon: TrendingUp, label: "Trending" },
   { href: "/startups", icon: Search, label: "Explore" },
   { href: "/message", icon: MessageCircle, label: "Messages" },
   { href: "/connect", icon: Users, label: "Network" },
@@ -15,7 +16,7 @@ export function BottomBar() {
   const unread = unreadCount ?? 0;
 
   return (
-    <nav className="flex justify-evenly items-center w-full h-full">
+    <nav className="block md:hidden fixed bottom-0 left-0 w-full bg-background border-t z-50 flex justify-evenly items-center h-16">
       {navigationItems.map((item) => (
         <Link
           key={item.href}

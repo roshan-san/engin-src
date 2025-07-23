@@ -9,8 +9,34 @@ import { Users, DollarSign, MapPin, Building2 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import type { Doc } from "@/../convex/_generated/dataModel";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { useMutation } from "convex/react";
+import { api } from "@/../convex/_generated/api";
+import { useState } from "react";
+import { ThumbsUp } from "lucide-react";
+import { useUser } from "@/features/authentication/UserContext";
 
-export default function StartupCard({ startup }: { startup: Doc<"startups"> }) {
+export default function StartupCard({ startup }: { startup: Doc<"startups"> & { upvotesCount?: number, upvotes?: string[] } }) {
+  const { profile } = useUser();
+  const toggleUpvote = useMutation(api.startups.mutations.toggleUpvoteStartup);
+  const [upvotes, setUpvotes] = useState(startup.upvotesCount || 0);
+  const [hasUpvoted, setHasUpvoted] = useState(
+    Array.isArray(startup.upvotes) && profile ? startup.upvotes.includes(profile._id) : false
+  );
+  const [loading, setLoading] = useState(false);
+
+  const handleUpvote = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const res = await toggleUpvote({ startupId: startup._id });
+      setUpvotes(res.upvotesCount);
+      setHasUpvoted(res.upvoted);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <Link
       key={startup._id}
@@ -49,9 +75,21 @@ export default function StartupCard({ startup }: { startup: Doc<"startups"> }) {
               ${(startup.funding / 1000000).toFixed(1)}M
             </span>
           </div>
-          <span className="text-xs text-muted-foreground">
-            {new Date(startup._creationTime).toLocaleDateString()}
-          </span>
+          <div className="flex items-center gap-2">
+            <Button
+              size="sm"
+              variant={hasUpvoted ? "secondary" : "ghost"}
+              onClick={handleUpvote}
+              disabled={loading}
+              aria-label="Upvote"
+            >
+              <ThumbsUp className="w-4 h-4" />
+              {upvotes}
+            </Button>
+            <span className="text-xs text-muted-foreground">
+              {new Date(startup._creationTime).toLocaleDateString()}
+            </span>
+          </div>
         </CardFooter>
       </Card>
     </Link>

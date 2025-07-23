@@ -1,5 +1,4 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ProfileHeader } from "@/features/platform/view-profile/components/ProfileHeader";
 import { ProfileAbout } from "@/features/platform/view-profile/components/ProfileAbout";
 import { ProfileSkills } from "@/features/platform/view-profile/components/ProfileSkills";
 import type { Doc } from "@/../convex/_generated/dataModel";
@@ -12,8 +11,6 @@ export default function PublicProfileView({
 }) {
   return (
     <div className="container mx-auto p-4 md:p-6 lg:p-8">
-      <ProfileHeader profile={profile} />
-
       <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-3">
         <div className="space-y-6 md:col-span-1">
           <ProfileAbout profile={profile} />

@@ -160,3 +160,25 @@ export const removeCollaborator = mutation({
     return true;
   },
 });
+
+export const toggleUpvoteStartup = mutation({
+  args: {
+    startupId: v.id("startups"),
+  },
+  handler: async (ctx, args) => {
+    const profile = await getAuthenticatedProfile(ctx);
+    if (!profile) throw new Error("Not authenticated");
+    const startup = await ctx.db.get(args.startupId);
+    if (!startup) throw new Error("Startup not found");
+    const upvotes = startup.upvotes || [];
+    const hasUpvoted = upvotes.includes(profile._id);
+    let newUpvotes;
+    if (hasUpvoted) {
+      newUpvotes = upvotes.filter((id) => id !== profile._id);
+    } else {
+      newUpvotes = [...upvotes, profile._id];
+    }
+    await ctx.db.patch(args.startupId, { upvotes: newUpvotes });
+    return { upvoted: !hasUpvoted, upvotesCount: newUpvotes.length };
+  },
+});

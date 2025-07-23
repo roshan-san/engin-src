@@ -67,6 +67,7 @@ const schema = defineSchema({
     ownerId: v.id("profiles"),
     // Simplified collaborators - just track who's on the team
     collaborators: v.optional(v.array(v.id("profiles"))),
+    upvotes: v.optional(v.array(v.id("profiles"))), // Track upvotes by user
   })
     .index("by_owner", ["ownerId"])
     .index("by_collaborators", ["collaborators"])
@@ -111,6 +112,29 @@ const schema = defineSchema({
     lastSeen: v.number(),
   })
   .index("by_user", ["userId"]),
+
+  posts: defineTable({
+    title: v.string(),
+    content: v.string(),
+    authorId: v.id("profiles"),
+    createdAt: v.number(),
+    tags: v.optional(v.array(v.string())),
+  }),
+  post_votes: defineTable({
+    postId: v.id("posts"),
+    userId: v.id("profiles"),
+    vote: v.union(v.literal(1), v.literal(-1)),
+    createdAt: v.number(),
+  })
+    .index("by_post", ["postId"])
+    .index("by_user_post", ["userId", "postId"]),
+  post_comments: defineTable({
+    postId: v.id("posts"),
+    userId: v.id("profiles"),
+    content: v.string(),
+    createdAt: v.number(),
+  })
+    .index("by_post", ["postId"]),
 });
 
 export default schema;
