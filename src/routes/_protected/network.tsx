@@ -21,21 +21,21 @@ function RouteComponent() {
               className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm lg:text-base font-medium data-[state=active]:bg-primary/10 data-[state=active]:text-primary transition-all duration-200"
             >
               <Sparkles className="h-3 w-3 sm:h-4 sm:w-4 lg:h-5 lg:w-5" />
-              <span className="hidden xs:inline">Creators</span>
+              <span className="hidden sm:inline">Creators</span>
             </TabsTrigger>
             <TabsTrigger 
               value="investors" 
               className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm lg:text-base font-medium data-[state=active]:bg-primary/10 data-[state=active]:text-primary transition-all duration-200"
             >
               <TrendingUp className="h-3 w-3 sm:h-4 sm:w-4 lg:h-5 lg:w-5" />
-              <span className="hidden xs:inline">Investors</span>
+              <span className="hidden sm:inline">Investors</span>
             </TabsTrigger>
             <TabsTrigger 
               value="mentors" 
               className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm lg:text-base font-medium data-[state=active]:bg-primary/10 data-[state=active]:text-primary transition-all duration-200"
             >
               <Lightbulb className="h-3 w-3 sm:h-4 sm:w-4 lg:h-5 lg:w-5" />
-              <span className="hidden xs:inline">Mentors</span>
+              <span className="hidden sm:inline">Mentors</span>
             </TabsTrigger>
           </TabsList>
           

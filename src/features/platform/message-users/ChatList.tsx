@@ -2,7 +2,7 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useQuery } from "convex/react";
 import { api } from "@/../convex/_generated/api";
-import { Users, MessageCircle } from "lucide-react";
+import { Users } from "lucide-react";
 import { useUser } from "@/features/authentication/UserContext";
 
 export function ChatList() {
@@ -16,20 +16,6 @@ export function ChatList() {
   return (
     <div className="flex flex-col h-full min-h-0">
       {/* Header for mobile */}
-      <div className="lg:hidden flex items-center justify-between p-4 border-b border-border/50 bg-background">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-            <MessageCircle className="h-5 w-5 text-primary" />
-          </div>
-          <div>
-            <h2 className="font-semibold text-lg">Conversations</h2>
-            <p className="text-sm text-muted-foreground">
-              {chatSummaries?.length || 0} chats
-            </p>
-          </div>
-        </div>
-      </div>
-
       <div className="flex-1 min-h-0 overflow-y-auto">
         {chatSummaries && chatSummaries.length > 0 ? (
           <div className="px-2">

@@ -19,6 +19,7 @@ import { Route as ProtectedMyStartupsImport } from './routes/_protected/my-start
 import { Route as ProtectedMessageImport } from './routes/_protected/message'
 import { Route as ProtectedHomeImport } from './routes/_protected/home'
 import { Route as ProtectedCrowdfundingImport } from './routes/_protected/crowdfunding'
+import { Route as ProtectedCreatePostImport } from './routes/_protected/create-post'
 import { Route as ProtectedStartupsIndexImport } from './routes/_protected/startups.index'
 import { Route as ProtectedMessageIndexImport } from './routes/_protected/message.index'
 import { Route as ProtectedStartupsStartupidImport } from './routes/_protected/startups.$startupid'
@@ -74,6 +75,12 @@ const ProtectedCrowdfundingRoute = ProtectedCrowdfundingImport.update({
   getParentRoute: () => ProtectedRoute,
 } as any)
 
+const ProtectedCreatePostRoute = ProtectedCreatePostImport.update({
+  id: '/create-post',
+  path: '/create-post',
+  getParentRoute: () => ProtectedRoute,
+} as any)
+
 const ProtectedStartupsIndexRoute = ProtectedStartupsIndexImport.update({
   id: '/startups/',
   path: '/startups/',
@@ -123,6 +130,13 @@ declare module '@tanstack/react-router' {
       fullPath: ''
       preLoaderRoute: typeof ProtectedImport
       parentRoute: typeof rootRoute
+    }
+    '/_protected/create-post': {
+      id: '/_protected/create-post'
+      path: '/create-post'
+      fullPath: '/create-post'
+      preLoaderRoute: typeof ProtectedCreatePostImport
+      parentRoute: typeof ProtectedImport
     }
     '/_protected/crowdfunding': {
       id: '/_protected/crowdfunding'
@@ -220,6 +234,7 @@ const ProtectedMessageRouteWithChildren =
   ProtectedMessageRoute._addFileChildren(ProtectedMessageRouteChildren)
 
 interface ProtectedRouteChildren {
+  ProtectedCreatePostRoute: typeof ProtectedCreatePostRoute
   ProtectedCrowdfundingRoute: typeof ProtectedCrowdfundingRoute
   ProtectedHomeRoute: typeof ProtectedHomeRoute
   ProtectedMessageRoute: typeof ProtectedMessageRouteWithChildren
@@ -232,6 +247,7 @@ interface ProtectedRouteChildren {
 }
 
 const ProtectedRouteChildren: ProtectedRouteChildren = {
+  ProtectedCreatePostRoute: ProtectedCreatePostRoute,
   ProtectedCrowdfundingRoute: ProtectedCrowdfundingRoute,
   ProtectedHomeRoute: ProtectedHomeRoute,
   ProtectedMessageRoute: ProtectedMessageRouteWithChildren,
@@ -250,6 +266,7 @@ const ProtectedRouteWithChildren = ProtectedRoute._addFileChildren(
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '': typeof ProtectedRouteWithChildren
+  '/create-post': typeof ProtectedCreatePostRoute
   '/crowdfunding': typeof ProtectedCrowdfundingRoute
   '/home': typeof ProtectedHomeRoute
   '/message': typeof ProtectedMessageRouteWithChildren
@@ -266,6 +283,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '': typeof ProtectedRouteWithChildren
+  '/create-post': typeof ProtectedCreatePostRoute
   '/crowdfunding': typeof ProtectedCrowdfundingRoute
   '/home': typeof ProtectedHomeRoute
   '/my-startups': typeof ProtectedMyStartupsRoute
@@ -282,6 +300,7 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/_protected': typeof ProtectedRouteWithChildren
+  '/_protected/create-post': typeof ProtectedCreatePostRoute
   '/_protected/crowdfunding': typeof ProtectedCrowdfundingRoute
   '/_protected/home': typeof ProtectedHomeRoute
   '/_protected/message': typeof ProtectedMessageRouteWithChildren
@@ -300,6 +319,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | ''
+    | '/create-post'
     | '/crowdfunding'
     | '/home'
     | '/message'
@@ -315,6 +335,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | ''
+    | '/create-post'
     | '/crowdfunding'
     | '/home'
     | '/my-startups'
@@ -329,6 +350,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_protected'
+    | '/_protected/create-post'
     | '/_protected/crowdfunding'
     | '/_protected/home'
     | '/_protected/message'
@@ -373,6 +395,7 @@ export const routeTree = rootRoute
     "/_protected": {
       "filePath": "_protected.tsx",
       "children": [
+        "/_protected/create-post",
         "/_protected/crowdfunding",
         "/_protected/home",
         "/_protected/message",
@@ -383,6 +406,10 @@ export const routeTree = rootRoute
         "/_protected/startups/$startupid",
         "/_protected/startups/"
       ]
+    },
+    "/_protected/create-post": {
+      "filePath": "_protected/create-post.tsx",
+      "parent": "/_protected"
     },
     "/_protected/crowdfunding": {
       "filePath": "_protected/crowdfunding.tsx",

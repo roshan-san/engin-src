@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import { MapPin, Briefcase, MessageSquare, Users, Github, Linkedin, User, Loader2 } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -212,8 +212,8 @@ export function ProfileHeader({ profile, isOwnProfile = false }: ProfileHeaderPr
                             </a>
                           </Button>
                         </TooltipTrigger>
-                        <TooltipContent>
-                          <p>GitHub Profile</p>
+                        <TooltipContent className="bg-background border border-border shadow-lg rounded-lg px-3 py-2">
+                          <p className="text-sm font-medium">GitHub Profile</p>
                         </TooltipContent>
                       </Tooltip>
                     </TooltipProvider>
@@ -234,8 +234,8 @@ export function ProfileHeader({ profile, isOwnProfile = false }: ProfileHeaderPr
                             </a>
                           </Button>
                         </TooltipTrigger>
-                        <TooltipContent>
-                          <p>LinkedIn Profile</p>
+                        <TooltipContent className="bg-background border border-border shadow-lg rounded-lg px-3 py-2">
+                          <p className="text-sm font-medium">LinkedIn Profile</p>
                         </TooltipContent>
                       </Tooltip>
                     </TooltipProvider>
@@ -263,8 +263,8 @@ export function ProfileHeader({ profile, isOwnProfile = false }: ProfileHeaderPr
                             </Link>
                           </Button>
                         </TooltipTrigger>
-                        <TooltipContent>
-                          <p>Send a message to {profile.name}</p>
+                        <TooltipContent className="bg-background border border-border shadow-lg rounded-lg px-3 py-2">
+                          <p className="text-sm font-medium">Send a message to {profile.name}</p>
                         </TooltipContent>
                       </Tooltip>
                     </TooltipProvider>
@@ -293,8 +293,15 @@ export function ProfileHeader({ profile, isOwnProfile = false }: ProfileHeaderPr
                             </span>
                           </Button>
                         </TooltipTrigger>
-                        <TooltipContent>
-                          <p>{connectionButtonContent.text === "Connected" ? "You are connected" : connectionButtonContent.text === "Waiting" ? "Connection request pending" : "Send Connection Request"}</p>
+                        <TooltipContent className="bg-background border border-border shadow-lg rounded-lg px-3 py-2">
+                          <p className="text-sm font-medium">
+                            {connectionButtonContent.text === "Connected" 
+                              ? "You are connected with this user" 
+                              : connectionButtonContent.text === "Waiting" 
+                              ? "Connection request is pending" 
+                              : "Send a connection request"
+                            }
+                          </p>
                         </TooltipContent>
                       </Tooltip>
                     </TooltipProvider>

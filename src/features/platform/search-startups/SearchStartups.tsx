@@ -18,7 +18,6 @@ export default function SearchStartups() {
           type="text"
           placeholder="Search for startups..."
           value={searchQuery}
-          autoFocus
           onChange={(e) => setSearchQuery(e.target.value)}
           className="w-full pl-10 sm:pl-12 pr-4 h-10 sm:h-12 rounded-xl border-2 border-border/50 focus:border-primary bg-background/50 backdrop-blur-sm transition-all duration-200 shadow-sm hover:shadow-md focus:shadow-lg"
         />
@@ -34,20 +33,6 @@ export default function SearchStartups() {
           </div>
         ) : startups && startups.length > 0 ? (
           <div className="space-y-3">
-            {/* Results Header */}
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-primary/10 flex items-center justify-center">
-                  <Search className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
-                </div>
-                <div>
-                  <h2 className="text-xl sm:text-2xl font-semibold text-foreground">Startups</h2>
-                  <p className="text-sm sm:text-base text-muted-foreground">
-                    {startups.length} {startups.length === 1 ? 'startup' : 'startups'} found
-                  </p>
-                </div>
-              </div>
-            </div>
 
             {/* Startup Cards Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">

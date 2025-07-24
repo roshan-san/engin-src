@@ -10,7 +10,7 @@ interface StartupHeaderProps {
 
 export function StartupHeader({ startup, isOwner }: StartupHeaderProps) {
   return (
-    <div className="border-b border-border/50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-10">
+    <div className="border-b border-border/50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 lg:py-6">
         <div className="flex items-center gap-3 sm:gap-4">
           <Link 
@@ -35,13 +35,27 @@ export function StartupHeader({ startup, isOwner }: StartupHeaderProps) {
                 {startup.description}
               </p>
             </div>
-            
-            {isOwner && (
-              <div className="flex-shrink-0">
-                <StartupEditDrawer startup={startup} />
-              </div>
-            )}
           </div>
+          
+          {isOwner && (
+            <div className="flex-shrink-0">
+              <StartupEditDrawer 
+                startup={startup} 
+                iconOnly={false}
+                renderTrigger={({ setOpen }) => (
+                  <button
+                    onClick={() => setOpen(true)}
+                    className="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-medium transition-all duration-200 hover:scale-105 shadow-sm"
+                  >
+                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                    <span className="hidden sm:inline">Edit Startup</span>
+                  </button>
+                )}
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>
