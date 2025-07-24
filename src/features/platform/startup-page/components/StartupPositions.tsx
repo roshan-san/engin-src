@@ -1,7 +1,12 @@
 import { Card, CardContent } from "../../../../components/ui/card";
 import { Badge } from "../../../../components/ui/badge";
-import { Briefcase, MapPin, Users, Calendar, Clock } from "lucide-react";
+import { Button } from "../../../../components/ui/button";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "../../../../components/ui/dialog";
+import { Briefcase, MapPin, Users, Calendar, Plus, Eye } from "lucide-react";
 import { ApplyToPosition } from "../../positions/ApplyToPosition";
+import { ApplicationsList } from "../../collabs/ApplicationsList";
+import { PositionForm } from "../../positions/PositionForm";
+import { useState } from "react";
 import type { Doc } from "../../../../../convex/_generated/dataModel";
 
 interface StartupPositionsProps {
@@ -12,6 +17,10 @@ interface StartupPositionsProps {
 }
 
 export function StartupPositions({ startup, positions, profile, isOwner }: StartupPositionsProps) {
+  const [selectedPosition, setSelectedPosition] = useState<Doc<"positions"> | null>(null);
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [isViewApplicationsOpen, setIsViewApplicationsOpen] = useState(false);
+
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
       case "open":
@@ -25,10 +34,42 @@ export function StartupPositions({ startup, positions, profile, isOwner }: Start
 
   return (
     <div className="space-y-6">
-      <h2 className="text-xl lg:text-2xl font-semibold text-foreground flex items-center gap-2">
-        <Briefcase className="h-6 w-6 text-primary" />
-        Open Positions
-      </h2>
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <h2 className="text-xl lg:text-2xl font-semibold text-foreground flex items-center gap-2">
+          <Briefcase className="h-6 w-6 text-primary" />
+          Open Positions
+        </h2>
+        
+        <div className="flex items-center gap-2">
+          {isOwner && (
+            <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
+              <DialogTrigger asChild>
+                <Button size="sm" className="gap-2 h-9 sm:h-10">
+                  <Plus className="h-3 w-3 sm:h-4 sm:w-4" />
+                  <span className="text-xs sm:text-sm">Create Position</span>
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-2xl">
+                <DialogHeader>
+                  <DialogTitle>Create New Position</DialogTitle>
+                  <DialogDescription>
+                    Add a new position to attract talent to your startup.
+                  </DialogDescription>
+                </DialogHeader>
+                <PositionForm 
+                  startupId={startup._id} 
+                  onSuccess={() => setIsCreateDialogOpen(false)} 
+                />
+              </DialogContent>
+            </Dialog>
+          )}
+          
+          <Badge variant="secondary" className="px-2 py-1 sm:px-3 sm:py-1 text-xs sm:text-sm font-medium w-fit">
+            {positions?.length || 0} position{(positions?.length || 0) !== 1 ? 's' : ''}
+          </Badge>
+        </div>
+      </div>
       
       {!positions || positions.length === 0 ? (
         <div className="text-center py-12">
@@ -37,7 +78,10 @@ export function StartupPositions({ startup, positions, profile, isOwner }: Start
           </div>
           <h4 className="text-lg lg:text-xl font-semibold text-foreground mb-2">No positions available</h4>
           <p className="text-muted-foreground max-w-md mx-auto">
-            Check back later for new opportunities or contact the team directly.
+            {isOwner 
+              ? "Create your first position to start building your team." 
+              : "Check back later for new opportunities or contact the team directly."
+            }
           </p>
         </div>
       ) : (
@@ -99,12 +143,29 @@ export function StartupPositions({ startup, positions, profile, isOwner }: Start
                   
                   {/* Actions */}
                   <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 lg:flex-shrink-0">
-                    {profile && !isOwner && (
-                      <ApplyToPosition
-                        positionId={position._id}
-                        applicantId={profile._id}
-                        onSuccess={() => {}}
-                      />
+                    {isOwner ? (
+                      <>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => {
+                            setSelectedPosition(position);
+                            setIsViewApplicationsOpen(true);
+                          }}
+                          className="gap-2 h-9 sm:h-10"
+                        >
+                          <Eye className="h-3 w-3 sm:h-4 sm:w-4" />
+                          <span className="text-xs sm:text-sm">View Apps</span>
+                        </Button>
+                      </>
+                    ) : (
+                      profile && (
+                        <ApplyToPosition
+                          positionId={position._id}
+                          applicantId={profile._id}
+                          onSuccess={() => {}}
+                        />
+                      )
                     )}
                   </div>
                 </div>
@@ -112,6 +173,24 @@ export function StartupPositions({ startup, positions, profile, isOwner }: Start
             </Card>
           ))}
         </div>
+      )}
+
+      {/* Dialogs */}
+      {selectedPosition && (
+        <>
+          {/* View Applications Dialog */}
+          <Dialog open={isViewApplicationsOpen} onOpenChange={setIsViewApplicationsOpen}>
+            <DialogContent className="sm:max-w-4xl">
+              <DialogHeader>
+                <DialogTitle>Applications for {selectedPosition.title}</DialogTitle>
+                <DialogDescription>
+                  Review applications for this position.
+                </DialogDescription>
+              </DialogHeader>
+              <ApplicationsList positionId={selectedPosition._id} />
+            </DialogContent>
+          </Dialog>
+        </>
       )}
     </div>
   );

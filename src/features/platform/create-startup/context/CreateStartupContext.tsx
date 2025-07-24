@@ -55,7 +55,7 @@ export const CreateStartupProvider = ({
   const [isCreating, setIsCreating] = useState(false);
   const createStartup = useMutation(api.startups.mutations.createStartup);
 
-  const nextStep = () => setStep((prev) => Math.min(9, prev + 1));
+  const nextStep = () => setStep((prev) => Math.min(10, prev + 1));
   const previousStep = () => setStep((prev) => Math.max(1, prev - 1));
   const navigate= useNavigate()
 

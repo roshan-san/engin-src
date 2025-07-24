@@ -12,6 +12,7 @@ import { StartupSolutionStep } from "./steps/StartupSolutionStep";
 import { StartupTeamStep } from "./steps/StartupTeamStep";
 import { StartupFundingStep } from "./steps/StartupFundingStep";
 import { StartupContactStep } from "./steps/StartupContactStep";
+import { StartupEmailStep } from "./steps/StartupEmailStep";
 
 const CreateStartupForm = () => {
   const { step } = useCreateStartup();
@@ -36,6 +37,8 @@ const CreateStartupForm = () => {
         return <StartupFundingStep />;
       case 9:
         return <StartupContactStep />;
+      case 10:
+        return <StartupEmailStep />;
       default:
         return <div></div>;
     }
@@ -43,7 +46,7 @@ const CreateStartupForm = () => {
 
   return (
     <div className="h-full">
-      <Progress hidden={step >= 9} value={(step / 9) * 100} className="mb-4" />
+      <Progress hidden={step >= 10} value={(step / 10) * 100} className="mb-4" />
       {renderStep()}
     </div>
   );
