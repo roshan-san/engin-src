@@ -21,8 +21,8 @@ export function ChatWindow({ username }: ChatWindowProps) {
   const messages = useQuery(api.messages.queries.getMessages, { 
     otherUserId: chatPartner?._id 
   });
-  const chatPartnerOnlineStatus = useQuery(api.messages.queries.getOnlineStatus, {
-    userId: chatPartner?._id || "placeholder" as any
+  const chatPartnerOnlineStatus = useQuery(api.messages.queries.getOnlineStatus, { 
+    userId: chatPartner?._id 
   });
   
   // Mutations
@@ -126,28 +126,30 @@ export function ChatWindow({ username }: ChatWindowProps) {
         onlineStatus={chatPartnerOnlineStatus}
         formatLastSeen={formatLastSeen}
       />
-      <div className="flex-1 min-h-0 p-6 overflow-y-auto bg-gradient-to-b from-background to-muted/10" style={{scrollbarGutter: 'stable'}}>
-        {Array.isArray(messages) && messages.length > 0 ? (
-          <MessageList
-            messages={messages}
-            myProfile={myProfile}
-            receiverProfile={chatPartner}
-            formatMessageTime={formatMessageTime}
-          />
-        ) : (
-          <div className="flex flex-col items-center justify-center h-full text-muted-foreground">
-            <div className="w-16 h-16 rounded-full bg-muted/50 flex items-center justify-center mb-4 border border-border/30">
-              <MessageCircle className="w-8 h-8" />
+      <div className="flex-1 min-h-0 overflow-y-auto bg-background" style={{scrollbarGutter: 'stable'}}>
+        <div className="p-3">
+          {Array.isArray(messages) && messages.length > 0 ? (
+            <MessageList
+              messages={messages}
+              myProfile={myProfile}
+              receiverProfile={chatPartner}
+              formatMessageTime={formatMessageTime}
+            />
+          ) : (
+            <div className="flex flex-col items-center justify-center h-full text-muted-foreground py-6">
+              <div className="w-12 h-12 rounded-full bg-muted/30 flex items-center justify-center mb-3">
+                <MessageCircle className="w-6 h-6" />
+              </div>
+              <p className="text-base font-medium mb-1 text-foreground">No messages yet</p>
+              <p className="text-xs text-center max-w-sm">
+                Start a conversation with {chatPartner.name || chatPartner.username || "this user"}
+              </p>
             </div>
-            <p className="text-lg font-medium mb-2 text-foreground">No messages yet</p>
-            <p className="text-sm text-center">
-              Start a conversation with {chatPartner.name || chatPartner.username || "this user"}
-            </p>
-          </div>
-        )}
-        <div ref={messagesEndRef} />
+          )}
+          <div ref={messagesEndRef} />
+        </div>
       </div>
-      <div className="p-6 pt-4 border-t border-border/50 bg-background">
+      <div className="p-3 border-t border-border/50 bg-background">
         <MessageInput
           message={message}
           setMessage={setMessage}

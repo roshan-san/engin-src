@@ -2,7 +2,7 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useQuery } from "convex/react";
 import { api } from "@/../convex/_generated/api";
-import { Users } from "lucide-react";
+import { Users, MessageCircle } from "lucide-react";
 import { useUser } from "@/features/authentication/UserContext";
 
 export function ChatList() {
@@ -14,8 +14,23 @@ export function ChatList() {
     : null;
 
   return (
-    <div className="flex flex-col h-full">
-      <div className="flex-1 overflow-y-auto">
+    <div className="flex flex-col h-full min-h-0">
+      {/* Header for mobile */}
+      <div className="lg:hidden flex items-center justify-between p-4 border-b border-border/50 bg-background">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+            <MessageCircle className="h-5 w-5 text-primary" />
+          </div>
+          <div>
+            <h2 className="font-semibold text-lg">Conversations</h2>
+            <p className="text-sm text-muted-foreground">
+              {chatSummaries?.length || 0} chats
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex-1 min-h-0 overflow-y-auto">
         {chatSummaries && chatSummaries.length > 0 ? (
           <div className="px-2">
             {chatSummaries.filter(Boolean).map((summary) => (
@@ -61,18 +76,22 @@ function ChatListItem({ summary, myId, active }: {
 
   return (
     <Link to="/message/$username" params={{ username: profile?.username! }}>
-      <div className={`flex items-center gap-3 px-4 py-3 transition-colors duration-200 cursor-pointer ${
-        active ? 'bg-primary/10' : hasUnread ? 'bg-primary/5' : 'hover:bg-muted/30'
+      <div className={`flex items-center gap-3 px-4 py-4 transition-all duration-200 cursor-pointer ${
+        active 
+          ? 'bg-primary/10 border-l-4 border-l-primary' 
+          : hasUnread 
+            ? 'bg-primary/5 hover:bg-primary/10' 
+            : 'hover:bg-muted/30'
       }`}>
         <div className="relative">
-          <Avatar className="w-11 h-11">
+          <Avatar className="w-12 h-12 lg:w-11 lg:h-11">
             <AvatarImage src={profile?.avatar_url} />
             <AvatarFallback className="bg-primary/20 text-primary font-semibold">
               {profile?.name?.[0] || "?"}
             </AvatarFallback>
           </Avatar>
           {hasUnread && (
-            <span className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-primary text-white text-xs flex items-center justify-center font-bold">
+            <span className="absolute -top-0.5 -right-0.5 w-5 h-5 lg:w-4 lg:h-4 rounded-full bg-primary text-white text-xs flex items-center justify-center font-bold">
               !
             </span>
           )}
@@ -80,17 +99,17 @@ function ChatListItem({ summary, myId, active }: {
         
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between">
-            <span className={`font-semibold truncate ${hasUnread ? 'text-primary' : 'text-foreground'}`}>
+            <span className={`font-semibold truncate text-base lg:text-sm ${hasUnread ? 'text-primary' : 'text-foreground'}`}>
               {profile?.name || "Unknown User"}
             </span>
             {lastMessage && (
-              <span className="text-xs text-muted-foreground ml-2">
+              <span className="text-xs text-muted-foreground ml-2 flex-shrink-0">
                 {formatTime(lastMessage._creationTime)}
               </span>
             )}
           </div>
           
-          <div className={`text-sm truncate mt-1 ${hasUnread ? 'font-medium text-primary' : 'text-muted-foreground'}`}>
+          <div className={`text-sm lg:text-xs truncate mt-1 ${hasUnread ? 'font-medium text-primary' : 'text-muted-foreground'}`}>
             {lastMessage ? (
               <>
                 {isLastFromMe && <span className="opacity-70">You: </span>}

@@ -13,23 +13,23 @@ export function MessageBubble({ msg, isMe, myProfile, receiverProfile, formatMes
   };
 
   return (
-    <div className={`flex items-end gap-3 ${isMe ? "justify-end" : "justify-start"}`}>
+    <div className={`flex items-end gap-2 ${isMe ? "justify-end" : "justify-start"}`}>
       {!isMe && (
-        <Avatar className="w-8 h-8 shrink-0">
+        <Avatar className="w-6 h-6 lg:w-8 lg:h-8 shrink-0">
           {isValidAvatarUrl(receiverProfile?.avatar_url) ? (
             <AvatarImage
               src={receiverProfile.avatar_url}
               alt={receiverProfile?.name || receiverProfile?.username || "?"}
             />
           ) : null}
-          <AvatarFallback className="text-xs bg-primary/10 text-primary">
+          <AvatarFallback className="text-xs lg:text-sm bg-primary/10 text-primary font-semibold">
             {receiverProfile?.name?.charAt(0) || receiverProfile?.username?.charAt(0) || "?"}
           </AvatarFallback>
         </Avatar>
       )}
       
       <div
-        className={`max-w-xs lg:max-w-md px-4 py-3 rounded-2xl shadow-sm ${
+        className={`max-w-[200px] lg:max-w-[250px] px-3 py-2 rounded-2xl shadow-sm ${
           isMe
             ? "bg-primary text-primary-foreground"
             : "bg-muted text-foreground border border-border/30"
@@ -38,7 +38,7 @@ export function MessageBubble({ msg, isMe, myProfile, receiverProfile, formatMes
         <p className="text-sm break-words whitespace-pre-line leading-relaxed">
           {msg.content}
         </p>
-        <div className="flex items-center gap-1 mt-2">
+        <div className="flex items-center gap-1 mt-1">
           <span className="text-[10px] opacity-70">
             {formatMessageTime(msg._creationTime)}
           </span>
@@ -55,14 +55,14 @@ export function MessageBubble({ msg, isMe, myProfile, receiverProfile, formatMes
       </div>
       
       {isMe && (
-        <Avatar className="w-8 h-8 shrink-0">
+        <Avatar className="w-6 h-6 lg:w-8 lg:h-8 shrink-0">
           {isValidAvatarUrl(myProfile?.avatar_url) ? (
             <AvatarImage
               src={myProfile.avatar_url}
               alt={myProfile?.name || myProfile?.username || "?"}
             />
           ) : null}
-          <AvatarFallback className="text-xs bg-primary/10 text-primary">
+          <AvatarFallback className="text-xs lg:text-sm bg-primary/10 text-primary font-semibold">
             {myProfile?.name?.charAt(0) || myProfile?.username?.charAt(0) || "?"}
           </AvatarFallback>
         </Avatar>

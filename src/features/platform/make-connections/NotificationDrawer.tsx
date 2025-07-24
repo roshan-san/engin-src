@@ -31,14 +31,14 @@ export default function NotificationsDrawer() {
           )}
         </Button>
       </DrawerTrigger>
-      <DrawerContent className="w-full sm:max-w-sm h-full  p-0 md:rounded-none md:shadow-lg md:bg-white md:dark:bg-gray-900">
-        <DrawerHeader>
-          <DrawerTitle>Notifications</DrawerTitle>
+      <DrawerContent className="p-0 h-full w-screen sm:w-3/4 sm:max-w-sm">
+        <DrawerHeader className="border-b border-border/50">
+          <DrawerTitle className="text-xl font-semibold">Notifications</DrawerTitle>
           <DrawerDescription>
             View and manage your notifications
           </DrawerDescription>
         </DrawerHeader>
-        <div className="p-4 space-y-4">
+        <div className="flex-1 overflow-y-auto p-4 space-y-4">
           {pendingNotifications === undefined ? (
             <div className="space-y-4">
               <Skeleton className="h-20 w-full" />
@@ -46,8 +46,10 @@ export default function NotificationsDrawer() {
               <Skeleton className="h-20 w-full" />
             </div>
           ) : pendingNotifications.length === 0 ? (
-            <div className="text-center text-muted-foreground">
-              No notifications
+            <div className="flex flex-col items-center justify-center h-full text-center text-muted-foreground py-8">
+              <Bell className="h-12 w-12 text-muted-foreground/50 mb-4" />
+              <p className="text-lg font-medium">No notifications</p>
+              <p className="text-sm">You're all caught up!</p>
             </div>
           ) : (
             <div className="space-y-4">

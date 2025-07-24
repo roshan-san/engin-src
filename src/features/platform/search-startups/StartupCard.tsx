@@ -18,7 +18,7 @@ const StartupCard: React.FC<StartupCardProps> = ({ startup }) => {
   const { profile } = useUser();
   const founderProfile = useQuery(api.profile.queries.getProfileById, { profileId: startup.ownerId });
   const [likeLoading, setLikeLoading] = useState(false);
-  const toggleLike = useMutation(api.startups.mutations.updateStartup);
+  const toggleLike = useMutation(api.startups.mutations.toggleLikeStartup);
 
   // Likes logic
   const likesArr = startup.likes || [];
@@ -30,36 +30,32 @@ const StartupCard: React.FC<StartupCardProps> = ({ startup }) => {
   const handleLike = async () => {
     if (!profile) return;
     setLikeLoading(true);
-    let newLikesArr;
-    if (liked) {
-      newLikesArr = likesArr.filter((id) => id !== profile._id);
-    } else {
-      newLikesArr = [...likesArr, profile._id];
+    try {
+      const result = await toggleLike({ startupId: startup._id });
+      setLikes(result.likesCount);
+      setLiked(result.liked);
+    } catch (error) {
+      console.error('Failed to toggle like:', error);
+    } finally {
+      setLikeLoading(false);
     }
-    await toggleLike({
-      startupId: startup._id,
-      likes: newLikesArr,
-    });
-    setLikes(newLikesArr.length);
-    setLiked(!liked);
-    setLikeLoading(false);
   };
 
   return (
-    <div className="bg-background border border-border rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-200">
+    <div className="bg-background border border-border rounded-xl p-5 sm:p-6 shadow-sm hover:shadow-md transition-all duration-200 h-full flex flex-col">
       {/* Header */}
       <div className="flex items-start gap-3 mb-4">
-        <Avatar className="w-10 h-10">
+        <Avatar className="w-12 h-12 sm:w-14 sm:h-14">
           <AvatarImage src={founderProfile?.avatar_url} />
-          <AvatarFallback className="bg-primary/10 text-primary font-semibold">
+          <AvatarFallback className="bg-primary/10 text-primary font-semibold text-lg">
             {founderProfile?.name?.charAt(0) || founderProfile?.username?.charAt(0) || '?'}
           </AvatarFallback>
         </Avatar>
         
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 mb-1">
-            <h3 className="font-semibold text-base truncate">{startup.name}</h3>
-            <CheckCircle className="w-4 h-4 text-primary" />
+          <div className="flex items-center gap-2 mb-2">
+            <h3 className="font-semibold text-lg sm:text-xl truncate">{startup.name}</h3>
+            <CheckCircle className="w-5 h-5 text-primary" />
             {startup.stage && (
               <Badge variant="secondary" className="text-xs">
                 {startup.stage}
@@ -73,8 +69,8 @@ const StartupCard: React.FC<StartupCardProps> = ({ startup }) => {
       </div>
 
       {/* Description */}
-      <div className="mb-4">
-        <p className="text-sm text-foreground/90 leading-relaxed line-clamp-2">
+      <div className="mb-5 flex-1">
+        <p className="text-sm sm:text-base text-foreground/90 leading-relaxed line-clamp-3">
           {startup.description}
         </p>
       </div>
@@ -93,7 +89,7 @@ const StartupCard: React.FC<StartupCardProps> = ({ startup }) => {
 
       {/* Tags */}
       {startup.tags && startup.tags.length > 0 && (
-        <div className="flex flex-wrap gap-2 mb-4">
+        <div className="flex flex-wrap gap-2 mb-5">
           {startup.tags.slice(0, 3).map((tag, idx) => (
             <Badge
               key={idx}
@@ -112,10 +108,12 @@ const StartupCard: React.FC<StartupCardProps> = ({ startup }) => {
       )}
 
       {/* Actions */}
-      <div className="flex items-center justify-between pt-4 border-t border-border/50">
+      <div className="flex items-center justify-between pt-4 border-t border-border/50 mt-auto">
         <div className="flex items-center gap-2">
           <button
-            className="p-2 rounded-full hover:bg-primary/10 text-muted-foreground hover:text-primary transition-colors disabled:opacity-50"
+            className={`p-2 rounded-full hover:bg-primary/10 transition-colors disabled:opacity-50 ${
+              liked ? 'text-primary bg-primary/10' : 'text-muted-foreground hover:text-primary'
+            }`}
             onClick={handleLike}
             disabled={likeLoading}
           >

@@ -1,5 +1,6 @@
 import SearchStartups from '@/features/platform/search-startups/SearchStartups'
 import { createFileRoute } from '@tanstack/react-router'
+import { CreateBtn } from '@/features/platform/create-startup/CreateBtn'
 
 export const Route = createFileRoute('/_protected/startups/')({
   component: RouteComponent,
@@ -7,16 +8,11 @@ export const Route = createFileRoute('/_protected/startups/')({
 
 function RouteComponent() {
   return (
-    <div className="h-full flex flex-col p-4">
-      <div className="max-w-6xl w-full mx-auto">
-        <div className="mb-6">
-          <h1 className="text-3xl font-bold mb-1">Explore Startups</h1>
-          <p className="text-muted-foreground text-lg">
-            Discover innovative startups and find opportunities to collaborate
-          </p>
-        </div>
+    <div className="h-full flex flex-col p-3 sm:p-4 lg:p-6">
+      <div className="max-w-7xl w-full mx-auto">
         <SearchStartups />
       </div>
+      <CreateBtn />
     </div>
   )
 }

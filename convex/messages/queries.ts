@@ -121,12 +121,16 @@ export const getUnreadMessagesCount = query({
 
 export const getOnlineStatus = query({
     args: {
-        userId: v.id("profiles"),
+        userId: v.optional(v.id("profiles")),
     },
     handler: async (ctx, args) => {
+        if (!args.userId) {
+            return { isOnline: false, lastSeen: Date.now() };
+        }
+        
         const status = await ctx.db
             .query("onlineStatus")
-            .withIndex("by_user", (q) => q.eq("userId", args.userId))
+            .withIndex("by_user", (q) => q.eq("userId", args.userId!))
             .first();
 
         if (!status) {

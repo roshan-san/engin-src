@@ -7,7 +7,7 @@ const navigationItems = [
   { href: "/home", icon: Laptop, label: "Home" },
   { href: "/startups", icon: Search, label: "Explore" },
   { href: "/message", icon: MessageCircle, label: "Messages" },
-  { href: "/connect", icon: Users, label: "Network" },
+  { href: "/network", icon: Users, label: "Network" },
 ];
 
 export function BottomBar() {

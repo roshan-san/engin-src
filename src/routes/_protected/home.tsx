@@ -1,7 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { CreatePostButton } from '@/features/platform/post/CreatePostButton';
 import { EmergingSpotlight } from '@/features/platform/post/EmergingSpotlight';
-import { TrendingTags } from '@/features/platform/post/TrendingTags';
 import { Feed } from '@/features/platform/post/Feed';
 import { useState } from 'react';
 
@@ -20,7 +19,6 @@ function HomePage() {
     <div className="h-full flex flex-col p-4">
       <div className="max-w-6xl w-full mx-auto">
         <div className="mb-6">
-          <h1 className="text-3xl font-bold mb-1">Home</h1>
           <p className="text-muted-foreground text-lg">
             Stay updated with the latest posts and trending content
           </p>
@@ -35,13 +33,11 @@ function HomePage() {
           <div className="hidden lg:block flex-1 max-w-sm">
             <div className="sticky top-24 space-y-6 w-full">
               <EmergingSpotlight />
-              <TrendingTags onTagClick={handleTagClick} selectedTag={selectedTag} />
             </div>
           </div>
           {/* Mobile sidebar components */}
           <div className="block lg:hidden space-y-6 mt-8">
             <EmergingSpotlight />
-            <TrendingTags onTagClick={handleTagClick} selectedTag={selectedTag} />
           </div>
         </div>
       </div>

@@ -14,7 +14,6 @@ interface StartupData {
   stage?: string;
   website?: string;
   email?: string;
-  phone?: string;
   tags?: string;
 }
 
@@ -51,13 +50,12 @@ export const CreateStartupProvider = ({
     stage: "Growth",
     website: "",
     email: "",
-    phone: "",
     tags: "",
   });
   const [isCreating, setIsCreating] = useState(false);
   const createStartup = useMutation(api.startups.mutations.createStartup);
 
-  const nextStep = () => setStep((prev) => Math.min(8, prev + 1));
+  const nextStep = () => setStep((prev) => Math.min(9, prev + 1));
   const previousStep = () => setStep((prev) => Math.max(1, prev - 1));
   const navigate= useNavigate()
 
@@ -73,7 +71,7 @@ export const CreateStartupProvider = ({
       };
       const startup= await createStartup(numericData);
       navigate({to:"/startups/$startupid", params:{startupid: startup}});
-      setStep(8)
+      setStep(9)
     } catch (error) {
       console.error("Failed to create startup", error);
     } finally {

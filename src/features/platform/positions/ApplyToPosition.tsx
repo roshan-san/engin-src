@@ -9,6 +9,7 @@ import {
   DialogTitle,
   DialogFooter,
   DialogTrigger,
+  DialogDescription,
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -105,9 +106,9 @@ export const ApplyToPosition: React.FC<ApplyToPositionProps> = ({ positionId, ap
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="text-xl font-bold">Apply to Position</DialogTitle>
-          <p className="text-sm text-muted-foreground">
+          <DialogDescription>
             Introduce yourself and explain why you're interested in this role
-          </p>
+          </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">

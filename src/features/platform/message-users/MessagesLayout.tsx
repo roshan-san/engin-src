@@ -9,28 +9,31 @@ export default function MessagesLayout() {
     location.pathname !== '/message';
 
   return (
-    <div className="h-full flex flex-col p-4">
-      <div className="max-w-6xl w-full mx-auto">
-        <div className="mb-6">
-          <h1 className="text-3xl font-bold mb-1">Messages</h1>
-          <p className="text-muted-foreground text-lg">
-            Connect and chat with your network
-          </p>
+    <div className="h-full flex flex-col p-0">
+      <div className="w-full h-full flex flex-col">
+        {/* Mobile Layout - Show either chat list OR chat window */}
+        <div className="lg:hidden h-full min-h-0 bg-background">
+          {hasActiveChat ? (
+            <Outlet />
+          ) : (
+            <ChatList />
+          )}
         </div>
-        
-        <div className="flex h-full bg-background rounded-lg border">
+
+        {/* Desktop Layout - Show both side by side */}
+        <div className="hidden lg:flex h-full min-h-0 bg-background">
           {/* Sidebar */}
-          <aside className="w-80 border-r bg-muted/20">
+          <aside className="w-80 border-r border-border/50 bg-background flex flex-col min-h-0">
             <ChatList />
           </aside>
 
           {/* Main Chat Area */}
-          <main className="flex-1 flex flex-col">
+          <main className="flex-1 flex flex-col min-h-0">
             {hasActiveChat ? (
               <Outlet />
             ) : (
               <div className="flex-1 flex flex-col items-center justify-center text-muted-foreground p-8">
-                <div className="w-20 h-20 rounded-full bg-muted/50 flex items-center justify-center mb-6">
+                <div className="w-20 h-20 rounded-full bg-muted/30 flex items-center justify-center mb-6">
                   <MessageCircle className="w-10 h-10" />
                 </div>
                 <h3 className="text-xl font-semibold mb-2">Select a conversation</h3>

@@ -8,6 +8,7 @@ import { useMediaQuery } from "../../../lib/utils";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -51,6 +52,9 @@ export function StartupEditDrawer({ startup, iconOnly = false, renderTrigger }: 
         <DialogContent className="sm:max-w-3xl">
           <DialogHeader>
             <DialogTitle>Edit Startup</DialogTitle>
+            <DialogDescription>
+              Update your startup information. All changes will be saved automatically.
+            </DialogDescription>
           </DialogHeader>
           <StartupForm startup={startup} setOpen={setOpen} />
         </DialogContent>
@@ -102,7 +106,7 @@ function StartupForm({ startup, setOpen }: { startup: Doc<"startups">, setOpen: 
     stage: startup.stage || "Growth",
     website: startup.website || "",
     email: startup.email || "",
-    phone: startup.phone || "",
+
     tags: startup.tags ? startup.tags.join(', ') : "",
   });
 
@@ -213,17 +217,7 @@ function StartupForm({ startup, setOpen }: { startup: Doc<"startups">, setOpen: 
             />
           </div>
           
-          <div>
-            <Label htmlFor="phone">Phone</Label>
-            <Input
-              id="phone"
-              name="phone"
-              type="tel"
-              value={formData.phone}
-              onChange={e => handleEditInput('phone', e.target.value)}
-              placeholder="+1 (555) 123-4567"
-            />
-          </div>
+
         </div>
       </div>
       {feedback && (

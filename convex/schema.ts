@@ -74,7 +74,6 @@ const schema = defineSchema({
     // Contact information
     website: v.optional(v.string()),
     email: v.optional(v.string()),
-    phone: v.optional(v.string()),
     createdAt: v.optional(v.number()),
   })
     .index("by_owner", ["ownerId"])

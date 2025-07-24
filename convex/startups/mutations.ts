@@ -16,7 +16,6 @@ export const createStartup = mutation({
     likes: v.optional(v.array(v.id("profiles"))),
     website: v.optional(v.string()),
     email: v.optional(v.string()),
-    phone: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const profile = await getAuthenticatedProfile(ctx);
@@ -50,7 +49,6 @@ export const updateStartup = mutation({
     likes: v.optional(v.array(v.id("profiles"))),
     website: v.optional(v.string()),
     email: v.optional(v.string()),
-    phone: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const profile = await getAuthenticatedProfile(ctx);
@@ -70,6 +68,32 @@ export const updateStartup = mutation({
       rest.stage = "Growth";
     }
     await ctx.db.patch(startupId, rest);
+  },
+});
+
+export const toggleLikeStartup = mutation({
+  args: {
+    startupId: v.id("startups"),
+  },
+  handler: async (ctx, args) => {
+    const profile = await getAuthenticatedProfile(ctx);
+    if (!profile) throw new Error("Not authenticated");
+    
+    const startup = await ctx.db.get(args.startupId);
+    if (!startup) throw new Error("Startup not found");
+    
+    const likes = startup.likes || [];
+    const hasLiked = likes.includes(profile._id);
+    
+    let newLikes;
+    if (hasLiked) {
+      newLikes = likes.filter((id) => id !== profile._id);
+    } else {
+      newLikes = [...likes, profile._id];
+    }
+    
+    await ctx.db.patch(args.startupId, { likes: newLikes });
+    return { liked: !hasLiked, likesCount: newLikes.length };
   },
 });
 

@@ -25,7 +25,7 @@ export const StartupProblemStep = () => {
           value={startupData.problem || ""}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
-          className="h-32 text-lg rounded-xl resize-none"
+          className="h-32 text-lg rounded-xl"
           autoFocus
         />
       </div>
