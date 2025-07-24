@@ -116,7 +116,7 @@ export default function UserType() {
           onClick={handleSubmit}
           className="flex-1 h-12 text-lg font-medium transition-all hover:scale-[1.02]"
         >
-          {isLoading ? "Saving..." : "Finish"}
+          {isLoading ? "Saving..." : "Next"}
         </Button>
       </div>
     </div>

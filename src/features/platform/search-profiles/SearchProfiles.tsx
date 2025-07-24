@@ -29,7 +29,6 @@ export default function SearchProfiles({ userType }: SearchProfilesProps) {
           type="text"
           placeholder={`Search for ${userType?.toLowerCase() || 'profiles'}...`}
           value={searchQuery}
-          autoFocus
           onChange={(e) => setSearchQuery(e.target.value)}
           className="w-full h-12 pl-12 pr-4 rounded-xl border-2 border-border/50 focus:border-primary transition-all duration-200 bg-background/50 backdrop-blur-sm"
         />

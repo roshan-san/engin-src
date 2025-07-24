@@ -1,7 +1,8 @@
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Edit } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import type { Doc } from "@/../convex/_generated/dataModel";
-import { StartupEditDrawer } from "../StartupEditDrawer";
+import { Button } from "@/components/ui/button";
+import { StartupEditDialog } from "../StartupEditDialog";
 
 interface StartupHeaderProps {
   startup: Doc<"startups">;
@@ -39,19 +40,16 @@ export function StartupHeader({ startup, isOwner }: StartupHeaderProps) {
           
           {isOwner && (
             <div className="flex-shrink-0">
-              <StartupEditDrawer 
-                startup={startup} 
-                iconOnly={false}
-                renderTrigger={({ setOpen }) => (
-                  <button
+              <StartupEditDialog 
+                startup={startup}
+                renderTrigger={({ setOpen }: { setOpen: (open: boolean) => void }) => (
+                  <Button 
                     onClick={() => setOpen(true)}
                     className="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-medium transition-all duration-200 hover:scale-105 shadow-sm"
                   >
-                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                    </svg>
+                    <Edit className="h-4 w-4" />
                     <span className="hidden sm:inline">Edit Startup</span>
-                  </button>
+                  </Button>
                 )}
               />
             </div>

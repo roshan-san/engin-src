@@ -1,37 +1,35 @@
 import React, { useState } from "react";
 import { Save, Edit, X, CheckCircle, AlertCircle, Settings, Building2, MapPin, Users, DollarSign, Globe, Mail, Tag, Target, Lightbulb } from "lucide-react";
-import { Button } from "../../../components/ui/button";
+import { Button } from "@/components/ui/button";
 import { useMutation } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 import type { Doc } from "../../../../convex/_generated/dataModel.d.ts";
 import {
-  Drawer,
-  DrawerContent,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-  DrawerFooter,
-  DrawerClose
-} from "../../../components/ui/drawer";
-import { Input } from "../../../components/ui/input";
-import { Textarea } from "../../../components/ui/textarea";
-import { Label } from "../../../components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../../components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../../components/ui/tabs";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../components/ui/select";
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-interface StartupEditDrawerProps {
+interface StartupEditDialogProps {
   startup: Doc<"startups">;
   iconOnly?: boolean;
   renderTrigger?: (props: { open: boolean; setOpen: (open: boolean) => void }) => React.ReactNode;
 }
 
-export function StartupEditDrawer({ startup, iconOnly = false, renderTrigger }: StartupEditDrawerProps) {
+export function StartupEditDialog({ startup, iconOnly = false, renderTrigger }: StartupEditDialogProps) {
   const [open, setOpen] = useState(false);
 
   return (
-    <Drawer open={open} onOpenChange={setOpen}>
-      <DrawerTrigger asChild>
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
         {renderTrigger
           ? renderTrigger({ open, setOpen })
           : (
@@ -45,28 +43,22 @@ export function StartupEditDrawer({ startup, iconOnly = false, renderTrigger }: 
               {!iconOnly && <span className="text-sm font-medium">Edit</span>}
             </Button>
           )}
-      </DrawerTrigger>
-      <DrawerContent>
+      </DialogTrigger>
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-hidden p-0">
         <div className="flex flex-col h-full">
-          <DrawerHeader className="text-left pb-4">
-            <DrawerTitle className="flex items-center gap-2 text-xl">
+          <DialogHeader className="px-6 py-4 border-b border-border/50">
+            <DialogTitle className="flex items-center gap-2 text-xl">
               <Settings className="h-5 w-5 text-primary" />
               Edit Startup
-            </DrawerTitle>
-          </DrawerHeader>
+            </DialogTitle>
+          </DialogHeader>
           
-          <div className="flex-1 overflow-hidden px-4">
+          <div className="flex-1 overflow-hidden px-6 py-4">
             <StartupForm startup={startup} setOpen={setOpen} />
           </div>
-          
-          <DrawerFooter className="pt-2">
-            <DrawerClose asChild>
-              <Button variant="outline" className="w-full">Cancel</Button>
-            </DrawerClose>
-          </DrawerFooter>
         </div>
-      </DrawerContent>
-    </Drawer>
+      </DialogContent>
+    </Dialog>
   );
 }
 
