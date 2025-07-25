@@ -11,8 +11,17 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as OnboardImport } from './routes/onboard'
 import { Route as ProtectedImport } from './routes/_protected'
+import { Route as OnboardingImport } from './routes/_onboarding'
 import { Route as IndexImport } from './routes/index'
+import { Route as OnboardWorkTypeImport } from './routes/onboard/work-type'
+import { Route as OnboardUsernameImport } from './routes/onboard/username'
+import { Route as OnboardUserTypeImport } from './routes/onboard/user-type'
+import { Route as OnboardSkillsImport } from './routes/onboard/skills'
+import { Route as OnboardLocationImport } from './routes/onboard/location'
+import { Route as OnboardInterestsImport } from './routes/onboard/interests'
+import { Route as OnboardContactImport } from './routes/onboard/contact'
 import { Route as ProtectedVoteArenaImport } from './routes/_protected/vote-arena'
 import { Route as ProtectedNetworkImport } from './routes/_protected/network'
 import { Route as ProtectedMyStartupsImport } from './routes/_protected/my-startups'
@@ -28,8 +37,19 @@ import { Route as ProtectedMessageUsernameImport } from './routes/_protected/mes
 
 // Create/Update Routes
 
+const OnboardRoute = OnboardImport.update({
+  id: '/onboard',
+  path: '/onboard',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const ProtectedRoute = ProtectedImport.update({
   id: '/_protected',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const OnboardingRoute = OnboardingImport.update({
+  id: '/_onboarding',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -37,6 +57,48 @@ const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRoute,
+} as any)
+
+const OnboardWorkTypeRoute = OnboardWorkTypeImport.update({
+  id: '/work-type',
+  path: '/work-type',
+  getParentRoute: () => OnboardRoute,
+} as any)
+
+const OnboardUsernameRoute = OnboardUsernameImport.update({
+  id: '/username',
+  path: '/username',
+  getParentRoute: () => OnboardRoute,
+} as any)
+
+const OnboardUserTypeRoute = OnboardUserTypeImport.update({
+  id: '/user-type',
+  path: '/user-type',
+  getParentRoute: () => OnboardRoute,
+} as any)
+
+const OnboardSkillsRoute = OnboardSkillsImport.update({
+  id: '/skills',
+  path: '/skills',
+  getParentRoute: () => OnboardRoute,
+} as any)
+
+const OnboardLocationRoute = OnboardLocationImport.update({
+  id: '/location',
+  path: '/location',
+  getParentRoute: () => OnboardRoute,
+} as any)
+
+const OnboardInterestsRoute = OnboardInterestsImport.update({
+  id: '/interests',
+  path: '/interests',
+  getParentRoute: () => OnboardRoute,
+} as any)
+
+const OnboardContactRoute = OnboardContactImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => OnboardRoute,
 } as any)
 
 const ProtectedVoteArenaRoute = ProtectedVoteArenaImport.update({
@@ -124,11 +186,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/_onboarding': {
+      id: '/_onboarding'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof OnboardingImport
+      parentRoute: typeof rootRoute
+    }
     '/_protected': {
       id: '/_protected'
       path: ''
       fullPath: ''
       preLoaderRoute: typeof ProtectedImport
+      parentRoute: typeof rootRoute
+    }
+    '/onboard': {
+      id: '/onboard'
+      path: '/onboard'
+      fullPath: '/onboard'
+      preLoaderRoute: typeof OnboardImport
       parentRoute: typeof rootRoute
     }
     '/_protected/create-post': {
@@ -179,6 +255,55 @@ declare module '@tanstack/react-router' {
       fullPath: '/vote-arena'
       preLoaderRoute: typeof ProtectedVoteArenaImport
       parentRoute: typeof ProtectedImport
+    }
+    '/onboard/contact': {
+      id: '/onboard/contact'
+      path: '/contact'
+      fullPath: '/onboard/contact'
+      preLoaderRoute: typeof OnboardContactImport
+      parentRoute: typeof OnboardImport
+    }
+    '/onboard/interests': {
+      id: '/onboard/interests'
+      path: '/interests'
+      fullPath: '/onboard/interests'
+      preLoaderRoute: typeof OnboardInterestsImport
+      parentRoute: typeof OnboardImport
+    }
+    '/onboard/location': {
+      id: '/onboard/location'
+      path: '/location'
+      fullPath: '/onboard/location'
+      preLoaderRoute: typeof OnboardLocationImport
+      parentRoute: typeof OnboardImport
+    }
+    '/onboard/skills': {
+      id: '/onboard/skills'
+      path: '/skills'
+      fullPath: '/onboard/skills'
+      preLoaderRoute: typeof OnboardSkillsImport
+      parentRoute: typeof OnboardImport
+    }
+    '/onboard/user-type': {
+      id: '/onboard/user-type'
+      path: '/user-type'
+      fullPath: '/onboard/user-type'
+      preLoaderRoute: typeof OnboardUserTypeImport
+      parentRoute: typeof OnboardImport
+    }
+    '/onboard/username': {
+      id: '/onboard/username'
+      path: '/username'
+      fullPath: '/onboard/username'
+      preLoaderRoute: typeof OnboardUsernameImport
+      parentRoute: typeof OnboardImport
+    }
+    '/onboard/work-type': {
+      id: '/onboard/work-type'
+      path: '/work-type'
+      fullPath: '/onboard/work-type'
+      preLoaderRoute: typeof OnboardWorkTypeImport
+      parentRoute: typeof OnboardImport
     }
     '/_protected/message/$username': {
       id: '/_protected/message/$username'
@@ -263,9 +388,33 @@ const ProtectedRouteWithChildren = ProtectedRoute._addFileChildren(
   ProtectedRouteChildren,
 )
 
+interface OnboardRouteChildren {
+  OnboardContactRoute: typeof OnboardContactRoute
+  OnboardInterestsRoute: typeof OnboardInterestsRoute
+  OnboardLocationRoute: typeof OnboardLocationRoute
+  OnboardSkillsRoute: typeof OnboardSkillsRoute
+  OnboardUserTypeRoute: typeof OnboardUserTypeRoute
+  OnboardUsernameRoute: typeof OnboardUsernameRoute
+  OnboardWorkTypeRoute: typeof OnboardWorkTypeRoute
+}
+
+const OnboardRouteChildren: OnboardRouteChildren = {
+  OnboardContactRoute: OnboardContactRoute,
+  OnboardInterestsRoute: OnboardInterestsRoute,
+  OnboardLocationRoute: OnboardLocationRoute,
+  OnboardSkillsRoute: OnboardSkillsRoute,
+  OnboardUserTypeRoute: OnboardUserTypeRoute,
+  OnboardUsernameRoute: OnboardUsernameRoute,
+  OnboardWorkTypeRoute: OnboardWorkTypeRoute,
+}
+
+const OnboardRouteWithChildren =
+  OnboardRoute._addFileChildren(OnboardRouteChildren)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '': typeof ProtectedRouteWithChildren
+  '/onboard': typeof OnboardRouteWithChildren
   '/create-post': typeof ProtectedCreatePostRoute
   '/crowdfunding': typeof ProtectedCrowdfundingRoute
   '/home': typeof ProtectedHomeRoute
@@ -273,6 +422,13 @@ export interface FileRoutesByFullPath {
   '/my-startups': typeof ProtectedMyStartupsRoute
   '/network': typeof ProtectedNetworkRoute
   '/vote-arena': typeof ProtectedVoteArenaRoute
+  '/onboard/contact': typeof OnboardContactRoute
+  '/onboard/interests': typeof OnboardInterestsRoute
+  '/onboard/location': typeof OnboardLocationRoute
+  '/onboard/skills': typeof OnboardSkillsRoute
+  '/onboard/user-type': typeof OnboardUserTypeRoute
+  '/onboard/username': typeof OnboardUsernameRoute
+  '/onboard/work-type': typeof OnboardWorkTypeRoute
   '/message/$username': typeof ProtectedMessageUsernameRoute
   '/profile/$username': typeof ProtectedProfileUsernameRoute
   '/startups/$startupid': typeof ProtectedStartupsStartupidRoute
@@ -283,12 +439,20 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '': typeof ProtectedRouteWithChildren
+  '/onboard': typeof OnboardRouteWithChildren
   '/create-post': typeof ProtectedCreatePostRoute
   '/crowdfunding': typeof ProtectedCrowdfundingRoute
   '/home': typeof ProtectedHomeRoute
   '/my-startups': typeof ProtectedMyStartupsRoute
   '/network': typeof ProtectedNetworkRoute
   '/vote-arena': typeof ProtectedVoteArenaRoute
+  '/onboard/contact': typeof OnboardContactRoute
+  '/onboard/interests': typeof OnboardInterestsRoute
+  '/onboard/location': typeof OnboardLocationRoute
+  '/onboard/skills': typeof OnboardSkillsRoute
+  '/onboard/user-type': typeof OnboardUserTypeRoute
+  '/onboard/username': typeof OnboardUsernameRoute
+  '/onboard/work-type': typeof OnboardWorkTypeRoute
   '/message/$username': typeof ProtectedMessageUsernameRoute
   '/profile/$username': typeof ProtectedProfileUsernameRoute
   '/startups/$startupid': typeof ProtectedStartupsStartupidRoute
@@ -299,7 +463,9 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/_onboarding': typeof OnboardingRoute
   '/_protected': typeof ProtectedRouteWithChildren
+  '/onboard': typeof OnboardRouteWithChildren
   '/_protected/create-post': typeof ProtectedCreatePostRoute
   '/_protected/crowdfunding': typeof ProtectedCrowdfundingRoute
   '/_protected/home': typeof ProtectedHomeRoute
@@ -307,6 +473,13 @@ export interface FileRoutesById {
   '/_protected/my-startups': typeof ProtectedMyStartupsRoute
   '/_protected/network': typeof ProtectedNetworkRoute
   '/_protected/vote-arena': typeof ProtectedVoteArenaRoute
+  '/onboard/contact': typeof OnboardContactRoute
+  '/onboard/interests': typeof OnboardInterestsRoute
+  '/onboard/location': typeof OnboardLocationRoute
+  '/onboard/skills': typeof OnboardSkillsRoute
+  '/onboard/user-type': typeof OnboardUserTypeRoute
+  '/onboard/username': typeof OnboardUsernameRoute
+  '/onboard/work-type': typeof OnboardWorkTypeRoute
   '/_protected/message/$username': typeof ProtectedMessageUsernameRoute
   '/_protected/profile/$username': typeof ProtectedProfileUsernameRoute
   '/_protected/startups/$startupid': typeof ProtectedStartupsStartupidRoute
@@ -319,6 +492,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | ''
+    | '/onboard'
     | '/create-post'
     | '/crowdfunding'
     | '/home'
@@ -326,6 +500,13 @@ export interface FileRouteTypes {
     | '/my-startups'
     | '/network'
     | '/vote-arena'
+    | '/onboard/contact'
+    | '/onboard/interests'
+    | '/onboard/location'
+    | '/onboard/skills'
+    | '/onboard/user-type'
+    | '/onboard/username'
+    | '/onboard/work-type'
     | '/message/$username'
     | '/profile/$username'
     | '/startups/$startupid'
@@ -335,12 +516,20 @@ export interface FileRouteTypes {
   to:
     | '/'
     | ''
+    | '/onboard'
     | '/create-post'
     | '/crowdfunding'
     | '/home'
     | '/my-startups'
     | '/network'
     | '/vote-arena'
+    | '/onboard/contact'
+    | '/onboard/interests'
+    | '/onboard/location'
+    | '/onboard/skills'
+    | '/onboard/user-type'
+    | '/onboard/username'
+    | '/onboard/work-type'
     | '/message/$username'
     | '/profile/$username'
     | '/startups/$startupid'
@@ -349,7 +538,9 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/_onboarding'
     | '/_protected'
+    | '/onboard'
     | '/_protected/create-post'
     | '/_protected/crowdfunding'
     | '/_protected/home'
@@ -357,6 +548,13 @@ export interface FileRouteTypes {
     | '/_protected/my-startups'
     | '/_protected/network'
     | '/_protected/vote-arena'
+    | '/onboard/contact'
+    | '/onboard/interests'
+    | '/onboard/location'
+    | '/onboard/skills'
+    | '/onboard/user-type'
+    | '/onboard/username'
+    | '/onboard/work-type'
     | '/_protected/message/$username'
     | '/_protected/profile/$username'
     | '/_protected/startups/$startupid'
@@ -367,12 +565,16 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  OnboardingRoute: typeof OnboardingRoute
   ProtectedRoute: typeof ProtectedRouteWithChildren
+  OnboardRoute: typeof OnboardRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  OnboardingRoute: OnboardingRoute,
   ProtectedRoute: ProtectedRouteWithChildren,
+  OnboardRoute: OnboardRouteWithChildren,
 }
 
 export const routeTree = rootRoute
@@ -386,11 +588,16 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/_protected"
+        "/_onboarding",
+        "/_protected",
+        "/onboard"
       ]
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/_onboarding": {
+      "filePath": "_onboarding.tsx"
     },
     "/_protected": {
       "filePath": "_protected.tsx",
@@ -405,6 +612,18 @@ export const routeTree = rootRoute
         "/_protected/profile/$username",
         "/_protected/startups/$startupid",
         "/_protected/startups/"
+      ]
+    },
+    "/onboard": {
+      "filePath": "onboard.tsx",
+      "children": [
+        "/onboard/contact",
+        "/onboard/interests",
+        "/onboard/location",
+        "/onboard/skills",
+        "/onboard/user-type",
+        "/onboard/username",
+        "/onboard/work-type"
       ]
     },
     "/_protected/create-post": {
@@ -438,6 +657,34 @@ export const routeTree = rootRoute
     "/_protected/vote-arena": {
       "filePath": "_protected/vote-arena.tsx",
       "parent": "/_protected"
+    },
+    "/onboard/contact": {
+      "filePath": "onboard/contact.tsx",
+      "parent": "/onboard"
+    },
+    "/onboard/interests": {
+      "filePath": "onboard/interests.tsx",
+      "parent": "/onboard"
+    },
+    "/onboard/location": {
+      "filePath": "onboard/location.tsx",
+      "parent": "/onboard"
+    },
+    "/onboard/skills": {
+      "filePath": "onboard/skills.tsx",
+      "parent": "/onboard"
+    },
+    "/onboard/user-type": {
+      "filePath": "onboard/user-type.tsx",
+      "parent": "/onboard"
+    },
+    "/onboard/username": {
+      "filePath": "onboard/username.tsx",
+      "parent": "/onboard"
+    },
+    "/onboard/work-type": {
+      "filePath": "onboard/work-type.tsx",
+      "parent": "/onboard"
     },
     "/_protected/message/$username": {
       "filePath": "_protected/message.$username.tsx",

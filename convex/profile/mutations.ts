@@ -20,6 +20,18 @@ export const createProfile = mutation({
       throw new Error("Failed to find user in database");
     }
 
+    // Check if username is provided and validate it's not already taken
+    if (args.username) {
+      const existingProfile = await ctx.db
+        .query("profiles")
+        .withSearchIndex("by_username", (q) => q.search("username", args.username!))
+        .first();
+      
+      if (existingProfile) {
+        throw new Error("Username already taken");
+      }
+    }
+
     // Debug logging
     console.log('Creating profile with user data:', {
       userImage: user.image,
