@@ -1,5 +1,6 @@
 import { GithubButton } from "../authentication/login-buttons/GithubButton";
 import { GoogleButton } from "../authentication/login-buttons/GoogleButton";
+import { AuthStatus } from "../authentication/AuthStatus";
 
 export default function Hero() {
   return (
@@ -12,6 +13,10 @@ export default function Hero() {
           Connect with founders, mentors, and investors to build your startup.
         </p>
       </div>
+      
+      {/* Auth Status for debugging */}
+      <AuthStatus />
+      
       <div className="p-4 flex md:flex-row flex-col gap-4 justify-center items-center">
         <GithubButton />
         <GoogleButton />
