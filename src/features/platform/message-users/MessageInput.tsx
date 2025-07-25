@@ -25,7 +25,7 @@ export function MessageInput({
           onKeyDown={(e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
               e.preventDefault();
-              onSend(e as any);
+              onSend(e as React.FormEvent);
             }
           }}
         />

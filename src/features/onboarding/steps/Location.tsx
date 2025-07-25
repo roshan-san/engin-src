@@ -1,14 +1,19 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useOnboarding } from "../context/OnboardContext";
+import { useOnboard } from "../context/useOnboard";
 
 export default function Location() {
-  const { nextStep, previousStep, onboardingData } = useOnboarding();
-  const [location, setLocation] = useState(onboardingData.location || "");
+  const { currentStep, setCurrentStep, formData, updateFormData } = useOnboard();
+  const [location, setLocation] = useState(formData.location as string || "");
 
   const handleSubmit = () => {
-    nextStep({ location });
+    updateFormData("location", location);
+    setCurrentStep(currentStep + 1);
+  };
+
+  const handlePrevious = () => {
+    setCurrentStep(currentStep - 1);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -38,7 +43,7 @@ export default function Location() {
         <Button
           type="button"
           variant="outline"
-          onClick={previousStep}
+          onClick={handlePrevious}
           className="flex-1 h-12 text-lg font-medium hover:bg-muted/50 transition-colors"
         >
           Previous

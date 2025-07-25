@@ -16,7 +16,7 @@ export default function MessagesLayout() {
           {hasActiveChat ? (
             <Outlet />
           ) : (
-            <ChatList />
+            <ChatList onChatSelect={() => {}} />
           )}
         </div>
 
@@ -24,7 +24,7 @@ export default function MessagesLayout() {
         <div className="hidden lg:flex h-full min-h-0 bg-background">
           {/* Sidebar */}
           <aside className="w-80 border-r border-border/50 bg-background flex flex-col min-h-0">
-            <ChatList />
+            <ChatList onChatSelect={() => {}} />
           </aside>
 
           {/* Main Chat Area */}

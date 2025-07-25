@@ -67,7 +67,11 @@ export const updateStartup = mutation({
     if (!rest.stage && !startup.stage) {
       rest.stage = "Growth";
     }
-    await ctx.db.patch(startupId, rest);
+    try {
+      await ctx.db.patch(startupId, rest);
+    } catch (error: unknown) {
+      throw new Error(error instanceof Error ? error.message : 'Failed to update startup');
+    }
   },
 });
 
@@ -197,7 +201,7 @@ export const removeCollaborator = mutation({
     if (startup.ownerId !== profile._id) throw new Error("Not authorized");
     
     await ctx.db.patch(args.startupId, {
-      collaborators: (startup.collaborators || []).filter((id: any) => id !== args.collaboratorId),
+      collaborators: (startup.collaborators || []).filter((id: string) => id !== args.collaboratorId),
     });
     return true;
   },

@@ -7,7 +7,7 @@ import type { Doc, Id } from '@/../convex/_generated/dataModel';
 import { useQuery, useMutation } from 'convex/react';
 import { api } from '@/../convex/_generated/api';
 import { useNavigate } from '@tanstack/react-router';
-import { useUser } from '@/features/authentication/UserContext';
+import { useUser } from '@/features/authentication/useUser';
 
 interface StartupCardProps {
   startup: Doc<'startups'>;

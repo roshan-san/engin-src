@@ -70,10 +70,11 @@ export const ApplyToPosition: React.FC<ApplyToPositionProps> = ({ positionId, ap
       setMessage("");
       onSuccess();
       setOpen(false);
-    } catch (err: any) {
-      setError(err.message || "Failed to apply.");
+    } catch (error: unknown) {
+      setError(error instanceof Error ? error.message : 'Failed to apply');
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   // If user has already applied, show status

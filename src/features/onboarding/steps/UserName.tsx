@@ -2,18 +2,23 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { FaUser } from "react-icons/fa";
-import { useOnboarding } from "../context/OnboardContext";
+import { useOnboard } from "../context/useOnboard";
 
 export default function UserName() {
-  const { nextStep, previousStep, onboardingData } = useOnboarding();
-  const [username, setUsername] = useState(onboardingData.username || "");
+  const { currentStep, setCurrentStep, formData, updateFormData } = useOnboard();
+  const [name, setName] = useState(formData.name as string || "");
 
   const handleSubmit = () => {
-    nextStep({ username });
+    updateFormData("name", name);
+    setCurrentStep(currentStep + 1);
+  };
+
+  const handlePrevious = () => {
+    setCurrentStep(currentStep - 1);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && username.trim()) {
+    if (e.key === "Enter" && name.trim()) {
       handleSubmit();
     }
   };
@@ -28,8 +33,8 @@ export default function UserName() {
         <div className="space-y-4">
           <Input
             placeholder="Enter your username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
             onKeyDown={handleKeyDown}
             className="h-14 text-lg rounded-xl"
             autoFocus
@@ -40,7 +45,7 @@ export default function UserName() {
         <Button
           type="button"
           variant="outline"
-          onClick={previousStep}
+          onClick={handlePrevious}
           className="flex-1 h-12 text-lg font-medium hover:bg-muted/50 transition-colors"
         >
           Previous
@@ -48,7 +53,7 @@ export default function UserName() {
         <Button
           type="button"
           onClick={handleSubmit}
-          disabled={!username.trim()}
+          disabled={!name.trim()}
           className="flex-1 h-12 text-lg font-medium transition-all hover:scale-[1.02]"
         >
           Next

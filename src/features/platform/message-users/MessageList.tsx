@@ -1,45 +1,41 @@
+import { useQuery } from "convex/react";
+import { api } from "@/../convex/_generated/api";
 import { MessageBubble } from "./MessageBubble";
+import { useUser } from "@/features/authentication/useUser";
+import type { Doc } from "@/../convex/_generated/dataModel";
 
-export function MessageList({ messages, myProfile, receiverProfile, formatMessageTime }: {
-  messages: any[],
-  myProfile: any,
-  receiverProfile: any,
-  formatMessageTime: (n: number) => string
-}) {
+interface MessageListProps {
+  receiverId: Doc<"profiles"> | null;
+}
+
+export function MessageList({ receiverId }: MessageListProps) {
+  const { profile } = useUser();
+  const messages = useQuery(api.messages.queries.getMessages, { 
+    otherUserId: receiverId?._id 
+  });
+
   if (!messages || messages.length === 0) {
-    return null;
+    return (
+      <div className="flex flex-col items-center justify-center h-full text-muted-foreground">
+        <p className="text-sm">No messages yet</p>
+        <p className="text-xs">Start a conversation!</p>
+      </div>
+    );
   }
 
   return (
-    <div className="flex flex-col gap-2 max-w-2xl mx-auto">
-      {messages.map((msg, index) => {
-        const isMe = msg.senderId === myProfile?._id;
-        const showDate = index === 0 ||
-          new Date(msg._creationTime).toDateString() !==
-          new Date(messages[index - 1]._creationTime).toDateString();
-
+    <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      {messages.map((message) => {
+        const isOwnMessage = message.senderId === profile?._id;
+        const senderProfile = isOwnMessage ? profile : receiverId;
+        
         return (
-          <div key={msg._id}>
-            {showDate && (
-              <div className="flex justify-center my-4">
-                <span className="text-xs text-muted-foreground bg-muted/50 px-3 py-1 rounded-full border border-border/30">
-                  {new Date(msg._creationTime).toLocaleDateString([], {
-                    weekday: 'long',
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                  })}
-                </span>
-              </div>
-            )}
-            <MessageBubble
-              msg={msg}
-              isMe={isMe}
-              myProfile={myProfile}
-              receiverProfile={receiverProfile}
-              formatMessageTime={formatMessageTime}
-            />
-          </div>
+          <MessageBubble
+            key={message._id}
+            message={message}
+            isOwnMessage={isOwnMessage}
+            senderProfile={senderProfile}
+          />
         );
       })}
     </div>

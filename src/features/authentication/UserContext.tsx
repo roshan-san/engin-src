@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from "react";
+import React, { createContext } from "react";
 import { useQuery } from "convex/react";
 import { api } from "@/../convex/_generated/api";
 import type { Doc } from "@/../convex/_generated/dataModel";
@@ -10,6 +10,8 @@ type UserContextType = {
 };
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
+
+export { UserContext };
 
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const data = useQuery(api.auth.getUser);
@@ -26,10 +28,4 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <UserContext.Provider value={{ profile }}>{children}</UserContext.Provider>
   );
-};
-
-export const useUser = () => {
-  const ctx = useContext(UserContext);
-  if (!ctx) throw new Error("useUser must be used within a UserProvider");
-  return ctx;
 };

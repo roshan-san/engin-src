@@ -1,41 +1,82 @@
+import { useEffect } from "react";
 import { useMutation } from "convex/react";
 import { api } from "@/../convex/_generated/api";
-import { useEffect } from "react";
 
 export function useOnlineStatus() {
   const updateOnlineStatus = useMutation(api.messages.mutations.updateOnlineStatus);
 
   useEffect(() => {
-    updateOnlineStatus({ isOnline: true });
+    const debounceTimeoutRef = { current: null as NodeJS.Timeout | null };
+    const lastUpdateRef = { current: 0 };
+
+    // Debounced function to update online status
+    const debouncedUpdateStatus = (isOnline: boolean) => {
+      const now = Date.now();
+      
+      // Don't update if we've updated in the last 2 seconds
+      if (now - lastUpdateRef.current < 2000) {
+        return;
+      }
+
+      // Clear existing timeout
+      if (debounceTimeoutRef.current) {
+        clearTimeout(debounceTimeoutRef.current);
+      }
+
+      // Set new timeout
+      debounceTimeoutRef.current = setTimeout(() => {
+        updateOnlineStatus({ isOnline }).catch((error) => {
+          console.warn("Failed to update online status:", error);
+        });
+        lastUpdateRef.current = Date.now();
+      }, 1000); // 1 second debounce
+    };
+
+    // Initial online status
+    debouncedUpdateStatus(true);
 
     const handleActivity = () => {
-      updateOnlineStatus({ isOnline: true });
+      debouncedUpdateStatus(true);
     };
 
     // Set offline when user becomes inactive
     const handleInactivity = () => {
-      updateOnlineStatus({ isOnline: false });
+      debouncedUpdateStatus(false);
     };
 
     // Set offline when page is hidden
     const handleVisibilityChange = () => {
       if (document.hidden) {
-        updateOnlineStatus({ isOnline: false });
+        debouncedUpdateStatus(false);
       } else {
-        updateOnlineStatus({ isOnline: true });
+        debouncedUpdateStatus(true);
       }
     };
 
     // Set offline when user leaves the page
     const handleBeforeUnload = () => {
-      updateOnlineStatus({ isOnline: false });
+      // Use synchronous approach for beforeunload
+      try {
+        updateOnlineStatus({ isOnline: false });
+      } catch (error) {
+        console.warn("Failed to update online status on unload:", error);
+      }
     };
 
-    // Add event listeners
-    document.addEventListener("mousemove", handleActivity);
-    document.addEventListener("keydown", handleActivity);
-    document.addEventListener("click", handleActivity);
-    document.addEventListener("scroll", handleActivity);
+    // Add event listeners with throttling
+    let activityTimeout: NodeJS.Timeout | null = null;
+    const throttledActivity = () => {
+      if (activityTimeout) return;
+      activityTimeout = setTimeout(() => {
+        handleActivity();
+        activityTimeout = null;
+      }, 5000); // Only update every 5 seconds of activity
+    };
+
+    document.addEventListener("mousemove", throttledActivity);
+    document.addEventListener("keydown", throttledActivity);
+    document.addEventListener("click", throttledActivity);
+    document.addEventListener("scroll", throttledActivity);
     document.addEventListener("visibilitychange", handleVisibilityChange);
     window.addEventListener("beforeunload", handleBeforeUnload);
 
@@ -62,10 +103,10 @@ export function useOnlineStatus() {
 
     // Cleanup function
     return () => {
-      document.removeEventListener("mousemove", handleActivity);
-      document.removeEventListener("keydown", handleActivity);
-      document.removeEventListener("click", handleActivity);
-      document.removeEventListener("scroll", handleActivity);
+      document.removeEventListener("mousemove", throttledActivity);
+      document.removeEventListener("keydown", throttledActivity);
+      document.removeEventListener("click", throttledActivity);
+      document.removeEventListener("scroll", throttledActivity);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
       window.removeEventListener("beforeunload", handleBeforeUnload);
       
@@ -75,7 +116,19 @@ export function useOnlineStatus() {
       document.removeEventListener("scroll", resetTimerOnActivity);
       
       clearTimeout(inactivityTimer);
-      updateOnlineStatus({ isOnline: false });
+      if (debounceTimeoutRef.current) {
+        clearTimeout(debounceTimeoutRef.current);
+      }
+      if (activityTimeout) {
+        clearTimeout(activityTimeout);
+      }
+      
+      // Final offline update
+      try {
+        updateOnlineStatus({ isOnline: false });
+      } catch (error) {
+        console.warn("Failed to update online status on cleanup:", error);
+      }
     };
   }, [updateOnlineStatus]);
 } 

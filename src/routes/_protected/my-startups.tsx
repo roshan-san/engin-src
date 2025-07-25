@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useQuery } from 'convex/react'
 import { api } from '@/../convex/_generated/api'
-import { useUser } from '@/features/authentication/UserContext'
+import { useUser } from '@/features/authentication/useUser'
 import { CreateBtn } from '@/features/platform/create-startup/CreateBtn'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -10,6 +10,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { MapPin, Users, Eye, Plus, Calendar, TrendingUp } from 'lucide-react'
 import { useNavigate } from '@tanstack/react-router'
 import { FullScreenLoader } from '@/components/FullScreenLoader'
+import type { Doc } from '@/../convex/_generated/dataModel'
 
 export const Route = createFileRoute('/_protected/my-startups')({
   component: RouteComponent,
@@ -93,7 +94,7 @@ function RouteComponent() {
 
 // Startup Card Component
 interface StartupCardProps {
-  startup: any
+  startup: Doc<"startups">
   isOwner: boolean
 }
 

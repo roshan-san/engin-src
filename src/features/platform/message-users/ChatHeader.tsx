@@ -1,10 +1,11 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { CheckCircle, ArrowLeft } from "lucide-react";
 import { Link } from "@tanstack/react-router";
+import type { Doc } from "@/../convex/_generated/dataModel";
 
 export function ChatHeader({ chatPartner, onlineStatus, formatLastSeen }: {
-  chatPartner: any,
-  onlineStatus: any,
+  chatPartner: Doc<"profiles">,
+  onlineStatus: { isOnline: boolean; lastSeen: number } | null,
   formatLastSeen: (n: number) => string
 }) {
   if (!chatPartner) {

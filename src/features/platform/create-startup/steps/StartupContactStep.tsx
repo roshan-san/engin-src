@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Globe } from "lucide-react";
-import { useCreateStartup } from "../context/CreateStartupContext";
+import { useCreateStartup } from "../context/useCreateStartup";
 
 export const StartupContactStep = () => {
   const {

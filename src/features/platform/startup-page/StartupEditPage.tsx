@@ -104,8 +104,8 @@ export function StartupEditPage({ startup }: StartupEditPageProps) {
       setTimeout(() => {
         navigate({ to: `/startups/${startup._id}` });
       }, 1500);
-    } catch (error: any) {
-      setFeedback({ type: 'error', message: error.message || 'Failed to update startup' });
+    } catch (error: unknown) {
+      console.error("Failed to update startup:", error);
     } finally {
       setLoading(false);
     }

@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import type { Id } from "../../../convex/_generated/dataModel.d.ts";
-import { useUser } from "../../features/authentication/UserContext";
+import { useUser } from "../../features/authentication/useUser";
 import { FullScreenLoader } from "@/components/FullScreenLoader";
 import { StartupDetailPage } from "@/features/platform/startup-page/StartupDetailPage";
 

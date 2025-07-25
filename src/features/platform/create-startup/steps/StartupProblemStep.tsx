@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { FaExclamationTriangle } from "react-icons/fa";
-import { useCreateStartup } from "../context/CreateStartupContext";
+import { useCreateStartup } from "../context/useCreateStartup";
 import { Input } from "@/components/ui/input";
 
 export const StartupProblemStep = () => {

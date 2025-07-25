@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, type ReactNode } from "react";
+import React, { createContext, useState, type ReactNode } from "react";
 import { useMutation } from "convex/react";
 import { api } from "@/../convex/_generated/api";
 import { useNavigate } from "@tanstack/react-router";
@@ -32,6 +32,8 @@ interface CreateStartupContextType {
 const CreateStartupContext = createContext<
   CreateStartupContextType | undefined
 >(undefined);
+
+export { CreateStartupContext };
 
 export const CreateStartupProvider = ({
   children,
@@ -99,14 +101,4 @@ export const CreateStartupProvider = ({
       {children}
     </CreateStartupContext.Provider>
   );
-};
-
-export const useCreateStartup = () => {
-  const context = useContext(CreateStartupContext);
-  if (context === undefined) {
-    throw new Error(
-      "useCreateStartup must be used within a CreateStartupProvider"
-    );
-  }
-  return context;
 }; 

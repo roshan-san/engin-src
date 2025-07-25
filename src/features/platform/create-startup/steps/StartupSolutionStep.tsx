@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { FaLightbulb } from "react-icons/fa";
-import { useCreateStartup } from "../context/CreateStartupContext";
+import { useCreateStartup } from "../context/useCreateStartup";
 import { Input } from "@/components/ui/input";
 
 export const StartupSolutionStep = () => {

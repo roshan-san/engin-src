@@ -106,7 +106,7 @@ export function Feed({ selectedTag: externalSelectedTag, onTagClick }: FeedProps
       ) : (
         <div className="space-y-0">
           {posts?.map((post: Doc<'posts'>) => (
-            <PostCard key={post._id} post={post} onTagClick={handleTagClick} />
+            <PostCard key={post._id} post={post} authorProfile={null} />
           ))}
         </div>
       )}

@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "convex/react";
 import { api } from "@/../convex/_generated/api";
 import { FullScreenLoader } from "@/components/FullScreenLoader";
-import { useUser } from "@/features/authentication/UserContext";
+import { useUser } from "@/features/authentication/useUser";
 import { ProfileHeader } from "@/features/platform/view-profile/components/ProfileHeader";
 import { ProfileAbout } from "@/features/platform/view-profile/components/ProfileAbout";
 import { ProfileSkills } from "@/features/platform/view-profile/components/ProfileSkills";

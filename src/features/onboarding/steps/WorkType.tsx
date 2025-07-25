@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { FaBriefcase, FaClock, FaFileContract } from "react-icons/fa";
-import { useOnboarding } from "../context/OnboardContext";
+import { useOnboard } from "../context/useOnboard";
 
 const workTypes = [
   {
@@ -26,23 +26,20 @@ const workTypes = [
 ];
 
 export default function WorkType() {
-  const { nextStep, previousStep, onboardingData } = useOnboarding();
-  const [selectedWorkType, setSelectedWorkType] = useState(
-    onboardingData.work_type || "",
-  );
-  const [isLoading, setIsLoading] = useState(false);
+  const { currentStep, setCurrentStep, formData, updateFormData } = useOnboard();
+  const [workType, setWorkType] = useState(formData.work_type as string || "");
 
-  const handleSubmit = async () => {
-    setIsLoading(true);
-    try {
-      nextStep({ work_type: selectedWorkType });
-    } finally {
-      setIsLoading(false);
-    }
+  const handleSubmit = () => {
+    updateFormData("work_type", workType);
+    setCurrentStep(currentStep + 1);
+  };
+
+  const handlePrevious = () => {
+    setCurrentStep(currentStep - 1);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && selectedWorkType) {
+    if (e.key === "Enter" && workType) {
       handleSubmit();
     }
   };
@@ -59,8 +56,8 @@ export default function WorkType() {
           Select your preferred work type
         </h3>
         <RadioGroup
-          value={selectedWorkType}
-          onValueChange={setSelectedWorkType}
+          value={workType}
+          onValueChange={setWorkType}
           className="grid gap-4 w-full"
         >
           {workTypes.map((type) => {
@@ -69,7 +66,7 @@ export default function WorkType() {
               <label
                 key={type.id}
                 className={`flex items-center space-x-4 p-6 rounded-xl border cursor-pointer transition-all duration-200 ease-in-out ${
-                  selectedWorkType === type.id
+                  workType === type.id
                     ? "border-primary bg-primary/10 shadow-lg scale-[1.02]"
                     : "border-border hover:border-primary/50 hover:shadow-md hover:scale-[1.01]"
                 }`}
@@ -78,7 +75,7 @@ export default function WorkType() {
                 <div className="flex items-center gap-5 flex-1">
                   <div
                     className={`p-3.5 rounded-full transition-all duration-200 ${
-                      selectedWorkType === type.id
+                      workType === type.id
                         ? "bg-primary text-primary-foreground scale-110"
                         : "bg-muted/80 hover:bg-muted"
                     }`}
@@ -101,7 +98,7 @@ export default function WorkType() {
         <Button
           type="button"
           variant="outline"
-          onClick={previousStep}
+          onClick={handlePrevious}
           className="flex-1 h-12 text-lg font-medium hover:bg-muted/50 transition-colors"
         >
           Previous
@@ -111,7 +108,8 @@ export default function WorkType() {
           onClick={handleSubmit}
           className="flex-1 h-12 text-lg font-medium transition-all hover:scale-[1.02]"
         >
-          {isLoading ? "Saving..." : "Next"}
+          {/* isLoading ? "Saving..." : "Next" */}
+          Next
         </Button>
       </div>
     </div>

@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { useUser } from "@/features/authentication/UserContext";
+import { useUser } from "@/features/authentication/useUser";
 import ProfileDropdown from "./ProfileDropdown";
 import { Search, Users, MessageCircle, Home } from "lucide-react";
 import NotificationsDrawer from "../make-connections/NotificationDrawer";

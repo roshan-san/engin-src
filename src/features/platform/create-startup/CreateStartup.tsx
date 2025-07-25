@@ -1,8 +1,6 @@
 import { Progress } from "@/components/ui/progress";
-import {
-  CreateStartupProvider,
-  useCreateStartup,
-} from "./context/CreateStartupContext";
+import { useCreateStartup } from "./context/useCreateStartup";
+import { CreateStartupProvider } from "./context/CreateStartupContext";
 import { StartupNameStep } from "./steps/StartupNameStep";
 import { StartupLocationStep } from "./steps/StartupLocationStep";
 import { StartupDescriptionStep } from "./steps/StartupDescriptionStep";

@@ -49,8 +49,8 @@ export function ProfileEditPopover({ profile }: ProfileEditPopoverProps) {
       setTimeout(() => {
         setOpen(false);
       }, 1500);
-    } catch (error: any) {
-      setFeedback({ type: 'error', message: error.message || "Failed to update profile" });
+    } catch (error: unknown) {
+      setFeedback({ type: 'error', message: error instanceof Error ? error.message : "Failed to update profile" });
     } finally {
       setLoading(false);
     }

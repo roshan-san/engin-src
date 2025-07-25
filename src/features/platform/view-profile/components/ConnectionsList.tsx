@@ -1,33 +1,36 @@
-import type { Doc } from "@/../convex/_generated/dataModel";
-import { useQuery } from "convex/react";
+import { useQuery, useMutation } from "convex/react";
 import { api } from "@/../convex/_generated/api";
-import ProfileCard from "@/features/platform/search-profiles/ProfileCard";
-import { Users } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import type { Doc } from "@/../convex/_generated/dataModel";
 
 export default function ConnectionsList({ profile }: { profile: Doc<"profiles"> }) {
-  // Fetch connected profiles for the given profile
-  const connectedProfiles = useQuery(api.messages.queries.getConnectedProfilesById, {
+  const connections = useQuery(api.connections.queries.getConnections, {
     profileId: profile._id,
   });
+  const updateConnectionStatus = useMutation(api.connections.mutations.updateConnectionStatus);
+
+  if (!connections) return null;
 
   return (
-    <div className="w-full">
-      <h2 className="text-lg font-semibold mb-4">Connections</h2>
-      {connectedProfiles && connectedProfiles.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {connectedProfiles.map((connectedProfile: any) => (
-            <ProfileCard key={connectedProfile._id} profile={connectedProfile} />
-          ))}
-        </div>
-      ) : (
-        <div className="text-muted-foreground text-center py-8">
-          <div className="w-12 h-12 rounded-full bg-muted/30 flex items-center justify-center mx-auto mb-3">
-            <Users className="w-6 h-6 text-muted-foreground" />
-          </div>
-          <p className="font-medium mb-1">No connections yet</p>
-          <p className="text-sm">This user hasn't connected with anyone yet.</p>
-        </div>
-      )}
+    <div className="space-y-4">
+      {connections.map((conn: Doc<"connections">) => (
+        <Card key={conn._id} className="hover:shadow-md transition-shadow">
+          <CardHeader className="pb-3 flex flex-row items-center justify-between">
+            <CardTitle className="text-base">Connection with {conn.receiverid}</CardTitle>
+            <Badge variant="secondary" className="text-xs capitalize">
+              {conn.status}
+            </Badge>
+          </CardHeader>
+          <CardContent>
+            <div className="flex gap-2">
+              <Button size="sm" variant="default" onClick={() => updateConnectionStatus({ connectionId: conn._id, status: "accepted" })}>Accept</Button>
+              <Button size="sm" variant="outline" onClick={() => updateConnectionStatus({ connectionId: conn._id, status: "declined" })}>Decline</Button>
+            </div>
+          </CardContent>
+        </Card>
+      ))}
     </div>
   );
 } 

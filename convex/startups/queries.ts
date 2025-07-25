@@ -1,6 +1,7 @@
 import { v } from "convex/values";
 import { getAuthenticatedProfile } from "../helper";
 import { query } from "../_generated/server";
+import type { Id } from "../_generated/dataModel";
 
 export const getMyStartups = query({
   args: {},
@@ -28,7 +29,7 @@ export const getStartupsByUser = query({
     // Get startups where user is a collaborator
     const collaboratedStartups = await ctx.db
       .query("startups")
-      .withIndex("by_collaborators", (q) => q.eq("collaborators", args.userId as any))
+      .withIndex("by_collaborators", (q) => q.eq("collaborators", [args.userId]))
       .collect();
     
     return {
@@ -121,7 +122,7 @@ export const getCollaborators = query({
     const startup = await ctx.db.get(args.startupId);
     if (!startup || !startup.collaborators || startup.collaborators.length === 0) return [];
     const profiles = await Promise.all(
-      startup.collaborators.map((id: any) => ctx.db.get(id))
+      startup.collaborators.map((id: Id<"profiles">) => ctx.db.get(id))
     );
     return profiles.filter(Boolean);
   },

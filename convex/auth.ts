@@ -31,7 +31,7 @@ export const getUser = query({
         user,
         profile: profile || null,
       };
-    } catch (error) {
+    } catch {
       return null;
     }
   },

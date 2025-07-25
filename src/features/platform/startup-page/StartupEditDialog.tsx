@@ -46,14 +46,14 @@ export function StartupEditDialog({ startup, iconOnly = false, renderTrigger }: 
       </DialogTrigger>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-hidden p-0">
         <div className="flex flex-col h-full">
-          <DialogHeader className="px-6 py-4 border-b border-border/50">
+          <DialogHeader className="px-6 py-4 border-b border-border/50 flex-shrink-0">
             <DialogTitle className="flex items-center gap-2 text-xl">
               <Settings className="h-5 w-5 text-primary" />
               Edit Startup
             </DialogTitle>
           </DialogHeader>
           
-          <div className="flex-1 overflow-hidden px-6 py-4">
+          <div className="flex-1 overflow-y-auto px-6 py-4">
             <StartupForm startup={startup} setOpen={setOpen} />
           </div>
         </div>
@@ -147,8 +147,8 @@ function StartupForm({ startup, setOpen }: { startup: Doc<"startups">, setOpen: 
       
       setFeedback({ type: 'success', message: 'Startup updated successfully!' });
       setTimeout(() => setOpen(false), 1500);
-    } catch (error: any) {
-      setFeedback({ type: 'error', message: error.message || 'Failed to update startup' });
+    } catch (error: unknown) {
+      setFeedback({ type: 'error', message: error instanceof Error ? error.message : 'Failed to update startup' });
     } finally {
       setLoading(false);
     }
@@ -161,7 +161,7 @@ function StartupForm({ startup, setOpen }: { startup: Doc<"startups">, setOpen: 
   return (
     <form onSubmit={handleSubmit} className="h-full flex flex-col">
       <Tabs defaultValue="basic" className="flex-1 flex flex-col">
-        <TabsList className="grid w-full grid-cols-3 mb-6">
+        <TabsList className="grid w-full grid-cols-3 mb-6 flex-shrink-0">
           <TabsTrigger value="basic" className="flex items-center gap-2 text-sm">
             <Building2 className="h-4 w-4" />
             <span>Basic</span>
@@ -474,7 +474,7 @@ function StartupForm({ startup, setOpen }: { startup: Doc<"startups">, setOpen: 
       </Tabs>
 
       {/* Feedback and Submit */}
-      <div className="mt-6 space-y-4 pt-4 border-t border-border/50">
+      <div className="mt-6 space-y-4 pt-4 border-t border-border/50 flex-shrink-0">
         {feedback && (
           <div className={`flex items-center gap-2 p-3 rounded-lg ${
             feedback.type === 'error' 
@@ -521,4 +521,4 @@ function StartupForm({ startup, setOpen }: { startup: Doc<"startups">, setOpen: 
       </div>
     </form>
   );
-} 
+}

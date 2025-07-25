@@ -1,7 +1,7 @@
 import { useQuery } from "convex/react";
 import type { Doc } from "@/../convex/_generated/dataModel";
 import { api } from "@/../convex/_generated/api";
-import { useUser } from "@/features/authentication/UserContext";
+import { useUser } from "@/features/authentication/useUser";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -17,7 +17,7 @@ export default function ProfileStartups({
 }: ProfileStartupsProps) {
   const { profile: currentUser } = useUser();
   const startups = useQuery(api.startups.queries.getStartupsByUser, {
-    userId: profile?._id!,
+    userId: profile?._id ?? "",
   });
   const isOwnProfile = currentUser?._id === profile._id;
   const ownedStartups = startups?.owned || [];

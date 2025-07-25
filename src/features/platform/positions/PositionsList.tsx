@@ -9,7 +9,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Briefcase, Plus, Users, Eye } from "lucide-react";
 import { ApplicationsList } from "../collabs/ApplicationsList";
 import { ApplyToPosition } from "./ApplyToPosition";
-import { useUser } from "../../authentication/UserContext";
+import { useUser } from "../../authentication/useUser";
 import { PositionForm } from "./PositionForm";
 
 interface PositionsListProps {

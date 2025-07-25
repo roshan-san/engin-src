@@ -1,95 +1,90 @@
-import { Card, CardContent } from "../../../../components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "../../../../components/ui/avatar";
-import { Badge } from "../../../../components/ui/badge";
-import { Users, Crown, UserCheck } from "lucide-react";
-import type { Doc, Id } from "@/../convex/_generated/dataModel";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Users, Crown, UserPlus } from "lucide-react";
+import type { Doc } from "@/../convex/_generated/dataModel";
 
 interface StartupTeamProps {
-  startup: Doc<"startups">;
-  teamProfiles: any[];
-  acceptedApplications: any[];
+  collaborators: Doc<"profiles">[];
+  owner: Doc<"profiles"> | null;
 }
 
-export function StartupTeam({ startup, teamProfiles, acceptedApplications }: StartupTeamProps) {
-  const getRole = (profileId: Id<"profiles">) => {
-    if (profileId === startup.ownerId) return "CEO & Founder";
-    const application = acceptedApplications?.find(app => app.applicantId === profileId);
-    return application?.acceptedRole || "Team Member";
-  };
-
-  const getRoleIcon = (profileId: Id<"profiles">) => {
-    if (profileId === startup.ownerId) return <Crown className="h-4 w-4 text-yellow-600" />;
-    return <UserCheck className="h-4 w-4 text-blue-600" />;
-  };
-
+export function StartupTeam({ collaborators, owner }: StartupTeamProps) {
   return (
     <div className="space-y-6">
-      <h2 className="text-xl lg:text-2xl font-semibold text-foreground flex items-center gap-2">
-        <Users className="h-6 w-6 text-primary" />
-        Team Members
-      </h2>
-      
-      {!teamProfiles || teamProfiles.length === 0 ? (
-        <div className="text-center py-12">
-          <Users className="h-16 w-16 text-muted-foreground/50 mx-auto mb-4" />
-          <h4 className="text-lg font-semibold text-foreground mb-2">No team members yet</h4>
-          <p className="text-muted-foreground">This startup is looking for team members to join their journey.</p>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {teamProfiles?.map((profile) => {
-            if (!profile) return null;
-            const role = getRole(profile._id);
-            const roleIcon = getRoleIcon(profile._id);
+      <div className="flex items-center justify-between">
+        <h3 className="text-lg font-semibold flex items-center gap-2">
+          <Users className="h-5 w-5 text-primary" />
+          Team
+        </h3>
+        <Badge variant="secondary" className="text-xs">
+          {collaborators.length + 1} member{(collaborators.length + 1) !== 1 ? 's' : ''}
+        </Badge>
+      </div>
 
-            return (
-              <Card key={profile._id} className="border border-border/50 shadow-sm bg-background/50 backdrop-blur-sm hover:shadow-md transition-all duration-200 hover:scale-[1.02]">
-                <CardContent className="p-6">
-                  <div className="flex items-start gap-4">
-                    <Avatar className="w-16 h-16 lg:w-20 lg:h-20 border-2 border-border/50">
-                      <AvatarImage 
-                        src={profile.avatar_url} 
-                        alt={profile.name || profile.username || "Team Member"} 
-                      />
-                      <AvatarFallback className="text-lg lg:text-xl font-semibold bg-gradient-to-br from-primary to-primary/80 text-white">
-                        {profile.name?.[0] || profile.username?.[0] || "?"}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-2">
-                        <h3 className="text-lg lg:text-xl font-semibold text-foreground truncate">
-                          {profile.name || "Unknown User"}
-                        </h3>
-                        {roleIcon}
-                      </div>
-                      <Badge variant="secondary" className="mb-3 text-xs">
-                        {role}
-                      </Badge>
-                      <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
-                        {profile.bio || `Team member at ${startup.name}`}
-                      </p>
-                      {profile.skills && profile.skills.length > 0 && (
-                        <div className="flex flex-wrap gap-2">
-                          {profile.skills?.slice(0, 3).map((skill: string, index: number) => (
-                            <Badge key={index} variant="outline" className="text-xs px-2 py-1">
-                              {skill}
-                            </Badge>
-                          ))}
-                          {profile.skills.length > 3 && (
-                            <Badge variant="outline" className="text-xs px-2 py-1">
-                              +{profile.skills.length - 3} more
-                            </Badge>
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          })}
-        </div>
-      )}
+      <div className="grid gap-4">
+        {/* Owner */}
+        {owner && (
+          <Card className="border-primary/20 bg-primary/5">
+            <CardHeader className="pb-3">
+              <div className="flex items-center gap-3">
+                <Avatar className="w-12 h-12">
+                  <AvatarImage src={owner.avatar_url} />
+                  <AvatarFallback className="bg-primary/10 text-primary font-semibold">
+                    {owner.name?.charAt(0) || owner.username?.charAt(0) || "?"}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="flex-1">
+                  <CardTitle className="text-base flex items-center gap-2">
+                    {owner.name || owner.username || "Unknown User"}
+                    <Crown className="h-4 w-4 text-yellow-500" />
+                    <Badge variant="outline" className="text-xs">
+                      Founder
+                    </Badge>
+                  </CardTitle>
+                  <p className="text-sm text-muted-foreground">
+                    {owner.user_type || "Team Member"}
+                  </p>
+                </div>
+              </div>
+            </CardHeader>
+          </Card>
+        )}
+
+        {/* Collaborators */}
+        {collaborators.map((collaborator) => (
+          <Card key={collaborator._id} className="hover:shadow-md transition-shadow">
+            <CardHeader className="pb-3">
+              <div className="flex items-center gap-3">
+                <Avatar className="w-12 h-12">
+                  <AvatarImage src={collaborator.avatar_url} />
+                  <AvatarFallback className="bg-primary/10 text-primary font-semibold">
+                    {collaborator.name?.charAt(0) || collaborator.username?.charAt(0) || "?"}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="flex-1">
+                  <CardTitle className="text-base">
+                    {collaborator.name || collaborator.username || "Unknown User"}
+                  </CardTitle>
+                  <p className="text-sm text-muted-foreground">
+                    {collaborator.user_type || "Team Member"}
+                  </p>
+                </div>
+              </div>
+            </CardHeader>
+          </Card>
+        ))}
+
+        {collaborators.length === 0 && (
+          <div className="text-center py-8">
+            <UserPlus className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+            <h4 className="text-lg font-semibold mb-2">No team members yet</h4>
+            <p className="text-muted-foreground">
+              Start building your team by creating positions and accepting applications
+            </p>
+          </div>
+        )}
+      </div>
     </div>
   );
 } 

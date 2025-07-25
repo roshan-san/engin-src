@@ -3,6 +3,28 @@ import { v } from "convex/values";
 import { getAuthenticatedProfile } from "../helper";
 import { getProfileByIdfn } from "./functions";
 
+export const getConnections = query({
+  args: {
+    profileId: v.id("profiles"),
+  },
+  handler: async (ctx, args) => {
+    const profile = await getProfileByIdfn(ctx, args.profileId);
+
+    if (!profile) return [];
+
+    const connections = await ctx.db
+      .query("connections")
+      .withIndex("by_sender", (q) => q.eq("senderid", profile._id))
+      .collect();
+
+    const connections2 = await ctx.db
+      .query("connections")
+      .withIndex("by_receiver", (q) => q.eq("receiverid", profile._id))
+      .collect();
+    return [...connections, ...connections2];
+  },
+});
+
 export const getMyAcceptedConnections = query({
   handler: async (ctx) => {
     const profile = await getAuthenticatedProfile(ctx);

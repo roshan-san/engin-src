@@ -5,7 +5,7 @@ import { MessageList } from "./MessageList";
 import { MessageInput } from "./MessageInput";
 import { MessageCircle } from "lucide-react";
 import { api } from "@/../convex/_generated/api";
-import { useUser } from "@/features/authentication/UserContext";
+import { useUser } from "@/features/authentication/useUser";
 
 interface ChatWindowProps {
   username: string;
@@ -72,17 +72,6 @@ export function ChatWindow({ username }: ChatWindowProps) {
     return `${days}d ago`;
   };
 
-  const formatMessageTime = (timestamp: number) => {
-    const now = new Date();
-    const messageDate = new Date(timestamp);
-    const isToday = now.toDateString() === messageDate.toDateString();
-    if (isToday) {
-      return messageDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    } else {
-      return messageDate.toLocaleDateString([], { month: 'short', day: 'numeric' });
-    }
-  };
-
   // Loading state
   if (!myProfile) {
     return (
@@ -123,17 +112,14 @@ export function ChatWindow({ username }: ChatWindowProps) {
     <div className="flex flex-1 flex-col h-full min-h-0 bg-background">
       <ChatHeader
         chatPartner={chatPartner}
-        onlineStatus={chatPartnerOnlineStatus}
+        onlineStatus={chatPartnerOnlineStatus || null}
         formatLastSeen={formatLastSeen}
       />
       <div className="flex-1 min-h-0 overflow-y-auto bg-background" style={{scrollbarGutter: 'stable'}}>
         <div className="p-3">
           {Array.isArray(messages) && messages.length > 0 ? (
             <MessageList
-              messages={messages}
-              myProfile={myProfile}
-              receiverProfile={chatPartner}
-              formatMessageTime={formatMessageTime}
+              receiverId={chatPartner}
             />
           ) : (
             <div className="flex flex-col items-center justify-center h-full text-muted-foreground py-6">

@@ -2,35 +2,34 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { FaPlus, FaTimes, FaHeart } from "react-icons/fa";
-import { useOnboarding } from "../context/OnboardContext";
+import { useOnboard } from "../context/useOnboard";
 
 export default function Interests() {
-  const { nextStep, previousStep, onboardingData } = useOnboarding();
-  const [interests, setInterests] = useState<string[]>(
-    onboardingData.interests || [],
+  const { currentStep, setCurrentStep, formData, updateFormData } = useOnboard();
+  const [selectedInterests, setSelectedInterests] = useState<string[]>(
+    (formData.interests as string[]) || []
   );
   const [newInterest, setNewInterest] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
 
   const addInterest = () => {
     const trimmed = newInterest.trim();
-    if (trimmed && !interests.includes(trimmed)) {
-      setInterests([...interests, trimmed]);
+    if (trimmed && !selectedInterests.includes(trimmed)) {
+      setSelectedInterests([...selectedInterests, trimmed]);
       setNewInterest("");
     }
   };
 
   const removeInterest = (index: number) => {
-    setInterests(interests.filter((_, i) => i !== index));
+    setSelectedInterests(selectedInterests.filter((_, i) => i !== index));
   };
 
-  const handleSubmit = async () => {
-    setIsLoading(true);
-    try {
-      nextStep({ interests });
-    } finally {
-      setIsLoading(false);
-    }
+  const handleSubmit = () => {
+    updateFormData("interests", selectedInterests);
+    setCurrentStep(currentStep + 1);
+  };
+
+  const handlePrevious = () => {
+    setCurrentStep(currentStep - 1);
   };
 
   return (
@@ -52,7 +51,7 @@ export default function Interests() {
                     e.preventDefault();
                     if (newInterest.trim()) {
                       addInterest();
-                    } else if (interests.length > 0) {
+                    } else if (selectedInterests.length > 0) {
                       handleSubmit();
                     }
                   }
@@ -69,12 +68,12 @@ export default function Interests() {
               </Button>
             </div>
             <div className="flex flex-wrap gap-3">
-              {interests.length === 0 ? (
+              {selectedInterests.length === 0 ? (
                 <p className="text-muted-foreground">
                   No interests added yet. Add some to get started!
                 </p>
               ) : (
-                interests.map((interest, index) => (
+                selectedInterests.map((interest, index) => (
                   <div
                     key={index}
                     className="bg-primary/10 text-primary px-5 py-2.5 rounded-full flex items-center gap-2 shadow-sm"
@@ -98,7 +97,7 @@ export default function Interests() {
         <Button
           type="button"
           variant="outline"
-          onClick={previousStep}
+          onClick={handlePrevious}
           className="flex-1 h-12 text-lg font-medium hover:bg-muted/50 transition-colors"
         >
           Previous
@@ -108,7 +107,8 @@ export default function Interests() {
           onClick={handleSubmit}
           className="flex-1 h-12 text-lg font-medium transition-all hover:scale-[1.02]"
         >
-          {isLoading ? "Saving..." : "Next"}
+          {/* isLoading ? "Saving..." : "Next" */}
+          Next
         </Button>
       </div>
     </div>

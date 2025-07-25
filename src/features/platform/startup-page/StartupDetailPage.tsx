@@ -7,7 +7,6 @@ import {
   Users as UsersIcon,
   Briefcase
 } from "lucide-react";
-import { useUser } from "../../authentication/UserContext";
 import {
   StartupHeader,
   StartupAbout,
@@ -22,22 +21,10 @@ interface StartupDetailPageProps {
 }
 
 export function StartupDetailPage({ startup, isOwner }: StartupDetailPageProps) {
-  const { profile } = useUser();
-  
   // Get team members (collaborators + owner)
   const teamMemberIds = [startup.ownerId, ...(startup.collaborators || [])];
   const teamProfiles = useQuery(api.profile.queries.getProfilesByIds, { 
     ids: teamMemberIds 
-  });
-
-  // Get open positions
-  const positions = useQuery(api.startups.queries.listPositions, { 
-    startupId: startup._id 
-  });
-
-  // Get accepted applications to determine roles
-  const acceptedApplications = useQuery(api.startups.queries.getAcceptedApplications, { 
-    startupId: startup._id 
   });
 
   return (
@@ -81,19 +68,16 @@ export function StartupDetailPage({ startup, isOwner }: StartupDetailPageProps) 
                 </TabsContent>
 
                 <TabsContent value="team" className="space-y-6">
-                  <StartupTeam 
-                    startup={startup} 
-                    teamProfiles={teamProfiles || []} 
-                    acceptedApplications={acceptedApplications || []} 
+                  <StartupTeam
+                    collaborators={(teamProfiles || []).filter((p): p is NonNullable<typeof p> => p !== null)}
+                    owner={(teamProfiles || []).find(p => p?._id === startup.ownerId) || null}
                   />
                 </TabsContent>
 
                 <TabsContent value="positions" className="space-y-6">
-                  <StartupPositions 
-                    startup={startup} 
-                    positions={positions || []} 
-                    profile={profile} 
-                    isOwner={isOwner} 
+                  <StartupPositions
+                    startupId={startup._id}
+                    onAddPosition={() => {}}
                   />
                 </TabsContent>
               </div>

@@ -7,7 +7,7 @@ import {
   FaUserGraduate,
   FaUserTie,
 } from "react-icons/fa";
-import { useOnboarding } from "../context/OnboardContext";
+import { useOnboard } from "../context/useOnboard";
 
 const roles = [
   {
@@ -31,23 +31,20 @@ const roles = [
 ];
 
 export default function UserType() {
-  const { nextStep, previousStep, onboardingData } = useOnboarding();
-  const [selectedUserType, setSelectedUserType] = useState(
-    onboardingData.user_type || "",
-  );
-  const [isLoading, setIsLoading] = useState(false);
+  const { currentStep, setCurrentStep, formData, updateFormData } = useOnboard();
+  const [userType, setUserType] = useState(formData.user_type as string || "");
 
-  const handleSubmit = async () => {
-    setIsLoading(true);
-    try {
-      nextStep({ user_type: selectedUserType });
-    } finally {
-      setIsLoading(false);
-    }
+  const handleSubmit = () => {
+    updateFormData("user_type", userType);
+    setCurrentStep(currentStep + 1);
+  };
+
+  const handlePrevious = () => {
+    setCurrentStep(currentStep - 1);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && selectedUserType) {
+    if (e.key === "Enter" && userType) {
       handleSubmit();
     }
   };
@@ -64,8 +61,8 @@ export default function UserType() {
           Select your primary role
         </h3>
         <RadioGroup
-          value={selectedUserType}
-          onValueChange={setSelectedUserType}
+          value={userType}
+          onValueChange={setUserType}
           className="grid gap-4 w-full"
         >
           {roles.map((type) => {
@@ -74,7 +71,7 @@ export default function UserType() {
               <label
                 key={type.id}
                 className={`flex items-center space-x-4 p-6 rounded-xl border cursor-pointer transition-all duration-200 ease-in-out ${
-                  selectedUserType === type.id
+                  userType === type.id
                     ? "border-primary bg-primary/10 shadow-lg scale-[1.02]"
                     : "border-border hover:border-primary/50 hover:shadow-md hover:scale-[1.01]"
                 }`}
@@ -83,7 +80,7 @@ export default function UserType() {
                 <div className="flex items-center gap-5 flex-1">
                   <div
                     className={`p-3.5 rounded-full transition-all duration-200 ${
-                      selectedUserType === type.id
+                      userType === type.id
                         ? "bg-primary text-primary-foreground scale-110"
                         : "bg-muted/80 hover:bg-muted"
                     }`}
@@ -106,7 +103,7 @@ export default function UserType() {
         <Button
           type="button"
           variant="outline"
-          onClick={previousStep}
+          onClick={handlePrevious}
           className="flex-1 h-12 text-lg font-medium hover:bg-muted/50 transition-colors"
         >
           Previous
@@ -116,7 +113,8 @@ export default function UserType() {
           onClick={handleSubmit}
           className="flex-1 h-12 text-lg font-medium transition-all hover:scale-[1.02]"
         >
-          {isLoading ? "Saving..." : "Next"}
+          {/* isLoading ? "Saving..." : "Next" */}
+          Next
         </Button>
       </div>
     </div>

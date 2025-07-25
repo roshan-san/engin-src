@@ -1,72 +1,43 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Check, CheckCheck } from "lucide-react";
+import { cn } from "@/lib/utils";
+import type { Doc } from "@/../convex/_generated/dataModel";
 
-export function MessageBubble({ msg, isMe, myProfile, receiverProfile, formatMessageTime }: {
-  msg: any,
-  isMe: boolean,
-  myProfile: any,
-  receiverProfile: any,
-  formatMessageTime: (n: number) => string
-}) {
-  const isValidAvatarUrl = (url: string | null | undefined) => {
-    return url && url.trim() !== '' && url !== 'null' && url !== 'undefined';
-  };
+interface MessageBubbleProps {
+  message: Doc<"messages">;
+  isOwnMessage: boolean;
+  senderProfile: Doc<"profiles"> | null;
+}
 
+export function MessageBubble({ message, isOwnMessage, senderProfile }: MessageBubbleProps) {
   return (
-    <div className={`flex items-end gap-2 ${isMe ? "justify-end" : "justify-start"}`}>
-      {!isMe && (
-        <Avatar className="w-6 h-6 lg:w-8 lg:h-8 shrink-0">
-          {isValidAvatarUrl(receiverProfile?.avatar_url) ? (
-            <AvatarImage
-              src={receiverProfile.avatar_url}
-              alt={receiverProfile?.name || receiverProfile?.username || "?"}
-            />
-          ) : null}
-          <AvatarFallback className="text-xs lg:text-sm bg-primary/10 text-primary font-semibold">
-            {receiverProfile?.name?.charAt(0) || receiverProfile?.username?.charAt(0) || "?"}
-          </AvatarFallback>
-        </Avatar>
-      )}
+    <div className={cn(
+      "flex gap-2 mb-4",
+      isOwnMessage ? "flex-row-reverse" : "flex-row"
+    )}>
+      <Avatar className="w-8 h-8 flex-shrink-0">
+        <AvatarImage src={senderProfile?.avatar_url} />
+        <AvatarFallback className="bg-primary/10 text-primary text-xs font-semibold">
+          {senderProfile?.name?.charAt(0) || senderProfile?.username?.charAt(0) || "?"}
+        </AvatarFallback>
+      </Avatar>
       
-      <div
-        className={`max-w-[200px] lg:max-w-[250px] px-3 py-2 rounded-2xl shadow-sm ${
-          isMe
-            ? "bg-primary text-primary-foreground"
-            : "bg-muted text-foreground border border-border/30"
-        }`}
-      >
-        <p className="text-sm break-words whitespace-pre-line leading-relaxed">
-          {msg.content}
-        </p>
-        <div className="flex items-center gap-1 mt-1">
-          <span className="text-[10px] opacity-70">
-            {formatMessageTime(msg._creationTime)}
-          </span>
-          {isMe && (
-            <div className="flex items-center">
-              {msg.read ? (
-                <CheckCheck className="w-3 h-3 text-blue-300" />
-              ) : (
-                <Check className="w-3 h-3 opacity-50" />
-              )}
-            </div>
-          )}
-        </div>
+      <div className={cn(
+        "max-w-[70%] px-3 py-2 rounded-lg",
+        isOwnMessage 
+          ? "bg-primary text-primary-foreground ml-auto" 
+          : "bg-muted text-foreground"
+      )}>
+        <p className="text-sm break-words">{message.content}</p>
+        <span className={cn(
+          "text-xs mt-1 block",
+          isOwnMessage ? "text-primary-foreground/70" : "text-muted-foreground"
+        )}>
+          {new Date(message._creationTime).toLocaleTimeString([], { 
+            hour: '2-digit', 
+            minute: '2-digit' 
+          })}
+        </span>
       </div>
-      
-      {isMe && (
-        <Avatar className="w-6 h-6 lg:w-8 lg:h-8 shrink-0">
-          {isValidAvatarUrl(myProfile?.avatar_url) ? (
-            <AvatarImage
-              src={myProfile.avatar_url}
-              alt={myProfile?.name || myProfile?.username || "?"}
-            />
-          ) : null}
-          <AvatarFallback className="text-xs lg:text-sm bg-primary/10 text-primary font-semibold">
-            {myProfile?.name?.charAt(0) || myProfile?.username?.charAt(0) || "?"}
-          </AvatarFallback>
-        </Avatar>
-      )}
     </div>
   );
 } 

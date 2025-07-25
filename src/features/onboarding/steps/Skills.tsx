@@ -2,33 +2,34 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { FaTools, FaPlus, FaTimes } from "react-icons/fa";
-import { useOnboarding } from "../context/OnboardContext";
+import { useOnboard } from "../context/useOnboard";
 
 export default function Skills() {
-  const { nextStep, previousStep, onboardingData } = useOnboarding();
-  const [skills, setSkills] = useState<string[]>(onboardingData.skills || []);
+  const { currentStep, setCurrentStep, formData, updateFormData } = useOnboard();
+  const [selectedSkills, setSelectedSkills] = useState<string[]>(
+    (formData.skills as string[]) || []
+  );
   const [newSkill, setNewSkill] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
 
   const addSkill = () => {
     const trimmed = newSkill.trim();
-    if (trimmed && !skills.includes(trimmed)) {
-      setSkills([...skills, trimmed]);
+    if (trimmed && !selectedSkills.includes(trimmed)) {
+      setSelectedSkills([...selectedSkills, trimmed]);
       setNewSkill("");
     }
   };
 
   const removeSkill = (index: number) => {
-    setSkills(skills.filter((_, i) => i !== index));
+    setSelectedSkills(selectedSkills.filter((_, i) => i !== index));
   };
 
-  const handleSubmit = async () => {
-    setIsLoading(true);
-    try {
-      nextStep({ skills });
-    } finally {
-      setIsLoading(false);
-    }
+  const handleSubmit = () => {
+    updateFormData("skills", selectedSkills);
+    setCurrentStep(currentStep + 1);
+  };
+
+  const handlePrevious = () => {
+    setCurrentStep(currentStep - 1);
   };
 
   return (
@@ -50,7 +51,7 @@ export default function Skills() {
                     e.preventDefault();
                     if (newSkill.trim()) {
                       addSkill();
-                    } else if (skills.length > 0) {
+                    } else if (selectedSkills.length > 0) {
                       handleSubmit();
                     }
                   }
@@ -67,12 +68,12 @@ export default function Skills() {
               </Button>
             </div>
             <div className="flex flex-wrap gap-3">
-              {skills.length === 0 ? (
+              {selectedSkills.length === 0 ? (
                 <p className="text-muted-foreground">
                   No skills added yet. Add some to get started!
                 </p>
               ) : (
-                skills.map((skill, index) => (
+                selectedSkills.map((skill, index) => (
                   <div
                     key={index}
                     className="bg-primary/10 text-primary px-5 py-2.5 rounded-full flex items-center gap-2 shadow-sm"
@@ -96,7 +97,7 @@ export default function Skills() {
         <Button
           type="button"
           variant="outline"
-          onClick={previousStep}
+          onClick={handlePrevious}
           className="flex-1 h-12 text-lg font-medium hover:bg-muted/50 transition-colors"
         >
           Previous
@@ -106,7 +107,8 @@ export default function Skills() {
           onClick={handleSubmit}
           className="flex-1 h-12 text-lg font-medium transition-all hover:scale-[1.02]"
         >
-          {isLoading ? "Saving..." : "Next"}
+          {/* isLoading ? "Saving..." : "Next" */}
+          Next
         </Button>
       </div>
     </div>

@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { FaTags } from "react-icons/fa";
-import { useCreateStartup } from "../context/CreateStartupContext";
+import { useCreateStartup } from "../context/useCreateStartup";
 
 export const StartupTagsStep = () => {
   const { startupData, handleChange, nextStep, previousStep } =

@@ -2,17 +2,23 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { FaGithub, FaLinkedinIn } from "react-icons/fa";
-import { useOnboarding } from "../context/OnboardContext";
+import { useOnboard } from "../context/useOnboard";
 
 export default function Contact() {
-  const { nextStep, previousStep, onboardingData } = useOnboarding();
-  const [githubUrl, setGithubUrl] = useState(onboardingData.github_url || "");
+  const { currentStep, setCurrentStep, formData, updateFormData } = useOnboard();
+  const [githubUrl, setGithubUrl] = useState(formData.github_url as string || "");
   const [linkedinUrl, setLinkedinUrl] = useState(
-    onboardingData.linkedin_url || "",
+    formData.linkedin_url as string || ""
   );
 
   const handleSubmit = () => {
-    nextStep({ github_url: githubUrl, linkedin_url: linkedinUrl });
+    updateFormData("github_url", githubUrl);
+    updateFormData("linkedin_url", linkedinUrl);
+    setCurrentStep(currentStep + 1);
+  };
+
+  const handlePrevious = () => {
+    setCurrentStep(currentStep - 1);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -56,7 +62,7 @@ export default function Contact() {
         <Button
           type="button"
           variant="outline"
-          onClick={previousStep}
+          onClick={handlePrevious}
           className="flex-1 h-12 text-lg font-medium hover:bg-muted/50 transition-colors"
         >
           Previous

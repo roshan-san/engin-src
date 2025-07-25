@@ -2,6 +2,19 @@ import { mutation } from "../_generated/server";
 import { v } from "convex/values";
 import { getAuthenticatedProfile } from "../helper";
 
+export const updateConnectionStatus = mutation({
+  args: {
+    connectionId: v.id("connections"),
+    status: v.union(v.literal("accepted"), v.literal("declined")),
+  },
+  handler: async (ctx, args) => {
+    await getAuthenticatedProfile(ctx);
+    return await ctx.db.patch(args.connectionId, {
+      status: args.status,
+    });
+  },
+});
+
 export const createConnection = mutation({
   args: {
     receiverId: v.id("profiles"),
