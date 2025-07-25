@@ -29,7 +29,11 @@ const schema = defineSchema({
     linkedin_url: v.optional(v.string()),
   })
     .index("email", ["email"])
-    .searchIndex("by_username", { searchField: "username" }),
+    .searchIndex("by_username", { searchField: "username" })
+    .searchIndex("by_name", { searchField: "name" })
+    .searchIndex("by_bio", { searchField: "bio" })
+    .searchIndex("by_location", { searchField: "location" })
+    .searchIndex("by_user_type", { searchField: "user_type" }),
   connections: defineTable({
     senderid: v.id("profiles"),
     receiverid: v.id("profiles"),

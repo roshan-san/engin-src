@@ -26,6 +26,12 @@ export function Feed({ selectedTag: externalSelectedTag, onTagClick }: FeedProps
 
   const trendingTags = useQuery(api.posts.queries.getTrendingTags);
 
+  // Get unique author IDs from posts
+  const authorIds = posts ? [...new Set(posts.map(post => post.authorId))] : [];
+  const authorProfiles = useQuery(api.profile.queries.getProfilesByIds, { 
+    ids: authorIds 
+  });
+
   const handleTagClick = (tag: string) => {
     if (onTagClick) {
       onTagClick(tag);
@@ -105,13 +111,18 @@ export function Feed({ selectedTag: externalSelectedTag, onTagClick }: FeedProps
         </div>
       ) : (
         <div className="space-y-0">
-          {posts?.map((post: Doc<'posts'>) => (
-            <PostCard key={post._id} post={post} authorProfile={null} />
-          ))}
+          {posts?.map((post: Doc<'posts'>) => {
+            const authorProfile = authorProfiles?.find(profile => profile?._id === post.authorId);
+            return (
+              <PostCard 
+                key={post._id} 
+                post={post} 
+                authorProfile={authorProfile || null} 
+              />
+            );
+          })}
         </div>
       )}
-
-
     </div>
   );
 } 

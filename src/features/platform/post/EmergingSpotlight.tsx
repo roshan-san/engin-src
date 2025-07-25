@@ -69,21 +69,6 @@ export function EmergingSpotlight() {
               )}
             </div>
           </div>
-          
-          {/* Trending Tags */}
-          <div className="flex flex-wrap gap-2">
-            {mostLikedStartup.startup.tags?.slice(0, 4).map((tag: string) => (
-              <Badge
-                key={tag}
-                variant="secondary"
-                className="cursor-pointer hover:bg-primary/20 text-primary border-primary/30 transition-colors"
-                onClick={() => navigate({ to: `/trending/${encodeURIComponent(tag)}` })}
-              >
-                <Sparkles className="w-3 h-3 mr-1" />
-                {tag.startsWith('#') ? tag : `#${tag}`}
-              </Badge>
-            ))}
-          </div>
         </div>
       ) : (
         <div className="text-center py-8 text-muted-foreground border-t border-border/30 mt-4">

@@ -25,6 +25,7 @@ export const createStartup = mutation({
       stage: args.stage ?? "Growth",
       ownerId: profile._id,
       collaborators: [], // Initialize empty collaborators array
+      team_size: 1, // Always start with 1 (the founder)
       createdAt: Date.now(),
     };
 
@@ -120,6 +121,30 @@ export const createPosition = mutation({
   },
 });
 
+export const updatePosition = mutation({
+  args: {
+    positionId: v.id("positions"),
+    title: v.string(),
+    description: v.string(),
+    requirements: v.optional(v.string()),
+    status: v.union(v.literal("open"), v.literal("closed")),
+  },
+  handler: async (ctx, args) => {
+    // Get the position to verify it exists
+    const position = await ctx.db.get(args.positionId);
+    if (!position) {
+      throw new Error("Position not found");
+    }
+    
+    return await ctx.db.patch(args.positionId, {
+      title: args.title,
+      description: args.description,
+      requirements: args.requirements,
+      status: args.status,
+    });
+  },
+});
+
 export const applyToPosition = mutation({
   args: {
     positionId: v.id("positions"),
@@ -178,14 +203,37 @@ export const updateApplicationStatus = mutation({
       const isAlreadyCollaborator = (startup.collaborators || []).includes(app.applicantId);
       
       if (!isAlreadyCollaborator) {
-        // Add as collaborator
+        // Add as collaborator and update team size
+        const newCollaborators = [...(startup.collaborators || []), app.applicantId];
+        const newTeamSize = 1 + newCollaborators.length; // owner + collaborators
+        
         await ctx.db.patch(position.startupId, {
-          collaborators: [...(startup.collaborators || []), app.applicantId],
+          collaborators: newCollaborators,
+          team_size: newTeamSize,
         });
       }
     }
     
     return true;
+  },
+});
+
+export const updateTeamSize = mutation({
+  args: {
+    startupId: v.id("startups"),
+  },
+  handler: async (ctx, args) => {
+    const startup = await ctx.db.get(args.startupId);
+    if (!startup) throw new Error("Startup not found");
+    
+    // Calculate new team size: owner + collaborators
+    const newTeamSize = 1 + (startup.collaborators || []).length;
+    
+    await ctx.db.patch(args.startupId, {
+      team_size: newTeamSize,
+    });
+    
+    return newTeamSize;
   },
 });
 
@@ -200,8 +248,12 @@ export const removeCollaborator = mutation({
     const profile = await getAuthenticatedProfile(ctx);
     if (startup.ownerId !== profile._id) throw new Error("Not authorized");
     
+    const newCollaborators = (startup.collaborators || []).filter((id: string) => id !== args.collaboratorId);
+    const newTeamSize = 1 + newCollaborators.length; // owner + collaborators
+    
     await ctx.db.patch(args.startupId, {
-      collaborators: (startup.collaborators || []).filter((id: string) => id !== args.collaboratorId),
+      collaborators: newCollaborators,
+      team_size: newTeamSize,
     });
     return true;
   },
@@ -226,5 +278,25 @@ export const toggleUpvoteStartup = mutation({
     }
     await ctx.db.patch(args.startupId, { upvotes: newUpvotes });
     return { upvoted: !hasUpvoted, upvotesCount: newUpvotes.length };
+  },
+});
+
+export const fixTeamSizes = mutation({
+  args: {},
+  handler: async (ctx) => {
+    const allStartups = await ctx.db.query("startups").collect();
+    let fixedCount = 0;
+    
+    for (const startup of allStartups) {
+      const correctTeamSize = 1 + (startup.collaborators || []).length;
+      if (startup.team_size !== correctTeamSize) {
+        await ctx.db.patch(startup._id, {
+          team_size: correctTeamSize,
+        });
+        fixedCount++;
+      }
+    }
+    
+    return { fixedCount, totalStartups: allStartups.length };
   },
 });

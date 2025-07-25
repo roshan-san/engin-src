@@ -14,6 +14,9 @@ import {
   StartupPositions,
   StartupSidebar
 } from "./components";
+import { useState } from "react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "../../../components/ui/dialog";
+import { PositionForm } from "../positions/PositionForm";
 
 interface StartupDetailPageProps {
   startup: Doc<"startups">;
@@ -21,11 +24,24 @@ interface StartupDetailPageProps {
 }
 
 export function StartupDetailPage({ startup, isOwner }: StartupDetailPageProps) {
-  // Get team members (collaborators + owner)
-  const teamMemberIds = [startup.ownerId, ...(startup.collaborators || [])];
+  const [isPositionDialogOpen, setIsPositionDialogOpen] = useState(false);
+  
+  // Get team members (collaborators + owner) with deduplication
+  const teamMemberIds = [
+    startup.ownerId,
+    ...(startup.collaborators || []).filter(id => id !== startup.ownerId)
+  ];
   const teamProfiles = useQuery(api.profile.queries.getProfilesByIds, { 
     ids: teamMemberIds 
   });
+
+  const handleAddPosition = () => {
+    setIsPositionDialogOpen(true);
+  };
+
+  const handlePositionSuccess = () => {
+    setIsPositionDialogOpen(false);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
@@ -69,15 +85,17 @@ export function StartupDetailPage({ startup, isOwner }: StartupDetailPageProps) 
 
                 <TabsContent value="team" className="space-y-6">
                   <StartupTeam
-                    collaborators={(teamProfiles || []).filter((p): p is NonNullable<typeof p> => p !== null)}
+                    collaborators={(teamProfiles || []).filter((p): p is NonNullable<typeof p> => p !== null && p._id !== startup.ownerId)}
                     owner={(teamProfiles || []).find(p => p?._id === startup.ownerId) || null}
+                    teamSize={startup.team_size}
                   />
                 </TabsContent>
 
                 <TabsContent value="positions" className="space-y-6">
                   <StartupPositions
                     startupId={startup._id}
-                    onAddPosition={() => {}}
+                    onAddPosition={handleAddPosition}
+                    isOwner={isOwner}
                   />
                 </TabsContent>
               </div>
@@ -92,6 +110,22 @@ export function StartupDetailPage({ startup, isOwner }: StartupDetailPageProps) 
           </div>
         </div>
       </div>
+
+      {/* Position Creation Dialog */}
+      <Dialog open={isPositionDialogOpen} onOpenChange={setIsPositionDialogOpen}>
+        <DialogContent className="sm:max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Create New Position</DialogTitle>
+            <DialogDescription>
+              Add a new position to attract talent to your startup.
+            </DialogDescription>
+          </DialogHeader>
+          <PositionForm 
+            startupId={startup._id} 
+            onSuccess={handlePositionSuccess} 
+          />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 } 

@@ -50,7 +50,7 @@ function RouteComponent() {
                   Connect with talented creators, developers, designers, and potential co-founders for your startup.
                 </p>
               </div>
-              <SearchProfiles userType="Creator" />
+              <SearchProfiles userType="Creator/Collaborator" />
             </TabsContent>
             
             <TabsContent value="investors" className="space-y-4 sm:space-y-6">

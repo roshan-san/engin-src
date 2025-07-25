@@ -7,9 +7,12 @@ import type { Doc } from "@/../convex/_generated/dataModel";
 interface StartupTeamProps {
   collaborators: Doc<"profiles">[];
   owner: Doc<"profiles"> | null;
+  teamSize?: number;
 }
 
-export function StartupTeam({ collaborators, owner }: StartupTeamProps) {
+export function StartupTeam({ collaborators, owner, teamSize }: StartupTeamProps) {
+  const displayTeamSize = teamSize || (collaborators.length + (owner ? 1 : 0));
+  
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -18,7 +21,7 @@ export function StartupTeam({ collaborators, owner }: StartupTeamProps) {
           Team
         </h3>
         <Badge variant="secondary" className="text-xs">
-          {collaborators.length + 1} member{(collaborators.length + 1) !== 1 ? 's' : ''}
+          {displayTeamSize} member{displayTeamSize !== 1 ? 's' : ''}
         </Badge>
       </div>
 

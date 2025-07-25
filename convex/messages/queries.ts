@@ -152,24 +152,23 @@ export const getChatSummaries = query({
     const myProfile = await getAuthenticatedProfile(ctx);
     const myId = myProfile._id;
 
-    // Get all connected profiles
-    const senderConnections = await ctx.db
-      .query("connections")
-      .withIndex("by_sender", (q) => q.eq("senderid", myId))
-      .filter((q) => q.eq(q.field("status"), "accepted"))
+    // Get all users with whom I have messages (sent or received)
+    const sentMessages = await ctx.db
+      .query("messages")
+      .withIndex("by_sender_receiver", (q) => q.eq("senderId", myId))
       .collect();
-    const receiverConnections = await ctx.db
-      .query("connections")
-      .withIndex("by_receiver", (q) => q.eq("receiverid", myId))
-      .filter((q) => q.eq(q.field("status"), "accepted"))
+    const receivedMessages = await ctx.db
+      .query("messages")
+      .withIndex("by_receiver", (q) => q.eq("receiverId", myId))
       .collect();
-    const connectedProfileIds = [
-      ...senderConnections.map((c) => c.receiverid),
-      ...receiverConnections.map((c) => c.senderid),
-    ];
+
+    // Get unique profile IDs from messages
+    const sentProfileIds = [...new Set(sentMessages.map(m => m.receiverId))];
+    const receivedProfileIds = [...new Set(receivedMessages.map(m => m.senderId))];
+    const allProfileIds = [...new Set([...sentProfileIds, ...receivedProfileIds])];
 
     const summaries = await Promise.all(
-      connectedProfileIds.map(async (profileId) => {
+      allProfileIds.map(async (profileId) => {
         const profile = await ctx.db.get(profileId);
         if (!profile) return null;
 

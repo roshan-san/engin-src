@@ -67,7 +67,7 @@ export const CreateStartupProvider = ({
       const numericData = {
         ...startupData,
         funding: Number(startupData.funding) || 0,
-        team_size: Number(startupData.team_size) || 0,
+        team_size: 1, // Always start with 1 (the founder)
         stage: startupData.stage || "Growth",
         tags: startupData.tags ? startupData.tags.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0) : [],
       };

@@ -1,2 +1,8 @@
-// This file is not needed since we're using providers in auth.ts
-// The auth configuration is handled in convex/auth.ts
+export default {
+    providers: [
+      {
+        domain: process.env.CONVEX_SITE_URL,
+        applicationID: "convex",
+      },
+    ],
+  };

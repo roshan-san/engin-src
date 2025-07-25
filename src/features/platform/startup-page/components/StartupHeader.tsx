@@ -2,7 +2,6 @@ import { ArrowLeft, Edit } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import type { Doc } from "@/../convex/_generated/dataModel";
 import { Button } from "@/components/ui/button";
-import { StartupEditDialog } from "../StartupEditDialog";
 
 interface StartupHeaderProps {
   startup: Doc<"startups">;
@@ -40,18 +39,12 @@ export function StartupHeader({ startup, isOwner }: StartupHeaderProps) {
           
           {isOwner && (
             <div className="flex-shrink-0">
-              <StartupEditDialog 
-                startup={startup}
-                renderTrigger={({ setOpen }: { setOpen: (open: boolean) => void }) => (
-                  <Button 
-                    onClick={() => setOpen(true)}
-                    className="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-medium transition-all duration-200 hover:scale-105 shadow-sm"
-                  >
-                    <Edit className="h-4 w-4" />
-                    <span className="hidden sm:inline">Edit Startup</span>
-                  </Button>
-                )}
-              />
+              <Link to="/startup-edit/$startupid" params={{ startupid: startup._id }}>
+                <Button className="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-medium transition-all duration-200 hover:scale-105 shadow-sm">
+                  <Edit className="h-4 w-4" />
+                  <span className="hidden sm:inline">Edit Startup</span>
+                </Button>
+              </Link>
             </div>
           )}
         </div>

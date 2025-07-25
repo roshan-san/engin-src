@@ -18,6 +18,8 @@ export default function SearchProfiles({ userType }: SearchProfilesProps) {
     ? (profiles || []).filter((profile) => profile.user_type === userType)
     : profiles;
 
+
+
   return (
     <div className="space-y-6">
       {/* Search Section */}
@@ -32,6 +34,11 @@ export default function SearchProfiles({ userType }: SearchProfilesProps) {
           onChange={(e) => setSearchQuery(e.target.value)}
           className="w-full h-12 pl-12 pr-4 rounded-xl border-2 border-border/50 focus:border-primary transition-all duration-200 bg-background/50 backdrop-blur-sm"
         />
+        {searchQuery && (
+          <div className="text-sm text-muted-foreground mt-2">
+            Searching for: "{searchQuery}"
+          </div>
+        )}
       </div>
 
       {/* Results Header */}
@@ -41,6 +48,9 @@ export default function SearchProfiles({ userType }: SearchProfilesProps) {
             <Users className="h-5 w-5 text-primary" />
             <span className="text-sm font-medium text-muted-foreground">
               {filteredProfiles.length} {userType?.toLowerCase() || 'profile'}{filteredProfiles.length !== 1 ? 's' : ''} found
+              {searchQuery && (
+                <span className="text-primary"> for "{searchQuery}"</span>
+              )}
             </span>
           </div>
           {userType && (
@@ -53,7 +63,7 @@ export default function SearchProfiles({ userType }: SearchProfilesProps) {
       )}
 
       {/* Loading State */}
-      {status === "LoadingFirstPage" ? (
+      {status === "LoadingFirstPage" || (searchQuery && status === "LoadingMore") ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {Array.from({ length: 6 }).map((_, i) => (
             <div key={i} className="space-y-4">
@@ -82,7 +92,7 @@ export default function SearchProfiles({ userType }: SearchProfilesProps) {
               </div>
             ) : status === "CanLoadMore" ? (
               <button
-                onClick={() => loadMore(9)}
+                onClick={() => loadMore()}
                 className="px-6 py-3 bg-primary/10 text-primary rounded-xl hover:bg-primary/20 transition-all duration-200 font-medium"
               >
                 Load more profiles

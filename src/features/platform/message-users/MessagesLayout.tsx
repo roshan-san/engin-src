@@ -1,30 +1,38 @@
-import { Outlet, useLocation } from "@tanstack/react-router";
-import { ChatList } from "./ChatList";
+import { Outlet, useLocation, useNavigate } from "@tanstack/react-router";
 import { MessageCircle } from "lucide-react";
+import { ChatList } from "./ChatList";
+import type { Doc } from "@/../convex/_generated/dataModel";
 
 export default function MessagesLayout() {
   const location = useLocation();
+  const navigate = useNavigate();
   const hasActiveChat = location.pathname.includes('/message') && 
     location.pathname !== '/message/' && 
     location.pathname !== '/message';
 
+  const handleChatSelect = (chatPartner: Doc<"profiles">) => {
+    if (chatPartner?.username) {
+      navigate({ to: '/message/$username', params: { username: chatPartner.username } });
+    }
+  };
+
   return (
     <div className="h-full flex flex-col p-0">
       <div className="w-full h-full flex flex-col">
-        {/* Mobile Layout - Show either chat list OR chat window */}
-        <div className="lg:hidden h-full min-h-0 bg-background">
+        {/* Mobile/Tablet Layout - Show either chat list OR chat window */}
+        <div className="md:hidden h-full min-h-0 bg-background">
           {hasActiveChat ? (
             <Outlet />
           ) : (
-            <ChatList onChatSelect={() => {}} />
+            <ChatList onChatSelect={handleChatSelect} />
           )}
         </div>
 
-        {/* Desktop Layout - Show both side by side */}
-        <div className="hidden lg:flex h-full min-h-0 bg-background">
+        {/* Desktop/Laptop Layout - Show both side by side */}
+        <div className="hidden md:flex h-full min-h-0 bg-background">
           {/* Sidebar */}
           <aside className="w-80 border-r border-border/50 bg-background flex flex-col min-h-0">
-            <ChatList onChatSelect={() => {}} />
+            <ChatList onChatSelect={handleChatSelect} />
           </aside>
 
           {/* Main Chat Area */}
