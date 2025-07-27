@@ -3,6 +3,7 @@ import { useProfileSearch } from "./useProfileSearch";
 import ProfileCard from "./ProfileCard";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Search, Users, Filter } from "lucide-react";
+import { useEffect, useState } from "react";
 
 // Add userType prop
 interface SearchProfilesProps {
@@ -10,8 +11,22 @@ interface SearchProfilesProps {
 }
 
 export default function SearchProfiles({ userType }: SearchProfilesProps) {
-  const { searchQuery, setSearchQuery, profiles, status, loadMore, ref } =
+  const { searchQuery, setSearchQuery, profiles, status, ref, isLoading, isLoadingMore, resetSearch } =
     useProfileSearch();
+  
+  const [localSearchQuery, setLocalSearchQuery] = useState("");
+
+  // Debounced search
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (localSearchQuery !== searchQuery) {
+        setSearchQuery(localSearchQuery);
+        resetSearch(); // Reset pagination when search changes
+      }
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [localSearchQuery, searchQuery, setSearchQuery, resetSearch]);
 
   // Filter profiles by userType if provided
   const filteredProfiles = userType
@@ -30,13 +45,13 @@ export default function SearchProfiles({ userType }: SearchProfilesProps) {
         <Input
           type="text"
           placeholder={`Search for ${userType?.toLowerCase() || 'profiles'}...`}
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
+          value={localSearchQuery}
+          onChange={(e) => setLocalSearchQuery(e.target.value)}
           className="w-full h-12 pl-12 pr-4 rounded-xl border-2 border-border/50 focus:border-primary transition-all duration-200 bg-background/50 backdrop-blur-sm"
         />
-        {searchQuery && (
+        {localSearchQuery && (
           <div className="text-sm text-muted-foreground mt-2">
-            Searching for: "{searchQuery}"
+            Searching for: "{localSearchQuery}"
           </div>
         )}
       </div>
@@ -48,8 +63,8 @@ export default function SearchProfiles({ userType }: SearchProfilesProps) {
             <Users className="h-5 w-5 text-primary" />
             <span className="text-sm font-medium text-muted-foreground">
               {filteredProfiles.length} {userType?.toLowerCase() || 'profile'}{filteredProfiles.length !== 1 ? 's' : ''} found
-              {searchQuery && (
-                <span className="text-primary"> for "{searchQuery}"</span>
+              {localSearchQuery && (
+                <span className="text-primary"> for "{localSearchQuery}"</span>
               )}
             </span>
           </div>
@@ -63,7 +78,7 @@ export default function SearchProfiles({ userType }: SearchProfilesProps) {
       )}
 
       {/* Loading State */}
-      {status === "LoadingFirstPage" || (searchQuery && status === "LoadingMore") ? (
+      {isLoading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {Array.from({ length: 6 }).map((_, i) => (
             <div key={i} className="space-y-4">
@@ -80,29 +95,27 @@ export default function SearchProfiles({ userType }: SearchProfilesProps) {
             ))}
           </div>
           
-          {/* Load More Section */}
+          {/* Infinite Scroll Trigger */}
           <div
             ref={ref}
             className="flex items-center justify-center py-8"
           >
-            {status === "LoadingMore" ? (
+            {isLoadingMore ? (
               <div className="flex items-center gap-3 text-muted-foreground">
                 <div className="animate-spin rounded-full h-5 w-5 border-2 border-primary border-t-transparent"></div>
-                <span>Loading more...</span>
+                <span>Loading more profiles...</span>
               </div>
             ) : status === "CanLoadMore" ? (
-              <button
-                onClick={() => loadMore()}
-                className="px-6 py-3 bg-primary/10 text-primary rounded-xl hover:bg-primary/20 transition-all duration-200 font-medium"
-              >
-                Load more profiles
-              </button>
-            ) : (
+              <div className="text-center text-muted-foreground">
+                <Users className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                <p className="text-sm">Scroll to load more</p>
+              </div>
+            ) : status === "Exhausted" ? (
               <div className="text-center text-muted-foreground">
                 <Users className="h-8 w-8 mx-auto mb-2 opacity-50" />
                 <p className="text-sm">No more profiles to load</p>
               </div>
-            )}
+            ) : null}
           </div>
         </>
       ) : (
@@ -113,8 +126,8 @@ export default function SearchProfiles({ userType }: SearchProfilesProps) {
           </div>
           <h3 className="text-xl font-semibold mb-2">No Profiles Found</h3>
           <p className="text-muted-foreground max-w-md">
-            {searchQuery 
-              ? `No ${userType?.toLowerCase() || 'profiles'} found matching "${searchQuery}". Try adjusting your search terms.`
+            {localSearchQuery 
+              ? `No ${userType?.toLowerCase() || 'profiles'} found matching "${localSearchQuery}". Try adjusting your search terms.`
               : `No ${userType?.toLowerCase() || 'profiles'} available at the moment. Check back later!`
             }
           </p>
