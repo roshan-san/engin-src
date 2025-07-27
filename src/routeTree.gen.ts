@@ -26,6 +26,7 @@ import { Route as ProtectedVoteArenaImport } from './routes/_protected/vote-aren
 import { Route as ProtectedNetworkImport } from './routes/_protected/network'
 import { Route as ProtectedMyStartupsImport } from './routes/_protected/my-startups'
 import { Route as ProtectedHomeImport } from './routes/_protected/home'
+import { Route as ProtectedFeedbackImport } from './routes/_protected/feedback'
 import { Route as ProtectedCrowdfundingImport } from './routes/_protected/crowdfunding'
 import { Route as ProtectedCreatePostImport } from './routes/_protected/create-post'
 import { Route as ProtectedStartupsIndexImport } from './routes/_protected/startups.index'
@@ -125,6 +126,12 @@ const ProtectedHomeRoute = ProtectedHomeImport.update({
   getParentRoute: () => ProtectedRoute,
 } as any)
 
+const ProtectedFeedbackRoute = ProtectedFeedbackImport.update({
+  id: '/feedback',
+  path: '/feedback',
+  getParentRoute: () => ProtectedRoute,
+} as any)
+
 const ProtectedCrowdfundingRoute = ProtectedCrowdfundingImport.update({
   id: '/crowdfunding',
   path: '/crowdfunding',
@@ -220,6 +227,13 @@ declare module '@tanstack/react-router' {
       path: '/crowdfunding'
       fullPath: '/crowdfunding'
       preLoaderRoute: typeof ProtectedCrowdfundingImport
+      parentRoute: typeof ProtectedImport
+    }
+    '/_protected/feedback': {
+      id: '/_protected/feedback'
+      path: '/feedback'
+      fullPath: '/feedback'
+      preLoaderRoute: typeof ProtectedFeedbackImport
       parentRoute: typeof ProtectedImport
     }
     '/_protected/home': {
@@ -349,6 +363,7 @@ declare module '@tanstack/react-router' {
 interface ProtectedRouteChildren {
   ProtectedCreatePostRoute: typeof ProtectedCreatePostRoute
   ProtectedCrowdfundingRoute: typeof ProtectedCrowdfundingRoute
+  ProtectedFeedbackRoute: typeof ProtectedFeedbackRoute
   ProtectedHomeRoute: typeof ProtectedHomeRoute
   ProtectedMyStartupsRoute: typeof ProtectedMyStartupsRoute
   ProtectedNetworkRoute: typeof ProtectedNetworkRoute
@@ -364,6 +379,7 @@ interface ProtectedRouteChildren {
 const ProtectedRouteChildren: ProtectedRouteChildren = {
   ProtectedCreatePostRoute: ProtectedCreatePostRoute,
   ProtectedCrowdfundingRoute: ProtectedCrowdfundingRoute,
+  ProtectedFeedbackRoute: ProtectedFeedbackRoute,
   ProtectedHomeRoute: ProtectedHomeRoute,
   ProtectedMyStartupsRoute: ProtectedMyStartupsRoute,
   ProtectedNetworkRoute: ProtectedNetworkRoute,
@@ -409,6 +425,7 @@ export interface FileRoutesByFullPath {
   '/onboard': typeof OnboardRouteWithChildren
   '/create-post': typeof ProtectedCreatePostRoute
   '/crowdfunding': typeof ProtectedCrowdfundingRoute
+  '/feedback': typeof ProtectedFeedbackRoute
   '/home': typeof ProtectedHomeRoute
   '/my-startups': typeof ProtectedMyStartupsRoute
   '/network': typeof ProtectedNetworkRoute
@@ -434,6 +451,7 @@ export interface FileRoutesByTo {
   '/onboard': typeof OnboardRouteWithChildren
   '/create-post': typeof ProtectedCreatePostRoute
   '/crowdfunding': typeof ProtectedCrowdfundingRoute
+  '/feedback': typeof ProtectedFeedbackRoute
   '/home': typeof ProtectedHomeRoute
   '/my-startups': typeof ProtectedMyStartupsRoute
   '/network': typeof ProtectedNetworkRoute
@@ -461,6 +479,7 @@ export interface FileRoutesById {
   '/onboard': typeof OnboardRouteWithChildren
   '/_protected/create-post': typeof ProtectedCreatePostRoute
   '/_protected/crowdfunding': typeof ProtectedCrowdfundingRoute
+  '/_protected/feedback': typeof ProtectedFeedbackRoute
   '/_protected/home': typeof ProtectedHomeRoute
   '/_protected/my-startups': typeof ProtectedMyStartupsRoute
   '/_protected/network': typeof ProtectedNetworkRoute
@@ -488,6 +507,7 @@ export interface FileRouteTypes {
     | '/onboard'
     | '/create-post'
     | '/crowdfunding'
+    | '/feedback'
     | '/home'
     | '/my-startups'
     | '/network'
@@ -512,6 +532,7 @@ export interface FileRouteTypes {
     | '/onboard'
     | '/create-post'
     | '/crowdfunding'
+    | '/feedback'
     | '/home'
     | '/my-startups'
     | '/network'
@@ -537,6 +558,7 @@ export interface FileRouteTypes {
     | '/onboard'
     | '/_protected/create-post'
     | '/_protected/crowdfunding'
+    | '/_protected/feedback'
     | '/_protected/home'
     | '/_protected/my-startups'
     | '/_protected/network'
@@ -598,6 +620,7 @@ export const routeTree = rootRoute
       "children": [
         "/_protected/create-post",
         "/_protected/crowdfunding",
+        "/_protected/feedback",
         "/_protected/home",
         "/_protected/my-startups",
         "/_protected/network",
@@ -628,6 +651,10 @@ export const routeTree = rootRoute
     },
     "/_protected/crowdfunding": {
       "filePath": "_protected/crowdfunding.tsx",
+      "parent": "/_protected"
+    },
+    "/_protected/feedback": {
+      "filePath": "_protected/feedback.tsx",
       "parent": "/_protected"
     },
     "/_protected/home": {

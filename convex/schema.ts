@@ -147,6 +147,36 @@ const schema = defineSchema({
     createdAt: v.number(),
   })
     .index("by_post", ["postId"]),
+
+  feedback: defineTable({
+    userId: v.id("profiles"),
+    type: v.union(
+      v.literal("feature-request"),
+      v.literal("bug-report"),
+      v.literal("improvement"),
+      v.literal("general")
+    ),
+    title: v.string(),
+    description: v.string(),
+    priority: v.union(
+      v.literal("low"),
+      v.literal("medium"),
+      v.literal("high"),
+      v.literal("critical")
+    ),
+    status: v.union(
+      v.literal("pending"),
+      v.literal("in-progress"),
+      v.literal("completed"),
+      v.literal("declined")
+    ),
+    createdAt: v.number(),
+    updatedAt: v.optional(v.number()),
+  })
+    .index("by_user", ["userId"])
+    .index("by_status", ["status"])
+    .index("by_type", ["type"])
+    .index("by_priority", ["priority"]),
 });
 
 export default schema;

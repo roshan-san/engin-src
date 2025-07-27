@@ -7,7 +7,7 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { LogOut, User, Building2, DollarSign, Vote } from "lucide-react";
+import { LogOut, User, Building2, DollarSign, Vote, MessageSquare } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { useAuthActions } from "@convex-dev/auth/react";
@@ -46,6 +46,9 @@ export default function ProfileDropdown({ profile }: { profile: Doc<"profiles"> 
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => navigate({ to: "/vote-arena" })}>
           <Vote className="mr-2 h-4 w-4" /> Vote Arena
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => navigate({ to: "/feedback" })}>
+          <MessageSquare className="mr-2 h-4 w-4" /> Give Feedback
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
